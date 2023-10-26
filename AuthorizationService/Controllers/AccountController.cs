@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AuthServices;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationService.Controllers
@@ -7,11 +9,17 @@ namespace AuthorizationService.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        public void Login()
+        public LoginInfo Login(LoginModel model)
         {
-
+            return new LoginInfo();
         }
-        public void Logout() { }
-        public void ChangePwd(string message) { }
+        public bool Logout(LogOutModel model) 
+        { 
+            return false;
+        }
+        public bool ChangePwd(ChangePwdModel model) {
+            
+            return false;
+        }
     }
 }

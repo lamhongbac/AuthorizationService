@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AuthServices
+namespace SharedLib
 {
     public class Class1
     {

@@ -1,27 +1,35 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AuthenticationDAL.DTO;
+using AuthServices;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationService.Controllers
 {
+    //controller-> logic-> dal->end
     [Route("api/[controller]")]
     [ApiController]
     public class ApplicationController : ControllerBase
     {
-        void Create()
+        ApplicationService applicationService;
+        public ApplicationController(ApplicationService applicationService)
         {
-
+            this.applicationService = applicationService;
         }
-        void Create()
+        public BODataProcessResult Create(Application data)
         {
-
+            return applicationService.Create(data);
         }
-        void Update()
+        public BODataProcessResult Update(Application data)
         {
-
+            return applicationService.Create(data);
         }
-        void MarkDelete()
+        public BODataProcessResult Delete(Application data)
         {
-
+            return applicationService.Create(data);
+        }
+        public BODataProcessResult MarkDelete(Application data)
+        {
+            return applicationService.Create(data);
         }
 
     }
