@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizationService", "AuthorizationService.csproj", "{8DF2011A-7D39-4BB6-81ED-B684D2D86804}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationService", "AuthorizationService.csproj", "{8DF2011A-7D39-4BB6-81ED-B684D2D86804}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationDemo", "..\AuthenticationDemo\AuthenticationDemo.csproj", "{E76944B4-8A57-458B-9C7A-93C1780821BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationDemo", "..\AuthenticationDemo\AuthenticationDemo.csproj", "{E76944B4-8A57-458B-9C7A-93C1780821BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationDAL", "..\AuthenticationDAL\AuthenticationDAL.csproj", "{47F9EB97-783E-4607-B7D0-205053A8A232}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationDAL", "..\AuthenticationDAL\AuthenticationDAL.csproj", "{47F9EB97-783E-4607-B7D0-205053A8A232}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServices", "..\AuthServices\AuthServices.csproj", "{2A04D495-9D3A-4886-86E0-EB268DCE6E36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{47F9EB97-783E-4607-B7D0-205053A8A232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47F9EB97-783E-4607-B7D0-205053A8A232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47F9EB97-783E-4607-B7D0-205053A8A232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A04D495-9D3A-4886-86E0-EB268DCE6E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A04D495-9D3A-4886-86E0-EB268DCE6E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A04D495-9D3A-4886-86E0-EB268DCE6E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A04D495-9D3A-4886-86E0-EB268DCE6E36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

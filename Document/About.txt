@@ -1,0 +1,14 @@
+Du an nay tao ra 1 service ten la MSA Authentication Service
+la 1 du an doc lap ve quan tri phan quyen
+
+Khi trien khai cac ung dung 
+ thi du nhu QA checklist: 
+ can viet cac UI nhu CMS admin quan ly tai khoan
+ can viet cac UI de Login,Kiem tra phan quyen (de su dung ung dung)....vv 
+ Cac UI nay se ket noi den MSA Authentication Service de thuc hien
+ 
+
+ 
+
+
+
