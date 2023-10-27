@@ -1,5 +1,6 @@
 ﻿using AuthenticationDAL;
 using AuthenticationDAL.DTO;
+using AuthorizationService.BaseObjects;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,7 +16,7 @@ namespace AuthServices
 
 
         }
-        public BODataProcessResult Create(Application data)
+        public BODataProcessResult Create(BaseApplication data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             ApplicationUI applicationUI = ConvertToData(data);
@@ -23,20 +24,20 @@ namespace AuthServices
             return processResult;
         }
 
-        private ApplicationUI ConvertToData(Application data)
+        private ApplicationUI ConvertToData(BaseApplication data)
         {
             throw new NotImplementedException();
         }
 
-        public BODataProcessResult Update(Application data)
+        public BODataProcessResult Update(BaseApplication data)
         {
             return new BODataProcessResult();
         }
-        public BODataProcessResult Delete(Application data)
+        public BODataProcessResult Delete(BaseApplication data)
         {
             return new BODataProcessResult();
         }
-        public BODataProcessResult MarkDelete(Application data)
+        public BODataProcessResult MarkDelete(BaseApplication data)
         {
             return new BODataProcessResult();
         }

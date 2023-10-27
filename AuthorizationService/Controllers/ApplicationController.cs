@@ -1,4 +1,5 @@
 ﻿using AuthenticationDAL.DTO;
+using AuthorizationService.BaseObjects;
 using AuthServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,19 +16,19 @@ namespace AuthorizationService.Controllers
         {
             this.applicationService = applicationService;
         }
-        public BODataProcessResult Create(Application data)
+        public BODataProcessResult Create(BaseApplication data)
         {
             return applicationService.Create(data);
         }
-        public BODataProcessResult Update(Application data)
+        public BODataProcessResult Update(BaseApplication data)
         {
             return applicationService.Create(data);
         }
-        public BODataProcessResult Delete(Application data)
+        public BODataProcessResult Delete(BaseApplication data)
         {
             return applicationService.Create(data);
         }
-        public BODataProcessResult MarkDelete(Application data)
+        public BODataProcessResult MarkDelete(BaseApplication data)
         {
             return applicationService.Create(data);
         }

@@ -1,4 +1,6 @@
-﻿namespace AuthorizationService.BaseObjects
+﻿using System;
+
+namespace AuthorizationService.BaseObjects
 {
     public class BaseData
     {

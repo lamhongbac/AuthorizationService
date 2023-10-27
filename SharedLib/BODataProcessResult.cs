@@ -4,7 +4,8 @@ using System.Text;
 
 namespace AuthServices
 {
-    internal class BODataProcessResult
+    public class BODataProcessResult
     {
+        public  bool OK { get; internal set; }
     }
 }
