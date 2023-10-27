@@ -1,7 +1,6 @@
-﻿using AuthenticationDAL;
-using AuthenticationDAL.DTO;
+﻿using AuthenticationDAL.DTO;
+using AuthenticationDAL;
 using AuthorizationService.BaseObjects;
-using AuthServices.Helpers;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -10,36 +9,36 @@ using System.Threading.Tasks;
 
 namespace AuthServices
 {
-    public class ApplicationService
+    public class AppObjectService
     {
         private string connectionString = string.Empty;
         private string tableName = "Applications";
         IMapper mapper;
-        public ApplicationService(IMapper mapper)
+        public AppObjectService(IMapper mapper)
         {
             this.mapper = mapper;
         }
 
-        public List<BaseApplication> GetDatas(out string errMessage, out bool result)
+        public List<BaseAppObject> GetDatas(out string errMessage, out bool result)
         {
             try
             {
-                GenericDataPortal<ApplicationUI> dataPortal = new GenericDataPortal<ApplicationUI>(connectionString, tableName);
+                GenericDataPortal<AppObjectUI> dataPortal = new GenericDataPortal<AppObjectUI>(connectionString, tableName);
                 string whereString = string.Empty;
-                List<ApplicationUI> applicationUIs = dataPortal.ReadList(whereString).Result;
-                if(applicationUIs == null)
+                List<AppObjectUI> AppObjectUIs = dataPortal.ReadList(whereString).Result;
+                if (AppObjectUIs == null)
                 {
                     result = false;
                     errMessage = "Data not Found";
                     return null;
                 }
-                List<BaseApplication> baseApplications = mapper.Map<List<BaseApplication>>(applicationUIs);
+                List<BaseAppObject> BaseAppObjects = mapper.Map<List<BaseAppObject>>(AppObjectUIs);
                 result = true;
                 errMessage = "Success";
-                return baseApplications;
+                return BaseAppObjects;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result = false;
                 errMessage = ex.Message;
@@ -47,24 +46,24 @@ namespace AuthServices
             }
         }
 
-        public BaseApplication GetData(int ID, out string errMessage, out bool result)
+        public BaseAppObject GetData(int ID, out string errMessage, out bool result)
         {
             try
             {
-                GenericDataPortal<ApplicationUI> dataPortal = new GenericDataPortal<ApplicationUI>(connectionString, tableName);
+                GenericDataPortal<AppObjectUI> dataPortal = new GenericDataPortal<AppObjectUI>(connectionString, tableName);
                 string whereString = "ID = @ID";
                 object param = new { ID = ID };
-                ApplicationUI applicationUIs = dataPortal.Read(whereString, param).Result;
-                if (applicationUIs == null)
+                AppObjectUI AppObjectUIs = dataPortal.Read(whereString, param).Result;
+                if (AppObjectUIs == null)
                 {
                     result = false;
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUIs);
+                BaseAppObject BaseAppObject = mapper.Map<BaseAppObject>(AppObjectUIs);
                 result = true;
                 errMessage = "Success";
-                return baseApplication;
+                return BaseAppObject;
 
             }
             catch (Exception ex)
@@ -75,24 +74,24 @@ namespace AuthServices
             }
         }
 
-        public BaseApplication GetData(string Number, out string errMessage, out bool result)
+        public BaseAppObject GetData(string Number, out string errMessage, out bool result)
         {
             try
             {
-                GenericDataPortal<ApplicationUI> dataPortal = new GenericDataPortal<ApplicationUI>(connectionString, tableName);
+                GenericDataPortal<AppObjectUI> dataPortal = new GenericDataPortal<AppObjectUI>(connectionString, tableName);
                 string whereString = "Number = @Number";
                 object param = new { Number = Number };
-                ApplicationUI applicationUIs = dataPortal.Read(whereString, param).Result;
-                if (applicationUIs == null)
+                AppObjectUI AppObjectUIs = dataPortal.Read(whereString, param).Result;
+                if (AppObjectUIs == null)
                 {
                     result = false;
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUIs);
+                BaseAppObject BaseAppObject = mapper.Map<BaseAppObject>(AppObjectUIs);
                 result = true;
                 errMessage = "Success";
-                return baseApplication;
+                return BaseAppObject;
 
             }
             catch (Exception ex)
@@ -103,46 +102,14 @@ namespace AuthServices
             }
         }
 
-        public async Task<BODataProcessResult> Create(BaseApplication data)
+        public async Task<BODataProcessResult> Create(BaseAppObject data)
         {
-            GenericDataPortal<ApplicationUI> dataPortal = new GenericDataPortal<ApplicationUI>(connectionString, tableName);
+            GenericDataPortal<AppObjectUI> dataPortal = new GenericDataPortal<AppObjectUI>(connectionString, tableName);
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
-                var result = await dataPortal.InsertAsync(applicationUI, null);
-                if(result == true)
-                {
-                    processResult.OK = true;
-                    processResult.Message = "Success";
-                }
-                else
-                {
-                    processResult.Message = "Fail";
-                    processResult.OK = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                processResult.OK = false;
-                processResult.Message = ex.Message;
-            }
-            return processResult;
-        }
-
-        private ApplicationUI ConvertToData(BaseApplication data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<BODataProcessResult> Update(BaseApplication data)
-        {
-            GenericDataPortal<ApplicationUI> dataPortal = new GenericDataPortal<ApplicationUI>(connectionString, tableName);
-            BODataProcessResult processResult = new BODataProcessResult();
-            try
-            {
-                ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
-                var result = await dataPortal.UpdateAsync(applicationUI, null);
+                AppObjectUI AppObjectUI = mapper.Map<AppObjectUI>(data);
+                var result = await dataPortal.InsertAsync(AppObjectUI, null);
                 if (result == true)
                 {
                     processResult.OK = true;
@@ -161,11 +128,43 @@ namespace AuthServices
             }
             return processResult;
         }
-        public BODataProcessResult Delete(BaseApplication data)
+
+        private AppObjectUI ConvertToData(BaseAppObject data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<BODataProcessResult> Update(BaseAppObject data)
+        {
+            GenericDataPortal<AppObjectUI> dataPortal = new GenericDataPortal<AppObjectUI>(connectionString, tableName);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                AppObjectUI AppObjectUI = mapper.Map<AppObjectUI>(data);
+                var result = await dataPortal.UpdateAsync(AppObjectUI, null);
+                if (result == true)
+                {
+                    processResult.OK = true;
+                    processResult.Message = "Success";
+                }
+                else
+                {
+                    processResult.Message = "Fail";
+                    processResult.OK = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+            }
+            return processResult;
+        }
+        public BODataProcessResult Delete(BaseAppObject data)
         {
             return new BODataProcessResult();
         }
-        public BODataProcessResult MarkDelete(BaseApplication data)
+        public BODataProcessResult MarkDelete(BaseAppObject data)
         {
             return new BODataProcessResult();
         }
