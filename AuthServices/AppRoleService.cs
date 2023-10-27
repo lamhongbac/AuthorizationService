@@ -12,7 +12,7 @@ namespace AuthServices
     public class AppRoleService
     {
         private string connectionString = string.Empty;
-        private string tableName = "Applications";
+        private string tableName = "AppRoles";
         IMapper mapper;
         public AppRoleService(IMapper mapper)
         {

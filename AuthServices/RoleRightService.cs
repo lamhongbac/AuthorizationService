@@ -12,7 +12,7 @@ namespace AuthServices
     public class RoleRightService
     {
         private string connectionString = string.Empty;
-        private string tableName = "Applications";
+        private string tableName = "RoleRights";
         IMapper mapper;
         public RoleRightService(IMapper mapper)
         {

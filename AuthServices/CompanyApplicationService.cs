@@ -12,7 +12,7 @@ namespace AuthServices
     public class CompanyApplicationService
     {
         private string connectionString = string.Empty;
-        private string tableName = "Applications";
+        private string tableName = "CompanyApplication";
         IMapper mapper;
         public CompanyApplicationService(IMapper mapper)
         {

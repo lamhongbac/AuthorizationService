@@ -12,7 +12,7 @@ namespace AuthServices
     public class AppObjectService
     {
         private string connectionString = string.Empty;
-        private string tableName = "Applications";
+        private string tableName = "AppObjects";
         IMapper mapper;
         public AppObjectService(IMapper mapper)
         {

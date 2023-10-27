@@ -12,7 +12,7 @@ namespace AuthServices
     public class UserStoreService
     {
         private string connectionString = string.Empty;
-        private string tableName = "Applications";
+        private string tableName = "UserStores";
         IMapper mapper;
         public UserStoreService(IMapper mapper)
         {
