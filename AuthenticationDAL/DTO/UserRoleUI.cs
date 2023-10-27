@@ -5,12 +5,13 @@ using System.Text;
 
 namespace AuthenticationDAL.DTO
 {
-    [Table("Applications")]
-    public class ApplicationUI:BaseUI
+    [Table("UserRoles")]
+    public class UserRoleUI:BaseUI
     {
         [Key]
         public int ID { get; set; }
-        public string Number { get; set; }
-        public string Name { get; set; }
+        public int CompanyAppID { get; set; }
+        public int UserID { get; set; }
+        public string UserName { get; set; }
     }
 }
