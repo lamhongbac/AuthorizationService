@@ -6,6 +6,16 @@ namespace AuthServices
 {
     public class BODataProcessResult
     {
-        public  bool OK { get; internal set; }
+        public BODataProcessResult()
+        {
+            OK = false;
+            ErrorNumber = -1;
+            Content = null;
+        }
+        public  bool OK { get; set; }
+        public string Message { get; set; } //message to display
+        public int NumOfRow { get; set; } //num of record is effected
+        public object Content { get; set; } //return value
+        public int ErrorNumber { get; set; } //error number for debug with backEnd
     }
 }
