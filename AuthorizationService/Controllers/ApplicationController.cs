@@ -16,9 +16,22 @@ namespace AuthorizationService.Controllers
         {
             this.applicationService = applicationService;
         }
-        public BODataProcessResult Create(BaseApplication data)
+        public async Task<IActionResult> Create(BaseApplication data)
         {
-            return applicationService.Create(data);
+            BODataProcessResult processResult=new BODataProcessResult();
+            try
+            {
+                 processResult =await applicationService.Create(data);
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+            }
+            return Ok(processResult);
         }
         public BODataProcessResult Update(BaseApplication data)
         {
