@@ -9,9 +9,14 @@ namespace AuthorizationService.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        public LoginInfo Login(LoginModel model)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public IActionResult Login(LoginModel model)
         {
-            return new LoginInfo();
+            return Ok(new LoginInfo());
         }
         public bool Logout(LogOutModel model) 
         { 
@@ -19,6 +24,11 @@ namespace AuthorizationService.Controllers
         }
         public bool ChangePwd(ChangePwdModel model) {
             
+            return false;
+        }
+        public bool UpdateProfile(ChangePwdModel model)
+        {
+
             return false;
         }
     }
