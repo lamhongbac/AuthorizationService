@@ -1,23 +1,19 @@
-﻿using AuthenticationDAL.DTO;
-using AuthorizationService.BaseObjects;
+﻿using AuthorizationService.BaseObjects;
 using AuthServices;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationService.Controllers
 {
-    //controller-> logic-> dal->end
     [Route("api/[controller]")]
     [ApiController]
-    public class ApplicationController : ControllerBase
+    public class UserRoleController : Controller
     {
-        ApplicationService applicationService;
-        public ApplicationController(ApplicationService applicationService)
+        UserRoleService service;
+        public UserRoleController(UserRoleService service)
         {
-            this.applicationService = applicationService;
+            this.service = service;
         }
-
-        [Route("GetApplications")]
+        [Route("GetUserRoles")]
         [HttpPost]
         public BODataProcessResult GetDatas()
         {
@@ -26,10 +22,10 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                List<BaseApplication> baseApplications = applicationService.GetDatas(out errMessage, out result);
-                if(result == true)
+                List<BaseUserRole> baseDatas = service.GetDatas(out errMessage, out result);
+                if (result == true)
                 {
-                    processResult.Content = baseApplications;
+                    processResult.Content = baseDatas;
                 }
                 processResult.OK = result;
                 processResult.Message = errMessage;
@@ -42,7 +38,7 @@ namespace AuthorizationService.Controllers
             return processResult;
         }
 
-        [Route("GetApplicationByID")]
+        [Route("GetUserRoleByID")]
         [HttpPost]
         public BODataProcessResult GetData(int ID)
         {
@@ -51,10 +47,10 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                BaseApplication baseApplication = applicationService.GetData(ID, out errMessage, out result);
+                BaseUserRole baseData = service.GetData(ID, out errMessage, out result);
                 if (result == true)
                 {
-                    processResult.Content = baseApplication;
+                    processResult.Content = baseData;
                 }
                 processResult.OK = result;
                 processResult.Message = errMessage;
@@ -67,7 +63,7 @@ namespace AuthorizationService.Controllers
             return processResult;
         }
 
-        [Route("GetApplicationByNumber")]
+        [Route("GetUserRoleByNumber")]
         [HttpPost]
         public BODataProcessResult GetData(string Number)
         {
@@ -76,10 +72,10 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                BaseApplication baseApplication = applicationService.GetData(Number, out errMessage, out result);
+                BaseUserRole baseData = service.GetData(Number, out errMessage, out result);
                 if (result == true)
                 {
-                    processResult.Content = baseApplication;
+                    processResult.Content = baseData;
                 }
                 processResult.OK = result;
                 processResult.Message = errMessage;
@@ -92,9 +88,9 @@ namespace AuthorizationService.Controllers
             return processResult;
         }
 
-        [Route("CreateApplication")]
+        [Route("CreateUserRole")]
         [HttpPost]
-        public async Task<BODataProcessResult> Create(BaseApplication data)
+        public async Task<BODataProcessResult> Create(BaseUserRole data)
         {
             //BODataProcessResult processResult=new BODataProcessResult();
             //try
@@ -110,29 +106,28 @@ namespace AuthorizationService.Controllers
 
             //}
             //return Ok(processResult);
-            return await applicationService.Create(data);
+            return await service.Create(data);
         }
 
-        [Route("UpdateApplication")]
+        [Route("UpdateUserRole")]
         [HttpPost]
-        public async Task<BODataProcessResult> Update(BaseApplication data)
+        public async Task<BODataProcessResult> Update(BaseUserRole data)
         {
-            return await applicationService.Update(data);
+            return await service.Update(data);
         }
 
-        [Route("DeleteApplication")]
+        [Route("DeleteUserRole")]
         [HttpPost]
-        public BODataProcessResult Delete(BaseApplication data)
+        public BODataProcessResult Delete(BaseUserRole data)
         {
-            return applicationService.Delete(data);
+            return service.Delete(data);
         }
 
-        [Route("MarkDeletaApplication")]
+        [Route("MarkDeletaUserRole")]
         [HttpPost]
-        public BODataProcessResult MarkDelete(BaseApplication data)
+        public BODataProcessResult MarkDelete(BaseUserRole data)
         {
-            return applicationService.MarkDelete(data);
+            return service.MarkDelete(data);
         }
-
     }
 }
