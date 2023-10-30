@@ -15,7 +15,7 @@ namespace AuthorizationService.Controllers
         }
         [Route("GetCompanyApplications")]
         [HttpPost]
-        public BODataProcessResult GetDatas()
+        public IActionResult GetDatas()
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
@@ -34,13 +34,14 @@ namespace AuthorizationService.Controllers
             {
                 processResult.OK = false;
                 processResult.Message = ex.Message;
+                return BadRequest(processResult);
             }
-            return processResult;
+            return Ok(processResult);
         }
 
         [Route("GetCompanyApplicationByID")]
         [HttpPost]
-        public BODataProcessResult GetData(int ID)
+        public IActionResult GetData(int ID)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
@@ -59,13 +60,14 @@ namespace AuthorizationService.Controllers
             {
                 processResult.OK = false;
                 processResult.Message = ex.Message;
+                return BadRequest(processResult);
             }
-            return processResult;
+            return Ok(processResult);
         }
 
         [Route("GetCompanyApplicationByNumber")]
         [HttpPost]
-        public BODataProcessResult GetData(string Number)
+        public IActionResult GetData(string Number)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
@@ -84,50 +86,97 @@ namespace AuthorizationService.Controllers
             {
                 processResult.OK = false;
                 processResult.Message = ex.Message;
+                return BadRequest(processResult);
             }
-            return processResult;
+            return Ok(processResult);
         }
 
         [Route("CreateCompanyApplication")]
         [HttpPost]
-        public async Task<BODataProcessResult> Create(BaseCompanyApplication data)
+        public async Task<IActionResult> Create(BaseCompanyApplication data)
         {
-            //BODataProcessResult processResult=new BODataProcessResult();
-            //try
-            //{
-            //     processResult =await applicationService.Create(data);
-            //}
-            //catch
-            //{
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                processResult = await service.Create(data);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            finally
+            {
 
-            //}
-            //finally
-            //{
-
-            //}
-            //return Ok(processResult);
-            return await service.Create(data);
+            }
+            return Ok(processResult);
         }
 
         [Route("UpdateCompanyApplication")]
         [HttpPost]
-        public async Task<BODataProcessResult> Update(BaseCompanyApplication data)
+        public async Task<IActionResult> Update(BaseCompanyApplication data)
         {
-            return await service.Update(data);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                processResult = await service.Update(data);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            finally
+            {
+
+            }
+            return Ok(processResult);
         }
 
         [Route("DeleteCompanyApplication")]
         [HttpPost]
-        public BODataProcessResult Delete(BaseCompanyApplication data)
+        public IActionResult Delete(BaseCompanyApplication data)
         {
-            return service.Delete(data);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                processResult = service.Delete(data);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            finally
+            {
+
+            }
+            return Ok(processResult);
         }
 
         [Route("MarkDeletaCompanyApplication")]
         [HttpPost]
-        public BODataProcessResult MarkDelete(BaseCompanyApplication data)
+        public IActionResult MarkDelete(BaseCompanyApplication data)
         {
-            return service.MarkDelete(data);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                processResult = service.MarkDelete(data);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            finally
+            {
+
+            }
+            return Ok(processResult);
         }
     }
 }

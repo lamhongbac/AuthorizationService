@@ -15,7 +15,7 @@ namespace AuthorizationService.Controllers
         }
         [Route("GetAppUsers")]
         [HttpPost]
-        public BODataProcessResult GetDatas()
+        public IActionResult GetDatas()
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
@@ -34,13 +34,14 @@ namespace AuthorizationService.Controllers
             {
                 processResult.OK = false;
                 processResult.Message = ex.Message;
+                return BadRequest(processResult);
             }
-            return processResult;
+            return Ok(processResult);
         }
 
         [Route("GetAppUserByID")]
         [HttpPost]
-        public BODataProcessResult GetData(int ID)
+        public IActionResult GetData(int ID)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
@@ -54,18 +55,19 @@ namespace AuthorizationService.Controllers
                 }
                 processResult.OK = result;
                 processResult.Message = errMessage;
+                return BadRequest(processResult);
             }
             catch (Exception ex)
             {
                 processResult.OK = false;
                 processResult.Message = ex.Message;
             }
-            return processResult;
+            return Ok(processResult);
         }
 
         [Route("GetAppUserByNumber")]
         [HttpPost]
-        public BODataProcessResult GetData(string Number)
+        public IActionResult GetData(string Number)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
@@ -84,50 +86,97 @@ namespace AuthorizationService.Controllers
             {
                 processResult.OK = false;
                 processResult.Message = ex.Message;
+                return BadRequest(processResult);
             }
-            return processResult;
+            return Ok(processResult);
         }
 
         [Route("CreateAppUser")]
         [HttpPost]
-        public async Task<BODataProcessResult> Create(BaseAppUser data)
+        public async Task<IActionResult> Create(BaseAppUser data)
         {
-            //BODataProcessResult processResult=new BODataProcessResult();
-            //try
-            //{
-            //     processResult =await applicationService.Create(data);
-            //}
-            //catch
-            //{
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                processResult = await service.Create(data);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            finally
+            {
 
-            //}
-            //finally
-            //{
-
-            //}
-            //return Ok(processResult);
-            return await service.Create(data);
+            }
+            return Ok(processResult);
         }
 
         [Route("UpdateAppUser")]
         [HttpPost]
-        public async Task<BODataProcessResult> Update(BaseAppUser data)
+        public async Task<IActionResult> Update(BaseAppUser data)
         {
-            return await service.Update(data);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                processResult = await service.Update(data);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            finally
+            {
+
+            }
+            return Ok(processResult);
         }
 
         [Route("DeleteAppUser")]
         [HttpPost]
-        public BODataProcessResult Delete(BaseAppUser data)
+        public IActionResult Delete(BaseAppUser data)
         {
-            return service.Delete(data);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                processResult = service.Delete(data);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            finally
+            {
+
+            }
+            return Ok(processResult);
         }
 
         [Route("MarkDeletaAppUser")]
         [HttpPost]
-        public BODataProcessResult MarkDelete(BaseAppUser data)
+        public IActionResult MarkDelete(BaseAppUser data)
         {
-            return service.MarkDelete(data);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                processResult = service.MarkDelete(data);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            finally
+            {
+
+            }
+            return Ok(processResult);
         }
     }
 }
