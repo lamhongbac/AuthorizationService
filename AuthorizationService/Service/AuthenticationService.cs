@@ -61,13 +61,16 @@ namespace AuthorizationService.Service
 
             List<Claim> claims = new List<Claim>();
 
-            claims.Add(new Claim(JwtRegisteredClaimNames.Email, userInfo.EmailAddress));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, userInfo.EmailAddress));
+            if (!string.IsNullOrEmpty(userInfo.EmailAddress))
+            {
+                claims.Add(new Claim(JwtRegisteredClaimNames.Email, userInfo.EmailAddress));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, userInfo.EmailAddress));
+            }
             //ID cua access token
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim("UserID", userInfo.ID.ToString()));
             claims.Add(new Claim("UserName", userInfo.UserName));
-            claims.Add(new Claim("Roles", userInfo.Roles.ToString()));
+            //claims.Add(new Claim("Roles", userInfo.Roles.ToString()));
 
 
 
