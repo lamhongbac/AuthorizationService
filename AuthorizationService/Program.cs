@@ -1,4 +1,5 @@
 using AuthorizationService.Data;
+using AuthorizationService.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -12,9 +13,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 JwtConfig jwtconfiguration = builder.Configuration.GetSection("Jwt").Get<JwtConfig>();
+builder.Services.AddAutoMapper(typeof(ModelMappingProfile));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
-    {   
+    {
         options.TokenValidationParameters = new TokenValidationParameters
         {
             //tu cap token?
@@ -30,7 +32,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddSingleton<RefreshTokenDatas>();
-builder.Services.AddAuthorization(x => {
+builder.Services.AddAuthorization(x =>
+{
     x.AddPolicy(IdentityData.AdminUserPolicyName, p => p.RequireClaim(IdentityData.AdminUserClaimName));
 });
 var app = builder.Build();
