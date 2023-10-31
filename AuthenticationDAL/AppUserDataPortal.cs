@@ -18,18 +18,28 @@ namespace AuthenticationDAL
 
         /// <summary>
         /// Lấy thông tin đầy đủ của 1 user. Bao gồm AppUserUI, AppRoleUI, List RoleRight
+        /// b1 lay CompanyAppID (company,App)ID
+        /// b2 lay ra user (userName, CompanyAppID)
+        /// b3 lay role (theo roleID)
+        /// b4 lay ra danh sach Right theo (AppID, RoleID)
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public async Task<AppUserData> GetAppUserData(string userName, int appID)
+        public async Task<AppUserData> GetAppUserData(string userName, int appID, int companyID)
         {
             try
             {
                 AppUserData data = new AppUserData();
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
-                    string Sql = "SELECT * FROM " + tableName + " WHERE UserName=@UserName AND CompanyAppID=@CompanyAppID";
-                    object parametter = new { UserName = userName, CompanyAppID = appID };
+                    //Get CompanyAppID
+                    string Sql = "SELECT * FROM CompanyApplication WHERE CompanyID=@CompanyID AND AppID = @AppID";
+                    object parametter = new { CompanyID = companyID, appID = appID };
+                    CompanyApplicationUI companyApplicationUI = await connection.QueryFirstOrDefaultAsync<CompanyApplicationUI>(Sql, parametter);
+
+
+                    Sql = "SELECT * FROM " + tableName + " WHERE UserName=@UserName AND CompanyAppID=@CompanyAppID";
+                    parametter = new { UserName = userName, CompanyAppID = appID };
                     AppUserUI appUserUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(Sql, parametter);
                     if (appUserUI == null)
                     {
