@@ -36,32 +36,43 @@ namespace AuthenticationDAL
                     string Sql = "SELECT * FROM CompanyApplication WHERE CompanyID=@CompanyID AND AppID = @AppID";
                     object parametter = new { CompanyID = companyID, appID = appID };
                     CompanyApplicationUI companyApplicationUI = await connection.QueryFirstOrDefaultAsync<CompanyApplicationUI>(Sql, parametter);
-
-
-                    Sql = "SELECT * FROM " + tableName + " WHERE UserName=@UserName AND CompanyAppID=@CompanyAppID";
-                    parametter = new { UserName = userName, CompanyAppID = appID };
-                    AppUserUI appUserUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(Sql, parametter);
-                    if (appUserUI == null)
+                    if (companyApplicationUI == null)
                     {
                         return null;
                     }
                     else
                     {
-                        //Get AppRole
-                        Sql = "SELECT * FROM AppRoles WHERE RoleID=@RoleID";
-                        parametter = new { RoleID = appUserUI.RoleID };
-                        AppRoleUI appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(Sql, parametter);
+                        Sql = "SELECT * FROM " + tableName + " WHERE UserName=@UserName AND CompanyAppID=@CompanyAppID";
+                        parametter = new { UserName = userName, CompanyAppID = companyApplicationUI.ID };
+                        AppUserUI appUserUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(Sql, parametter);
+                        if (appUserUI == null)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            data.AppUser = appUserUI;
 
-                        //Get RoleRights
-                        Sql = "SELECT * FROM RoleRights WHERE RoleID=@RoleID";
-                        parametter = new { RoleID = appUserUI.RoleID };
-                        List<RoleRightUI> roleRightUIs = (List<RoleRightUI>)await connection.QueryAsync<List<RoleRightUI>>(Sql, parametter);
+                            //Get AppRoleUI
+                            Sql = "SELECT * FROM AppRoles WHERE ID=@ID";
+                            parametter = new { RoleID = appID };
+                            AppRoleUI appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(Sql, parametter);
+                            data.AppRole = appRoleUI;
 
-                        data.AppUser = appUserUI;
-                        data.AppRole = appRoleUI;
-                        data.RoleRights = roleRightUIs;
+                            //Get CompanyUI
+                            Sql = "SELECT * FROM Companies WHERE ID=@ID";
+                            parametter = new { ID = companyID };
+                            CompanyUI companyUI = await connection.QueryFirstOrDefaultAsync<CompanyUI>(Sql, parametter);
+                            data.Company = companyUI;
+
+                            //Get List RoleRightUI
+                            Sql = "SELECT * FROM RoleRights WHERE RoleID=@RoleID";
+                            parametter = new { RoleID = appUserUI.RoleID };
+                            List<RoleRightUI> roleRightUIs = (List<RoleRightUI>)await connection.QueryAsync<List<RoleRightUI>>(Sql, parametter);
+                            data.RoleRights = roleRightUIs;
+                        }
+                        return data;
                     }
-                    return data;
                 }
             }
             catch
