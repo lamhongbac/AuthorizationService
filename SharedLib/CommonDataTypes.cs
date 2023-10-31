@@ -12,4 +12,15 @@ namespace SharedLib
         Email,
         MobileNo
     }
+    public enum JwtStatus
+    {
+        InvalidToken,
+        TokenIsNotExpired,
+        TokenIsNotExist,
+        TokenIsUsed,
+        IsRevoked,
+        AccessTokenIdIsNotMatch,
+        Success,
+        BadRequest
+    }
 }
