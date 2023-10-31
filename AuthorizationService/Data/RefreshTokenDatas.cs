@@ -18,6 +18,7 @@
             if (index==-1)
             {
                 RefreshTokens.Add(token);
+                //update vao mongo DB
             }
         }
         /// <summary>
@@ -30,6 +31,7 @@
             if (index>=0)
             {
                 RefreshTokens.Remove(token);
+                //update vao mongo DB
             }
         }
 
@@ -40,6 +42,7 @@
             {
                 int index = RefreshTokens.IndexOf(oldTk);
                 RefreshTokens[index] = token;
+                //update vao mongo DB
             }
         }
     }

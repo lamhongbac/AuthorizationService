@@ -8,5 +8,6 @@ namespace SharedLib.Models
     {
         public int AppID { get; set; }
         public int CompanyID { get; set; }
+        
     }
 }

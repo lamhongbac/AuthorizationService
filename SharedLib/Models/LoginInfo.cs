@@ -15,10 +15,9 @@ namespace AuthServices
             JwtData = new JwtData();
             LoginDate=DateTime.Now;
         }
-        public string UserName { get; set; }
-        public string FullName { get; set; }
+       
         public DateTime LoginDate { get; set; }
-        public string Roles { get; set; }
+       
         public JwtData JwtData { get; set; }
     }
 }

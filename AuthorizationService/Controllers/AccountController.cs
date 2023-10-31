@@ -1,7 +1,10 @@
-﻿using AuthServices;
+﻿using AuthorizationService.Data;
+using AuthorizationService.Service;
+using AuthServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SharedLib.Models;
 
 namespace AuthorizationService.Controllers
 {
@@ -9,6 +12,13 @@ namespace AuthorizationService.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        AuthenticationService _authenticationService;
+        
+        public AccountController(AuthenticationService authenticationService)
+        {
+            _authenticationService = authenticationService;
+           
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -16,20 +26,27 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         public IActionResult Login(LoginModel model)
         {
-            return Ok(new LoginInfo());
-        }
-        public bool Logout(LogOutModel model) 
-        { 
-            return false;
-        }
-        public bool ChangePwd(ChangePwdModel model) {
-            
-            return false;
-        }
-        public bool UpdateProfile(ChangePwdModel model)
-        {
+            IActionResult response = Unauthorized();
+            UserInfo? user = _authenticationService.AuthenticateUser(model);
+            LoginInfo loginInfo = new LoginInfo();
+            if (user != null)
+            {
+                JwtData jwtData = _authenticationService.GenerateJSONWebToken(user);
+                loginInfo.JwtData = jwtData;
+                response = Ok(user);
+            }
 
-            return false;
+            return response;
+        }
+        public IActionResult Logout(LogOutModel model) 
+        { 
+            var logutResult= _authenticationService.Logout(model);
+            return Ok(logutResult);
+        }
+        public IActionResult RenewToken(JwtData model)
+        {
+            var renewTokenResult = _authenticationService.RenewToken(model);
+            return Ok(renewTokenResult);
         }
     }
 }
