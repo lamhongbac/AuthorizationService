@@ -1,5 +1,6 @@
 ﻿using AuthenticationDAL.DTO;
 using Dapper;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -16,19 +17,19 @@ namespace AuthenticationDAL
         }
 
         /// <summary>
-        /// Lấy thông tin đầy đủ của 1 user. Bao gồm AppUserUI, AppRoleUI, App
+        /// Lấy thông tin đầy đủ của 1 user. Bao gồm AppUserUI, AppRoleUI, List RoleRight
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public async Task<AppUserData> GetAppUserData(string userName)
+        public async Task<AppUserData> GetAppUserData(string userName, int appID)
         {
             try
             {
                 AppUserData data = new AppUserData();
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
-                    string Sql = "SELECT * FROM " + tableName + " WHERE UserName=@UserName";
-                    object parametter = new { UserName = userName };
+                    string Sql = "SELECT * FROM " + tableName + " WHERE UserName=@UserName AND CompanyAppID=@CompanyAppID";
+                    object parametter = new { UserName = userName, CompanyAppID = appID };
                     AppUserUI appUserUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(Sql, parametter);
                     if (appUserUI == null)
                     {
@@ -42,12 +43,13 @@ namespace AuthenticationDAL
                         AppRoleUI appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(Sql, parametter);
 
                         //Get RoleRights
-                        Sql = "SELECT * FROM AppRoles WHERE RoleID=@RoleID";
+                        Sql = "SELECT * FROM RoleRights WHERE RoleID=@RoleID";
                         parametter = new { RoleID = appUserUI.RoleID };
-                        AppRoleUI appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(Sql, parametter);
+                        List<RoleRightUI> roleRightUIs = (List<RoleRightUI>)await connection.QueryAsync<List<RoleRightUI>>(Sql, parametter);
 
                         data.AppUser = appUserUI;
                         data.AppRole = appRoleUI;
+                        data.RoleRights = roleRightUIs;
                     }
                     return data;
                 }
