@@ -1,6 +1,7 @@
 ﻿using AuthorizationService.BaseObjects;
 using AuthorizationService.Data;
 using AuthServices;
+using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using SharedLib;
 using SharedLib.Models;
@@ -17,24 +18,28 @@ namespace AuthorizationService.Service
         JwtConfig jwtConfig;
         private IConfiguration _config;
         RefreshTokenDatas _tokenDatas;
-        public AuthenticationService(IConfiguration config, 
+        IMapper _mapper;
+        public AuthenticationService(IConfiguration config,
             RefreshTokenDatas tokenDatas,
-            AccountService accountService)
+            AccountService accountService,
+            IMapper mapper)
         {
             _config = config;
             _tokenDatas = tokenDatas;
             jwtConfig = _config.GetSection("Jwt").Get<JwtConfig>();
-            _accountService= accountService;
+            _accountService = accountService;
+            _mapper = mapper;
         }
         public async Task<UserInfo> AuthenticateUser(LoginModel model)
         {
             UserInfo userInfo = null;
-           BaseAppUser appUser=await  _accountService.GetUserInfo(model.UserName,model.CompanyID,model.AppID);
+            BaseAppUser appUser = await _accountService.GetUserInfo(model.UserName, model.CompanyID, model.AppID);
             if (appUser != null)
             {
-                if ( appUser.Pwd==model.Password)
+                if (appUser.Pwd == model.Password)
                 {
-                     userInfo = GetUserInfor(appUser);
+                    userInfo = GetUserInfor(appUser);
+                    userInfo.AppID = model.AppID;
                     return userInfo;
                 }
             }
@@ -43,7 +48,9 @@ namespace AuthorizationService.Service
 
         private UserInfo? GetUserInfor(BaseAppUser appUser)
         {
-            throw new NotImplementedException();
+            UserInfo userInfo = _mapper.Map<UserInfo>(appUser);
+            userInfo.CompanyID = appUser.Company.ID;
+            return userInfo;
         }
 
         public JwtData GenerateJSONWebToken(UserInfo userInfo)
@@ -62,7 +69,7 @@ namespace AuthorizationService.Service
             claims.Add(new Claim("UserName", userInfo.UserName));
             claims.Add(new Claim("Roles", userInfo.Roles.ToString()));
 
-           
+
 
             SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
             {
@@ -74,12 +81,12 @@ namespace AuthorizationService.Service
 
             };
             JwtData data = new JwtData();
-            
+
 
             var jwtoken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
             string jwt = jwtSecurityTokenHandler.WriteToken(jwtoken);
             string refreshToken = GenerateRefreshToken();
-        int ref_exp_mins= jwtConfig.RefExpireMinutes;
+            int ref_exp_mins = jwtConfig.RefExpireMinutes;
 
             //save data to DB
             RefreshTokenData refreshTokenModel = new RefreshTokenData()
@@ -89,12 +96,12 @@ namespace AuthorizationService.Service
                 IssuedAt = DateTime.UtcNow,
                 ExpiredAt = DateTime.UtcNow.AddMinutes(ref_exp_mins),
 
-                
+
                 IsRevoked = false,
                 IsUsed = false,
 
-                JwtId = jwtoken.Id,                               
-                UserId = userInfo.ID                
+                JwtId = jwtoken.Id,
+                UserId = userInfo.ID
             };
             //save token
             _tokenDatas.AddToken(refreshTokenModel);
@@ -121,7 +128,7 @@ namespace AuthorizationService.Service
 
         public BODataProcessResult RenewToken(JwtData model)
         {
-            BODataProcessResult processResult= new BODataProcessResult();   
+            BODataProcessResult processResult = new BODataProcessResult();
             JwtSecurityTokenHandler tokenSecurityTokenHandler = new JwtSecurityTokenHandler();
             JwtConfig config = _config.GetSection("Jwt").Get<JwtConfig>();
             Byte[] seckeyBytes = Encoding.UTF8.GetBytes(config.Key);
@@ -137,7 +144,7 @@ namespace AuthorizationService.Service
                 ValidateLifetime = false
 
             };
-            
+
             try
             {
                 //b2 check token is Valid
@@ -150,7 +157,7 @@ namespace AuthorizationService.Service
                     if (!result)
                     {
                         processResult.OK = false;
-                        processResult.Message= JwtStatus.InvalidToken.ToString();
+                        processResult.Message = JwtStatus.InvalidToken.ToString();
                         return processResult;
                     }
                 }
@@ -173,7 +180,7 @@ namespace AuthorizationService.Service
                     processResult.Message = JwtStatus.TokenIsNotExist.ToString();
 
                     return processResult;
-                    
+
                 }
                 //check token is used/revoked
                 if (storedToken.IsUsed)
@@ -199,7 +206,7 @@ namespace AuthorizationService.Service
                     processResult.Message = JwtStatus.AccessTokenIdIsNotMatch.ToString();
 
                     return processResult;
-                    
+
                 }
 
                 //Update token
@@ -216,7 +223,7 @@ namespace AuthorizationService.Service
                 processResult.Message = JwtStatus.Success.ToString();
 
                 return processResult;
-               
+
             }
             catch
             {
@@ -227,9 +234,9 @@ namespace AuthorizationService.Service
             }
             finally
             {
-                
+
             }
-            
+
         }
         UserInfo GetUserInfoFromToken(string validToken)
         {

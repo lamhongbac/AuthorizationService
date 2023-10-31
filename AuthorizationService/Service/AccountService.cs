@@ -16,7 +16,7 @@ namespace AuthorizationService.Service
         {
             _mapper = mapper;
             _config = config;
-            _connectionString = _config.GetSection("DBConfiguration:ConnectionString").ToString();
+            _connectionString = _config.GetSection("DBConfiguration:ConnectionString").Value;
         }
 
         public async Task<BaseAppUser> GetUserInfo(string userName, int companyID, int appID)
@@ -29,7 +29,10 @@ namespace AuthorizationService.Service
             }
             else
             {
-                BaseAppUser baseAppUser = _mapper.Map<BaseAppUser>(appUserData);
+                BaseAppUser baseAppUser = _mapper.Map<BaseAppUser>(appUserData.AppUser);
+                baseAppUser.Company = _mapper.Map<BaseCompany>(appUserData.Company);
+                baseAppUser.Role = _mapper.Map<BaseAppRole>(appUserData.AppRole);
+                baseAppUser.Role.Rights = _mapper.Map<List<BaseRoleRight>>(appUserData.RoleRights);
                 return baseAppUser;
             }
         }

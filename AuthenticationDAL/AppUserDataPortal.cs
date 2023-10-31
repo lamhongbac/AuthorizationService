@@ -25,7 +25,7 @@ namespace AuthenticationDAL
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public async Task<AppUserData> GetAppUserData(string userName, int appID, int companyID)
+        public async Task<AppUserData> GetAppUserData(string userName, int companyID, int appID)
         {
             try
             {
@@ -52,10 +52,9 @@ namespace AuthenticationDAL
                         else
                         {
                             data.AppUser = appUserUI;
-
                             //Get AppRoleUI
                             Sql = "SELECT * FROM AppRoles WHERE ID=@ID";
-                            parametter = new { RoleID = appID };
+                            parametter = new { ID = appID };
                             AppRoleUI appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(Sql, parametter);
                             data.AppRole = appRoleUI;
 
@@ -68,8 +67,8 @@ namespace AuthenticationDAL
                             //Get List RoleRightUI
                             Sql = "SELECT * FROM RoleRights WHERE RoleID=@RoleID";
                             parametter = new { RoleID = appUserUI.RoleID };
-                            List<RoleRightUI> roleRightUIs = (List<RoleRightUI>)await connection.QueryAsync<List<RoleRightUI>>(Sql, parametter);
-                            data.RoleRights = roleRightUIs;
+                            var roleRightUIs = await connection.QueryAsync<RoleRightUI>(Sql, parametter);
+                            data.RoleRights = (List<RoleRightUI>)roleRightUIs;
                         }
                         return data;
                     }

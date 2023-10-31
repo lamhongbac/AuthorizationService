@@ -1,8 +1,6 @@
 ﻿using AuthorizationService.Data;
 using AuthorizationService.Service;
 using AuthServices;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SharedLib.Models;
 
@@ -13,21 +11,23 @@ namespace AuthorizationService.Controllers
     public class AccountController : ControllerBase
     {
         AuthenticationService _authenticationService;
-        
+
         public AccountController(AuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
-           
+
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
+        [Route("Login")]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
             IActionResult response = Unauthorized();
-            UserInfo user =await _authenticationService.AuthenticateUser(model);
+            UserInfo user = await _authenticationService.AuthenticateUser(model);
             LoginInfo loginInfo = new LoginInfo();
             if (user != null)
             {
@@ -38,11 +38,15 @@ namespace AuthorizationService.Controllers
 
             return response;
         }
-        public IActionResult Logout(LogOutModel model) 
-        { 
-            var logutResult= _authenticationService.Logout(model);
+        [Route("Logout")]
+        [HttpPost]
+        public IActionResult Logout(LogOutModel model)
+        {
+            var logutResult = _authenticationService.Logout(model);
             return Ok(logutResult);
         }
+        [Route("RenewToken")]
+        [HttpPost]
         public IActionResult RenewToken(JwtData model)
         {
             var renewTokenResult = _authenticationService.RenewToken(model);

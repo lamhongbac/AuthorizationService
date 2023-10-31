@@ -1,5 +1,6 @@
 ﻿using AuthenticationDAL.DTO;
 using AuthorizationService.BaseObjects;
+using AuthorizationService.Data;
 using AutoMapper;
 
 namespace AuthorizationService.Helper
@@ -10,8 +11,11 @@ namespace AuthorizationService.Helper
         {
             CreateMap<BaseCompany, CompanyUI>().ReverseMap();
             CreateMap<BaseAppObject, AppObjectUI>().ReverseMap();
+            CreateMap<BaseRoleRight, RoleRightUI>().ReverseMap();
             CreateMap<BaseAppRole, AppRoleUI>().ReverseMap();
             CreateMap<BaseAppUser, AppUserUI>().ReverseMap();
+            CreateMap<AppUserData, BaseAppUser>().ReverseMap();
+            CreateMap<BaseAppUser, UserInfo>().ReverseMap();
         }
     }
 }

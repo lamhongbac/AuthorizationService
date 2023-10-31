@@ -1,5 +1,6 @@
 using AuthorizationService.Data;
 using AuthorizationService.Helper;
+using AuthorizationService.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -32,6 +33,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddSingleton<RefreshTokenDatas>();
+builder.Services.AddSingleton<AuthenticationService>();
+builder.Services.AddSingleton<AccountService>();
 builder.Services.AddAuthorization(x =>
 {
     x.AddPolicy(IdentityData.AdminUserPolicyName, p => p.RequireClaim(IdentityData.AdminUserClaimName));
