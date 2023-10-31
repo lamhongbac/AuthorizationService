@@ -1,0 +1,28 @@
+He thong quan ly phan quyen cho Platform, co n cty, n ung dung
+trong platform se co  n App
+
+Thiet ke nay chi phu  hop cho platform (kg phu hop cho On premise)
+
+Platform cho phep n cong ty dang ky su dung app (CompanyApp)
+
+
+Application: danh muc ung dung dang co
+AppObject: la danh muc cac chuc nang cua 1 AppID
+AppRole: la maping ds cac AppObject vao cac quyen (trong 1 AppID)
+
+Note: 1 AppRole chi co the tren 1 danh sach AppObject cua 1 AppID
+CompanyApp: quan he 1 cong ty dang ky su dung App
+
+RoleRights: la bang chi tiet hoa quyen cua RoleID-AppObjectID
+
+
+AppUser: danh sach user trong 1 Company , cua 1 App (CompanyAppID)
+AppUser se so huu 1 AppRole (AppRoleID)
+
+Trong truong hop 1 user co n role (role khac nhau tren cac ung dung khac nhau)
+
+Bang User-Role: la danh sach map 1 User vao n role (tat nhen Company phai dang ky thi moi hhien thi cac role tuong ung)
+
+
+
+
