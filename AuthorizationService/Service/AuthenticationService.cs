@@ -1,4 +1,5 @@
-﻿using AuthorizationService.Data;
+﻿using AuthorizationService.BaseObjects;
+using AuthorizationService.Data;
 using AuthServices;
 using Microsoft.IdentityModel.Tokens;
 using SharedLib;
@@ -12,17 +13,35 @@ namespace AuthorizationService.Service
 {
     public class AuthenticationService
     {
+        AccountService _accountService;
         JwtConfig jwtConfig;
         private IConfiguration _config;
         RefreshTokenDatas _tokenDatas;
         public AuthenticationService(IConfiguration config, 
-            RefreshTokenDatas tokenDatas)
+            RefreshTokenDatas tokenDatas,
+            AccountService accountService)
         {
             _config = config;
             _tokenDatas = tokenDatas;
             jwtConfig = _config.GetSection("Jwt").Get<JwtConfig>();
+            _accountService= accountService;
         }
-        public UserInfo? AuthenticateUser(LoginModel model)
+        public async Task<UserInfo> AuthenticateUser(LoginModel model)
+        {
+            UserInfo userInfo = null;
+           BaseAppUser appUser=await  _accountService.GetUserInfo(model.UserName,model.CompanyID,model.AppID);
+            if (appUser != null)
+            {
+                if ( appUser.Pwd==model.Password)
+                {
+                     userInfo = GetUserInfor(appUser);
+                    return userInfo;
+                }
+            }
+            return userInfo;
+        }
+
+        private UserInfo? GetUserInfor(BaseAppUser appUser)
         {
             throw new NotImplementedException();
         }

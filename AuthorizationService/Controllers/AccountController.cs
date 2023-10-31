@@ -24,10 +24,10 @@ namespace AuthorizationService.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public IActionResult Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginModel model)
         {
             IActionResult response = Unauthorized();
-            UserInfo? user = _authenticationService.AuthenticateUser(model);
+            UserInfo user =await _authenticationService.AuthenticateUser(model);
             LoginInfo loginInfo = new LoginInfo();
             if (user != null)
             {
