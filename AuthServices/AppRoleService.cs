@@ -12,7 +12,6 @@ namespace AuthServices
     public class AppRoleService
     {
         private string connectionString = string.Empty;
-        private string tableName = "AppRoles";
         IMapper mapper;
         public AppRoleService(IMapper mapper)
         {
@@ -23,9 +22,8 @@ namespace AuthServices
         {
             try
             {
-                GenericDataPortal<AppRoleUI> dataPortal = new GenericDataPortal<AppRoleUI>(connectionString, tableName);
-                string whereString = string.Empty;
-                List<AppRoleUI> AppRoleUIs = dataPortal.ReadList(whereString).Result;
+                AppRoleDataPortal dataPortal = new AppRoleDataPortal(connectionString);
+                List<AppRoleUI> AppRoleUIs = dataPortal.ReadList().Result;
                 if (AppRoleUIs == null)
                 {
                     result = false;
@@ -46,52 +44,23 @@ namespace AuthServices
             }
         }
 
-        public BaseAppRole GetData(int ID, out string errMessage, out bool result)
-        {
-            try
-            {
-                GenericDataPortal<AppRoleUI> dataPortal = new GenericDataPortal<AppRoleUI>(connectionString, tableName);
-                string whereString = "ID = @ID";
-                object param = new { ID = ID };
-                AppRoleUI AppRoleUIs = dataPortal.Read(whereString, param).Result;
-                if (AppRoleUIs == null)
-                {
-                    result = false;
-                    errMessage = "Data not Found";
-                    return null;
-                }
-                BaseAppRole BaseAppRole = mapper.Map<BaseAppRole>(AppRoleUIs);
-                result = true;
-                errMessage = "Success";
-                return BaseAppRole;
-
-            }
-            catch (Exception ex)
-            {
-                result = false;
-                errMessage = ex.Message;
-                return null;
-            }
-        }
-
         public BaseAppRole GetData(string Number, out string errMessage, out bool result)
         {
             try
             {
-                GenericDataPortal<AppRoleUI> dataPortal = new GenericDataPortal<AppRoleUI>(connectionString, tableName);
-                string whereString = "Number = @Number";
-                object param = new { Number = Number };
-                AppRoleUI AppRoleUIs = dataPortal.Read(whereString, param).Result;
-                if (AppRoleUIs == null)
+                AppRoleDataPortal dataPortal = new AppRoleDataPortal(connectionString);
+                AppRoleData AppRoleData = dataPortal.GetAppUserData(Number).Result;
+                if (AppRoleData == null)
                 {
                     result = false;
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseAppRole BaseAppRole = mapper.Map<BaseAppRole>(AppRoleUIs);
+                BaseAppRole baseData = mapper.Map<BaseAppRole>(AppRoleData.AppRoleUI);
+                baseData.Rights = mapper.Map<List<BaseRoleRight>>(AppRoleData.RoleRightUIs);
                 result = true;
                 errMessage = "Success";
-                return BaseAppRole;
+                return baseData;
 
             }
             catch (Exception ex)
@@ -104,12 +73,25 @@ namespace AuthServices
 
         public async Task<BODataProcessResult> Create(BaseAppRole data)
         {
-            GenericDataPortal<AppRoleUI> dataPortal = new GenericDataPortal<AppRoleUI>(connectionString, tableName);
+            AppRoleDataPortal dataPortal = new AppRoleDataPortal(connectionString);
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
+                var exists = dataPortal.GetAppUserData(data.Number);
+                if (exists != null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Data is exist";
+                    return processResult;
+                }
                 AppRoleUI AppRoleUI = mapper.Map<AppRoleUI>(data);
-                var result = await dataPortal.InsertAsync(AppRoleUI, null);
+                List<RoleRightUI> roleRightUIs = mapper.Map<List<RoleRightUI>>(data.Rights);
+
+                AppRoleData appRoleData = new AppRoleData();
+                appRoleData.AppRoleUI = AppRoleUI;
+                appRoleData.RoleRightUIs = roleRightUIs;
+
+                var result = await dataPortal.Insert(appRoleData);
                 if (result == true)
                 {
                     processResult.OK = true;
@@ -136,12 +118,25 @@ namespace AuthServices
 
         public async Task<BODataProcessResult> Update(BaseAppRole data)
         {
-            GenericDataPortal<AppRoleUI> dataPortal = new GenericDataPortal<AppRoleUI>(connectionString, tableName);
+            AppRoleDataPortal dataPortal = new AppRoleDataPortal(connectionString);
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
+                var exists = dataPortal.GetAppUserData(data.Number);
+                if (exists == null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Data not found";
+                    return processResult;
+                }
                 AppRoleUI AppRoleUI = mapper.Map<AppRoleUI>(data);
-                var result = await dataPortal.UpdateAsync(AppRoleUI, null);
+                List<RoleRightUI> roleRightUIs = mapper.Map<List<RoleRightUI>>(data.Rights);
+
+                AppRoleData appRoleData = new AppRoleData();
+                appRoleData.AppRoleUI = AppRoleUI;
+                appRoleData.RoleRightUIs = roleRightUIs;
+
+                var result = await dataPortal.Update(appRoleData);
                 if (result == true)
                 {
                     processResult.OK = true;
@@ -160,13 +155,83 @@ namespace AuthServices
             }
             return processResult;
         }
-        public BODataProcessResult Delete(BaseAppRole data)
+        public async Task<BODataProcessResult> Delete(BaseAppRole data)
         {
-            return new BODataProcessResult();
+            AppRoleDataPortal dataPortal = new AppRoleDataPortal(connectionString);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                var exists = dataPortal.GetAppUserData(data.Number);
+                if (exists == null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Data not found";
+                    return processResult;
+                }
+                AppRoleUI AppRoleUI = mapper.Map<AppRoleUI>(data);
+                List<RoleRightUI> roleRightUIs = mapper.Map<List<RoleRightUI>>(data.Rights);
+
+                AppRoleData appRoleData = new AppRoleData();
+                appRoleData.AppRoleUI = AppRoleUI;
+                appRoleData.RoleRightUIs = roleRightUIs;
+
+                var result = await dataPortal.Delete(appRoleData);
+                if (result == true)
+                {
+                    processResult.OK = true;
+                    processResult.Message = "Success";
+                }
+                else
+                {
+                    processResult.Message = "Fail";
+                    processResult.OK = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+            }
+            return processResult;
         }
-        public BODataProcessResult MarkDelete(BaseAppRole data)
+        public async Task<BODataProcessResult> MarkDelete(BaseAppRole data)
         {
-            return new BODataProcessResult();
+            AppRoleDataPortal dataPortal = new AppRoleDataPortal(connectionString);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                var exists = dataPortal.GetAppUserData(data.Number);
+                if (exists == null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Data not found";
+                    return processResult;
+                }
+                AppRoleUI AppRoleUI = mapper.Map<AppRoleUI>(data);
+                List<RoleRightUI> roleRightUIs = mapper.Map<List<RoleRightUI>>(data.Rights);
+
+                AppRoleData appRoleData = new AppRoleData();
+                appRoleData.AppRoleUI = AppRoleUI;
+                appRoleData.RoleRightUIs = roleRightUIs;
+
+                var result = await dataPortal.MarkDelete(appRoleData);
+                if (result == true)
+                {
+                    processResult.OK = true;
+                    processResult.Message = "Success";
+                }
+                else
+                {
+                    processResult.Message = "Fail";
+                    processResult.OK = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+            }
+            return processResult;
         }
     }
 }
