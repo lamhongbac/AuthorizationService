@@ -1,3 +1,4 @@
+using AuthorizationService.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationService.Controllers
@@ -13,11 +14,13 @@ namespace AuthorizationService.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
+        
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
         }
 
+        [ServiceFilter(typeof(ApiKeyAuthFilter))]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
