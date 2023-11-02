@@ -55,7 +55,7 @@ namespace AuthenticationDAL
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
                     AppRoleData appRoleData = new AppRoleData();
-                    string sql = "SELECT * FROM " + tableName + "WHERE Number = @Number";
+                    string sql = "SELECT * FROM " + tableName + " WHERE Number = @Number";
                     object param = new { Number = Number };
                     var appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(sql, param);
                     if(appRoleUI == null)

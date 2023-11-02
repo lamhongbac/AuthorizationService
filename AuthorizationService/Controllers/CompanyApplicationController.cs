@@ -1,4 +1,5 @@
 ﻿using AuthorizationService.BaseObjects;
+using AuthorizationService.Models;
 using AuthServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,14 +42,14 @@ namespace AuthorizationService.Controllers
 
         [Route("GetCompanyApplicationByID")]
         [HttpPost]
-        public IActionResult GetData(int ID)
+        public IActionResult GetData(RequestModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
             bool result = false;
             try
             {
-                BaseCompanyApplication baseData = service.GetData(ID, out errMessage, out result);
+                BaseCompanyApplication baseData = service.GetData(model.ID, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
