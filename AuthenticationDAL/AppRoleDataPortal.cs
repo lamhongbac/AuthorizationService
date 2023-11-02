@@ -99,35 +99,41 @@ namespace AuthenticationDAL
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var trans = connection.BeginTransaction();
-                try
+                if (connection.State != ConnectionState.Open)
                 {
-                    var result = await connection.InsertAsync(data.AppRoleUI, trans);
-                    if (result <= 0)
+                    connection.Open();
+                }
+                using (var trans = connection.BeginTransaction())
+                {
+                    try
                     {
-                        trans.Dispose();
-                        return false;
-                    }
-                    else
-                    {
-                        foreach(var item in data.RoleRightUIs)
-                        {
-                            item.RoleID = result;
-                        }
-                        var resultSub = await connection.InsertAsync(data.RoleRightUIs, trans);
-                        if (resultSub <= 0)
+                        var result = await connection.InsertAsync(data.AppRoleUI, trans);
+                        if (result <= 0)
                         {
                             trans.Dispose();
                             return false;
                         }
-                        trans.Commit();
-                        return true;
+                        else
+                        {
+                            foreach (var item in data.RoleRightUIs)
+                            {
+                                item.RoleID = result;
+                            }
+                            var resultSub = await connection.InsertAsync(data.RoleRightUIs, trans);
+                            if (resultSub <= 0)
+                            {
+                                trans.Dispose();
+                                return false;
+                            }
+                            trans.Commit();
+                            return true;
+                        }
                     }
-                }
-                catch
-                {
-                    trans.Dispose();
-                    return false;
+                    catch
+                    {
+                        trans.Dispose();
+                        return false;
+                    }
                 }
                 
             }
@@ -138,31 +144,37 @@ namespace AuthenticationDAL
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var trans = connection.BeginTransaction();
-                try
+                if (connection.State != ConnectionState.Open)
                 {
-                    var result = await connection.UpdateAsync(data.AppRoleUI, trans);
-                    if (result == false)
+                    connection.Open();
+                }
+                using (var trans = connection.BeginTransaction())
+                {
+                    try
                     {
-                        trans.Dispose();
-                        return false;
-                    }
-                    else
-                    {
-                        var resultSub = await connection.UpdateAsync(data.RoleRightUIs, trans);
-                        if (resultSub == false)
+                        var result = await connection.UpdateAsync(data.AppRoleUI, trans);
+                        if (result == false)
                         {
                             trans.Dispose();
                             return false;
                         }
-                        trans.Commit();
-                        return true;
+                        else
+                        {
+                            var resultSub = await connection.UpdateAsync(data.RoleRightUIs, trans);
+                            if (resultSub == false)
+                            {
+                                trans.Dispose();
+                                return false;
+                            }
+                            trans.Commit();
+                            return true;
+                        }
                     }
-                }
-                catch
-                {
-                    trans.Dispose();
-                    return false;
+                    catch
+                    {
+                        trans.Dispose();
+                        return false;
+                    }
                 }
 
             }
@@ -173,31 +185,37 @@ namespace AuthenticationDAL
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var trans = connection.BeginTransaction();
-                try
+                if (connection.State != ConnectionState.Open)
                 {
-                    var result = await connection.DeleteAsync(data.AppRoleUI, trans);
-                    if (result == false)
+                    connection.Open();
+                }
+                using (var trans = connection.BeginTransaction())
+                {
+                    try
                     {
-                        trans.Dispose();
-                        return false;
-                    }
-                    else
-                    {
-                        var resultSub = await connection.DeleteAsync(data.RoleRightUIs, trans);
-                        if (resultSub == false)
+                        var result = await connection.DeleteAsync(data.AppRoleUI, trans);
+                        if (result == false)
                         {
                             trans.Dispose();
                             return false;
                         }
-                        trans.Commit();
-                        return true;
+                        else
+                        {
+                            var resultSub = await connection.DeleteAsync(data.RoleRightUIs, trans);
+                            if (resultSub == false)
+                            {
+                                trans.Dispose();
+                                return false;
+                            }
+                            trans.Commit();
+                            return true;
+                        }
                     }
-                }
-                catch
-                {
-                    trans.Dispose();
-                    return false;
+                    catch
+                    {
+                        trans.Dispose();
+                        return false;
+                    }
                 }
 
             }
@@ -207,31 +225,37 @@ namespace AuthenticationDAL
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var trans = connection.BeginTransaction();
-                try
+                if (connection.State != ConnectionState.Open)
                 {
-                    var result = await connection.UpdateAsync(data.AppRoleUI, trans);
-                    if (result == false)
+                    connection.Open();
+                }
+                using (var trans = connection.BeginTransaction())
+                {
+                    try
                     {
-                        trans.Dispose();
-                        return false;
-                    }
-                    else
-                    {
-                        var resultSub = await connection.UpdateAsync(data.RoleRightUIs, trans);
-                        if (resultSub == false)
+                        var result = await connection.UpdateAsync(data.AppRoleUI, trans);
+                        if (result == false)
                         {
                             trans.Dispose();
                             return false;
                         }
-                        trans.Commit();
-                        return true;
+                        else
+                        {
+                            var resultSub = await connection.UpdateAsync(data.RoleRightUIs, trans);
+                            if (resultSub == false)
+                            {
+                                trans.Dispose();
+                                return false;
+                            }
+                            trans.Commit();
+                            return true;
+                        }
                     }
-                }
-                catch
-                {
-                    trans.Dispose();
-                    return false;
+                    catch
+                    {
+                        trans.Dispose();
+                        return false;
+                    }
                 }
 
             }
