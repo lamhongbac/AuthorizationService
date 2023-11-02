@@ -1,4 +1,5 @@
 ﻿using AuthorizationService.BaseObjects;
+using AuthorizationService.Models;
 using AuthServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,14 +68,14 @@ namespace AuthorizationService.Controllers
 
         [Route("GetAppRoleByNumber")]
         [HttpPost]
-        public IActionResult GetData(string Number)
+        public IActionResult GetData(RequestModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
             bool result = false;
             try
             {
-                BaseAppRole baseData = service.GetData(Number, out errMessage, out result);
+                BaseAppRole baseData = service.GetData(model.Number, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;

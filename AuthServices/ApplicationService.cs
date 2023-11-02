@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AuthServices
 {
@@ -15,6 +16,11 @@ namespace AuthServices
         private string connectionString = string.Empty;
         private string tableName = "Applications";
         IMapper mapper;
+        public ApplicationService(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
         public ApplicationService(IMapper mapper)
         {
             this.mapper = mapper;
@@ -33,7 +39,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                List<BaseApplication> baseApplications = mapper.Map<List<BaseApplication>>(applicationUIs);
+                IMappingHelper<BaseApplication, ApplicationUI> mappingHelper = new IMappingHelper<BaseApplication, ApplicationUI>();
+                List<BaseApplication> baseApplications = mappingHelper.Map(applicationUIs);
+
+
+                //List<BaseApplication> baseApplications = mapper.Map<List<BaseApplication>>(applicationUIs);
                 result = true;
                 errMessage = "Success";
                 return baseApplications;
@@ -54,14 +64,18 @@ namespace AuthServices
                 GenericDataPortal<ApplicationUI> dataPortal = new GenericDataPortal<ApplicationUI>(connectionString, tableName);
                 string whereString = "ID = @ID";
                 object param = new { ID = ID };
-                ApplicationUI applicationUIs = dataPortal.Read(whereString, param).Result;
-                if (applicationUIs == null)
+                ApplicationUI applicationUI = dataPortal.Read(whereString, param).Result;
+                if (applicationUI == null)
                 {
                     result = false;
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUIs);
+
+                IMappingHelper<BaseApplication, ApplicationUI> mappingHelper = new IMappingHelper<BaseApplication, ApplicationUI>();
+                BaseApplication baseApplication = mappingHelper.Map(applicationUI);
+
+                //BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUI);
                 result = true;
                 errMessage = "Success";
                 return baseApplication;
@@ -82,14 +96,18 @@ namespace AuthServices
                 GenericDataPortal<ApplicationUI> dataPortal = new GenericDataPortal<ApplicationUI>(connectionString, tableName);
                 string whereString = "Number = @Number";
                 object param = new { Number = Number };
-                ApplicationUI applicationUIs = dataPortal.Read(whereString, param).Result;
-                if (applicationUIs == null)
+                ApplicationUI applicationUI = dataPortal.Read(whereString, param).Result;
+                if (applicationUI == null)
                 {
                     result = false;
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUIs);
+
+                IMappingHelper<BaseApplication, ApplicationUI> mappingHelper = new IMappingHelper<BaseApplication, ApplicationUI>();
+                BaseApplication baseApplication = mappingHelper.Map(applicationUI);
+
+                //BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUIs);
                 result = true;
                 errMessage = "Success";
                 return baseApplication;
@@ -109,7 +127,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
+                IMappingHelper<ApplicationUI, BaseApplication> mappingHelper = new IMappingHelper<ApplicationUI, BaseApplication>();
+                ApplicationUI applicationUI = mappingHelper.Map(data);
+
+                //ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
                 var result = await dataPortal.InsertAsync(applicationUI, null);
                 if(result == true)
                 {
@@ -141,7 +162,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
+                IMappingHelper<ApplicationUI, BaseApplication> mappingHelper = new IMappingHelper<ApplicationUI, BaseApplication>();
+                ApplicationUI applicationUI = mappingHelper.Map(data);
+
+                //ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
                 var result = await dataPortal.UpdateAsync(applicationUI, null);
                 if (result == true)
                 {

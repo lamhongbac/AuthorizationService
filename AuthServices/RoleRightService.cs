@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AuthServices.Helpers;
 
 namespace AuthServices
 {
@@ -17,6 +18,11 @@ namespace AuthServices
         public RoleRightService(IMapper mapper)
         {
             this.mapper = mapper;
+        }
+
+        public RoleRightService(string connectionString)
+        {
+            this.connectionString = connectionString;
         }
 
         public List<BaseRoleRight> GetDatas(out string errMessage, out bool result)
@@ -32,7 +38,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                List<BaseRoleRight> BaseRoleRights = mapper.Map<List<BaseRoleRight>>(RoleRightUIs);
+
+                IMappingHelper<BaseRoleRight, RoleRightUI> mappingHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
+                List<BaseRoleRight> BaseRoleRights = mappingHelper.Map(RoleRightUIs);
+
+                //List<BaseRoleRight> BaseRoleRights = mapper.Map<List<BaseRoleRight>>(RoleRightUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseRoleRights;
@@ -60,7 +70,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseRoleRight BaseRoleRight = mapper.Map<BaseRoleRight>(RoleRightUIs);
+
+                IMappingHelper<BaseRoleRight, RoleRightUI> mappingHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
+                BaseRoleRight BaseRoleRight = mappingHelper.Map(RoleRightUIs);
+
+                //BaseRoleRight BaseRoleRight = mapper.Map<BaseRoleRight>(RoleRightUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseRoleRight;
@@ -88,7 +102,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseRoleRight BaseRoleRight = mapper.Map<BaseRoleRight>(RoleRightUIs);
+
+                IMappingHelper<BaseRoleRight, RoleRightUI> mappingHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
+                BaseRoleRight BaseRoleRight = mappingHelper.Map(RoleRightUIs);
+
+                //BaseRoleRight BaseRoleRight = mapper.Map<BaseRoleRight>(RoleRightUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseRoleRight;
@@ -108,7 +126,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                RoleRightUI RoleRightUI = mapper.Map<RoleRightUI>(data);
+                IMappingHelper<RoleRightUI, BaseRoleRight> mappingHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
+                RoleRightUI RoleRightUI = mappingHelper.Map(data);
+
+                //RoleRightUI RoleRightUI = mapper.Map<RoleRightUI>(data);
                 var result = await dataPortal.InsertAsync(RoleRightUI, null);
                 if (result == true)
                 {
@@ -140,7 +161,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                RoleRightUI RoleRightUI = mapper.Map<RoleRightUI>(data);
+                IMappingHelper<RoleRightUI, BaseRoleRight> mappingHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
+                RoleRightUI RoleRightUI = mappingHelper.Map(data);
+
+                //RoleRightUI RoleRightUI = mapper.Map<RoleRightUI>(data);
                 var result = await dataPortal.UpdateAsync(RoleRightUI, null);
                 if (result == true)
                 {
