@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AuthServices.Helpers;
 
 namespace AuthServices
 {
@@ -17,6 +18,11 @@ namespace AuthServices
         public CompanyApplicationService(IMapper mapper)
         {
             this.mapper = mapper;
+        }
+
+        public CompanyApplicationService(string connectionString)
+        {
+            this.connectionString = connectionString;
         }
 
         public List<BaseCompanyApplication> GetDatas(out string errMessage, out bool result)
@@ -32,7 +38,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                List<BaseCompanyApplication> BaseCompanyApplications = mapper.Map<List<BaseCompanyApplication>>(CompanyApplicationUIs);
+
+                IMappingHelper<BaseCompanyApplication, CompanyApplicationUI> mappingHelper = new IMappingHelper<BaseCompanyApplication, CompanyApplicationUI>();
+                List<BaseCompanyApplication> BaseCompanyApplications = mappingHelper.Map(CompanyApplicationUIs);
+
+                //List<BaseCompanyApplication> BaseCompanyApplications = mapper.Map<List<BaseCompanyApplication>>(CompanyApplicationUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseCompanyApplications;
@@ -60,7 +70,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseCompanyApplication BaseCompanyApplication = mapper.Map<BaseCompanyApplication>(CompanyApplicationUIs);
+
+                IMappingHelper<BaseCompanyApplication, CompanyApplicationUI> mappingHelper = new IMappingHelper<BaseCompanyApplication, CompanyApplicationUI>();
+                BaseCompanyApplication BaseCompanyApplication = mappingHelper.Map(CompanyApplicationUIs);
+
+                //BaseCompanyApplication BaseCompanyApplication = mapper.Map<BaseCompanyApplication>(CompanyApplicationUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseCompanyApplication;
@@ -88,7 +102,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseCompanyApplication BaseCompanyApplication = mapper.Map<BaseCompanyApplication>(CompanyApplicationUIs);
+
+                IMappingHelper<BaseCompanyApplication, CompanyApplicationUI> mappingHelper = new IMappingHelper<BaseCompanyApplication, CompanyApplicationUI>();
+                BaseCompanyApplication BaseCompanyApplication = mappingHelper.Map(CompanyApplicationUIs);
+
+                //BaseCompanyApplication BaseCompanyApplication = mapper.Map<BaseCompanyApplication>(CompanyApplicationUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseCompanyApplication;
@@ -108,7 +126,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                CompanyApplicationUI CompanyApplicationUI = mapper.Map<CompanyApplicationUI>(data);
+                IMappingHelper<CompanyApplicationUI, BaseCompanyApplication> mappingHelper = new IMappingHelper<CompanyApplicationUI, BaseCompanyApplication>();
+                CompanyApplicationUI CompanyApplicationUI = mappingHelper.Map(data);
+
+                //CompanyApplicationUI CompanyApplicationUI = mapper.Map<CompanyApplicationUI>(data);
                 var result = await dataPortal.InsertAsync(CompanyApplicationUI, null);
                 if (result == true)
                 {
@@ -140,7 +161,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                CompanyApplicationUI CompanyApplicationUI = mapper.Map<CompanyApplicationUI>(data);
+                IMappingHelper<CompanyApplicationUI, BaseCompanyApplication> mappingHelper = new IMappingHelper<CompanyApplicationUI, BaseCompanyApplication>();
+                CompanyApplicationUI CompanyApplicationUI = mappingHelper.Map(data);
+
+                //CompanyApplicationUI CompanyApplicationUI = mapper.Map<CompanyApplicationUI>(data);
                 var result = await dataPortal.UpdateAsync(CompanyApplicationUI, null);
                 if (result == true)
                 {

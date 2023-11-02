@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AuthServices.Helpers;
 
 namespace AuthServices
 {
@@ -17,6 +18,11 @@ namespace AuthServices
         public CompanyService(IMapper mapper)
         {
             this.mapper = mapper;
+        }
+
+        public CompanyService(string connectionString)
+        {
+            this.connectionString = connectionString;
         }
 
         public List<BaseCompany> GetDatas(out string errMessage, out bool result)
@@ -32,7 +38,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                List<BaseCompany> BaseCompanys = mapper.Map<List<BaseCompany>>(CompanyUIs);
+
+                IMappingHelper<BaseCompany, CompanyUI> mappingHelper = new IMappingHelper<BaseCompany, CompanyUI>();
+                List<BaseCompany> BaseCompanys = mappingHelper.Map(CompanyUIs);
+
+                //List<BaseCompany> BaseCompanys = mapper.Map<List<BaseCompany>>(CompanyUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseCompanys;
@@ -60,7 +70,10 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseCompany BaseCompany = mapper.Map<BaseCompany>(CompanyUIs);
+                IMappingHelper<BaseCompany, CompanyUI> mappingHelper = new IMappingHelper<BaseCompany, CompanyUI>();
+                BaseCompany BaseCompany = mappingHelper.Map(CompanyUIs);
+
+                //BaseCompany BaseCompany = mapper.Map<BaseCompany>(CompanyUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseCompany;
@@ -88,7 +101,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseCompany BaseCompany = mapper.Map<BaseCompany>(CompanyUIs);
+
+                IMappingHelper<BaseCompany, CompanyUI> mappingHelper = new IMappingHelper<BaseCompany, CompanyUI>();
+                BaseCompany BaseCompany = mappingHelper.Map(CompanyUIs);
+
+                //BaseCompany BaseCompany = mapper.Map<BaseCompany>(CompanyUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseCompany;
@@ -108,7 +125,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                CompanyUI CompanyUI = mapper.Map<CompanyUI>(data);
+                IMappingHelper<CompanyUI, BaseCompany> mappingHelper = new IMappingHelper<CompanyUI, BaseCompany>();
+                CompanyUI CompanyUI = mappingHelper.Map(data);
+
+                //CompanyUI CompanyUI = mapper.Map<CompanyUI>(data);
                 var result = await dataPortal.InsertAsync(CompanyUI, null);
                 if (result == true)
                 {
@@ -140,7 +160,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                CompanyUI CompanyUI = mapper.Map<CompanyUI>(data);
+                IMappingHelper<CompanyUI, BaseCompany> mappingHelper = new IMappingHelper<CompanyUI, BaseCompany>();
+                CompanyUI CompanyUI = mappingHelper.Map(data);
+
+                //CompanyUI CompanyUI = mapper.Map<CompanyUI>(data);
                 var result = await dataPortal.UpdateAsync(CompanyUI, null);
                 if (result == true)
                 {

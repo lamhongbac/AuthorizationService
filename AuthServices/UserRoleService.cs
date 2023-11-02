@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AuthServices.Helpers;
 
 namespace AuthServices
 {
@@ -19,12 +20,18 @@ namespace AuthServices
             this.mapper = mapper;
         }
 
+        public UserRoleService(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
         public List<BaseUserRole> GetDatas(out string errMessage, out bool result)
         {
             try
             {
                 GenericDataPortal<UserRoleUI> dataPortal = new GenericDataPortal<UserRoleUI>(connectionString, tableName);
                 string whereString = string.Empty;
+
                 List<UserRoleUI> UserRoleUIs = dataPortal.ReadList(whereString).Result;
                 if (UserRoleUIs == null)
                 {
@@ -32,7 +39,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                List<BaseUserRole> BaseUserRoles = mapper.Map<List<BaseUserRole>>(UserRoleUIs);
+
+                IMappingHelper<BaseUserRole, UserRoleUI> mappingHelper = new IMappingHelper<BaseUserRole, UserRoleUI>();
+                List<BaseUserRole> BaseUserRoles = mappingHelper.Map(UserRoleUIs);
+
+                //List<BaseUserRole> BaseUserRoles = mapper.Map<List<BaseUserRole>>(UserRoleUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserRoles;
@@ -60,7 +71,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseUserRole BaseUserRole = mapper.Map<BaseUserRole>(UserRoleUIs);
+
+                IMappingHelper<BaseUserRole, UserRoleUI> mappingHelper = new IMappingHelper<BaseUserRole, UserRoleUI>();
+                BaseUserRole BaseUserRole = mappingHelper.Map(UserRoleUIs);
+
+                //BaseUserRole BaseUserRole = mapper.Map<BaseUserRole>(UserRoleUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserRole;
@@ -88,7 +103,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseUserRole BaseUserRole = mapper.Map<BaseUserRole>(UserRoleUIs);
+
+                IMappingHelper<BaseUserRole, UserRoleUI> mappingHelper = new IMappingHelper<BaseUserRole, UserRoleUI>();
+                BaseUserRole BaseUserRole = mappingHelper.Map(UserRoleUIs);
+
+                //BaseUserRole BaseUserRole = mapper.Map<BaseUserRole>(UserRoleUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserRole;
@@ -108,7 +127,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                UserRoleUI UserRoleUI = mapper.Map<UserRoleUI>(data);
+                IMappingHelper<UserRoleUI, BaseUserRole> mappingHelper = new IMappingHelper<UserRoleUI, BaseUserRole>();
+                UserRoleUI UserRoleUI = mappingHelper.Map(data);
+
+                //UserRoleUI UserRoleUI = mapper.Map<UserRoleUI>(data);
                 var result = await dataPortal.InsertAsync(UserRoleUI, null);
                 if (result == true)
                 {
@@ -140,7 +162,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                UserRoleUI UserRoleUI = mapper.Map<UserRoleUI>(data);
+                IMappingHelper<UserRoleUI, BaseUserRole> mappingHelper = new IMappingHelper<UserRoleUI, BaseUserRole>();
+                UserRoleUI UserRoleUI = mappingHelper.Map(data);
+
+                //UserRoleUI UserRoleUI = mapper.Map<UserRoleUI>(data);
                 var result = await dataPortal.UpdateAsync(UserRoleUI, null);
                 if (result == true)
                 {

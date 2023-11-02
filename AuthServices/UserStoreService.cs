@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AuthServices.Helpers;
 
 namespace AuthServices
 {
@@ -17,6 +18,11 @@ namespace AuthServices
         public UserStoreService(IMapper mapper)
         {
             this.mapper = mapper;
+        }
+
+        public UserStoreService(string connectionString)
+        {
+            this.connectionString = connectionString;
         }
 
         public List<BaseUserStore> GetDatas(out string errMessage, out bool result)
@@ -32,7 +38,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                List<BaseUserStore> BaseUserStores = mapper.Map<List<BaseUserStore>>(UserStoreUIs);
+
+                IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
+                List<BaseUserStore> BaseUserStores = mappingHelper.Map(UserStoreUIs);
+
+                //List<BaseUserStore> BaseUserStores = mapper.Map<List<BaseUserStore>>(UserStoreUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserStores;
@@ -60,7 +70,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseUserStore BaseUserStore = mapper.Map<BaseUserStore>(UserStoreUIs);
+
+                IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
+                BaseUserStore BaseUserStore = mappingHelper.Map(UserStoreUIs);
+
+                //BaseUserStore BaseUserStore = mapper.Map<BaseUserStore>(UserStoreUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserStore;
@@ -88,7 +102,12 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseUserStore BaseUserStore = mapper.Map<BaseUserStore>(UserStoreUIs);
+
+                
+                IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
+                BaseUserStore BaseUserStore = mappingHelper.Map(UserStoreUIs);
+
+                //BaseUserStore BaseUserStore = mapper.Map<BaseUserStore>(UserStoreUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserStore;
@@ -108,7 +127,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                UserStoreUI UserStoreUI = mapper.Map<UserStoreUI>(data);
+                IMappingHelper<UserStoreUI, BaseUserStore> mappingHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
+                UserStoreUI UserStoreUI = mappingHelper.Map(data);
+
+                //UserStoreUI UserStoreUI = mapper.Map<UserStoreUI>(data);
                 var result = await dataPortal.InsertAsync(UserStoreUI, null);
                 if (result == true)
                 {
@@ -140,7 +162,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                UserStoreUI UserStoreUI = mapper.Map<UserStoreUI>(data);
+                IMappingHelper<UserStoreUI, BaseUserStore> mappingHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
+                UserStoreUI UserStoreUI = mappingHelper.Map(data);
+
+                //UserStoreUI UserStoreUI = mapper.Map<UserStoreUI>(data);
                 var result = await dataPortal.UpdateAsync(UserStoreUI, null);
                 if (result == true)
                 {

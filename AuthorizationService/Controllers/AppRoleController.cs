@@ -1,4 +1,5 @@
 ﻿using AuthorizationService.BaseObjects;
+using AuthorizationService.Models;
 using AuthServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,42 +40,42 @@ namespace AuthorizationService.Controllers
             return Ok(processResult);
         }
 
-        [Route("GetAppRoleByID")]
-        [HttpPost]
-        public IActionResult GetData(int ID)
-        {
-            BODataProcessResult processResult = new BODataProcessResult();
-            string errMessage = string.Empty;
-            bool result = false;
-            try
-            {
-                BaseAppRole baseData = service.GetData(ID, out errMessage, out result);
-                if (result == true)
-                {
-                    processResult.Content = baseData;
-                }
-                processResult.OK = result;
-                processResult.Message = errMessage;
-            }
-            catch (Exception ex)
-            {
-                processResult.OK = false;
-                processResult.Message = ex.Message;
-                return BadRequest(processResult);
-            }
-            return Ok(processResult);
-        }
+        //[Route("GetAppRoleByID")]
+        //[HttpPost]
+        //public IActionResult GetData(int ID)
+        //{
+        //    BODataProcessResult processResult = new BODataProcessResult();
+        //    string errMessage = string.Empty;
+        //    bool result = false;
+        //    try
+        //    {
+        //        BaseAppRole baseData = service.GetData(ID, out errMessage, out result);
+        //        if (result == true)
+        //        {
+        //            processResult.Content = baseData;
+        //        }
+        //        processResult.OK = result;
+        //        processResult.Message = errMessage;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        processResult.OK = false;
+        //        processResult.Message = ex.Message;
+        //        return BadRequest(processResult);
+        //    }
+        //    return Ok(processResult);
+        //}
 
         [Route("GetAppRoleByNumber")]
         [HttpPost]
-        public IActionResult GetData(string Number)
+        public IActionResult GetData(RequestModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
             bool result = false;
             try
             {
-                BaseAppRole baseData = service.GetData(Number, out errMessage, out result);
+                BaseAppRole baseData = service.GetData(model.Number, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
@@ -137,12 +138,12 @@ namespace AuthorizationService.Controllers
 
         [Route("DeleteAppRole")]
         [HttpPost]
-        public IActionResult Delete(BaseAppRole data)
+        public async Task<IActionResult> Delete(BaseAppRole data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                processResult = service.Delete(data);
+                processResult = await service.Delete(data);
             }
             catch (Exception ex)
             {
@@ -159,12 +160,12 @@ namespace AuthorizationService.Controllers
 
         [Route("MarkDeletaAppRole")]
         [HttpPost]
-        public IActionResult MarkDelete(BaseAppRole data)
+        public async Task<IActionResult> MarkDelete(BaseAppRole data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                processResult = service.MarkDelete(data);
+                processResult = await service.MarkDelete(data);
             }
             catch (Exception ex)
             {

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AuthServices.Helpers;
 
 namespace AuthServices
 {
@@ -17,6 +18,11 @@ namespace AuthServices
         public AppUserService(IMapper mapper)
         {
             this.mapper = mapper;
+        }
+
+        public AppUserService(string connectionString)
+        {
+            this.connectionString = connectionString;
         }
 
         public List<BaseAppUser> GetDatas(out string errMessage, out bool result)
@@ -32,7 +38,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
+
+                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
+
+                //List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppUsers;
@@ -60,7 +70,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserUIs);
+
+                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                BaseAppUser BaseAppUser = mappingHelper.Map(AppUserUIs);
+
+                //BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppUser;
@@ -88,7 +102,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserUIs);
+
+                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                BaseAppUser BaseAppUser = mappingHelper.Map(AppUserUIs);
+
+                //BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppUser;
@@ -108,7 +126,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
+                IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
+                AppUserUI AppUserUI = mappingHelper.Map(data);
+
+                //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
                 var result = await dataPortal.InsertAsync(AppUserUI, null);
                 if (result == true)
                 {
@@ -140,7 +161,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
+                IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
+                AppUserUI AppUserUI = mappingHelper.Map(data);
+
+                //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
                 var result = await dataPortal.UpdateAsync(AppUserUI, null);
                 if (result == true)
                 {
