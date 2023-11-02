@@ -17,7 +17,7 @@ namespace SharedLib
         /// tao salt cho member hay user
         /// </summary>
         /// <returns></returns>
-        private static string GetSalt()
+        public static string GetSalt()
         {
             byte[] bytes = new byte[128 / 8];
             using (var keyGenerator = RandomNumberGenerator.Create())
@@ -34,7 +34,7 @@ namespace SharedLib
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        private static string GetHash(string text)
+        public static string GetHash(string text)
         {
             // SHA512 is disposable by inheritance.  
             using (var sha256 = SHA256.Create())
