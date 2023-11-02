@@ -160,6 +160,7 @@ namespace AuthenticationDAL
                         }
                         else
                         {
+                            //for(var item)
                             var resultSub = await connection.UpdateAsync(data.RoleRightUIs, trans);
                             if (resultSub == false)
                             {

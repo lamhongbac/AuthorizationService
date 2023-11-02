@@ -155,7 +155,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                var exists = dataPortal.GetAppUserData(data.Number);
+                var exists = await dataPortal.GetAppUserData(data.Number);
                 if (exists == null)
                 {
                     processResult.OK = false;
