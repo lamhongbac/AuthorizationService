@@ -2,6 +2,7 @@
 using AuthorizationService.Service;
 using AuthServices;
 using Microsoft.AspNetCore.Mvc;
+using SharedLib;
 using SharedLib.Models;
 
 namespace AuthorizationService.Controllers
@@ -28,7 +29,7 @@ namespace AuthorizationService.Controllers
         {
             IActionResult response = Unauthorized();
             UserInfo user = await _authenticationService.AuthenticateUser(model);
-            LoginInfo loginInfo = new LoginInfo();
+            SharedLib.LoginInfo loginInfo = new SharedLib.LoginInfo();
             if (user != null)
             {
                 JwtData jwtData = _authenticationService.GenerateJSONWebToken(user);
