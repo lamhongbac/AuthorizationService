@@ -57,12 +57,13 @@ namespace AuthorizationService.Controllers
                 }
                 processResult.OK = result;
                 processResult.Message = errMessage;
-                return BadRequest(processResult);
+                
             }
             catch (Exception ex)
             {
                 processResult.OK = false;
                 processResult.Message = ex.Message;
+                return BadRequest(processResult);
             }
             return Ok(processResult);
         }

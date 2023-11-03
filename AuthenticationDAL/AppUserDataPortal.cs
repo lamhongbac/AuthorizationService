@@ -26,7 +26,7 @@ namespace AuthenticationDAL
                 {
                     string whereString = " WHERE CompanyAppID = @CompanyAppID";
                     string sql = "SELECT * FROM " + tableName + whereString;
-                    object param = new { };
+                    object param = new { CompanyAppID = companyAppID };
                     var dataUIs = await connection.QueryAsync<AppUserUI>(sql, param);
                     return dataUIs.ToList();
                 }
