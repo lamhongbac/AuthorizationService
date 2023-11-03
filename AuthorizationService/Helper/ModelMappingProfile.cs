@@ -2,6 +2,7 @@
 using AuthorizationService.BaseObjects;
 using AuthorizationService.Data;
 using AutoMapper;
+using SharedLib;
 
 namespace AuthorizationService.Helper
 {
