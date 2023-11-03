@@ -17,6 +17,7 @@
         public string UserType { get; set; }
         public string FullName { get; set; }
         public string Pwd { get; set; }
+        public string PwdKey { get; set; }
         public int CompanyAppID { get; set; }
         public int AppID { get; set; }
         public BaseCompany Company { get; set; }

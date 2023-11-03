@@ -11,6 +11,7 @@ namespace AuthenticationDAL.DTO
         public string UserType { get; set; }
         public string FullName { get; set; }
         public string Pwd { get; set; }
+        public string PwdKey { get; set; }
         public int CompanyAppID { get; set; }
         public string Email { get; set; }
         public string Mobile { get; set; }
