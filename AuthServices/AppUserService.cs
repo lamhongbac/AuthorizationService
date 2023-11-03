@@ -25,13 +25,13 @@ namespace AuthServices
             this.connectionString = connectionString;
         }
 
-        public List<BaseAppUser> GetDatas(out string errMessage, out bool result)
+        public List<BaseAppUser> GetDatas(int companyAppID, out string errMessage, out bool result)
         {
             try
             {
-                GenericDataPortal<AppUserUI> dataPortal = new GenericDataPortal<AppUserUI>(connectionString, tableName);
+                AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
                 string whereString = string.Empty;
-                List<AppUserUI> AppUserUIs = dataPortal.ReadList(whereString).Result;
+                List<AppUserUI> AppUserUIs = dataPortal.ReadList(companyAppID).Result;
                 if (AppUserUIs == null)
                 {
                     result = false;
@@ -60,10 +60,9 @@ namespace AuthServices
         {
             try
             {
-                GenericDataPortal<AppUserUI> dataPortal = new GenericDataPortal<AppUserUI>(connectionString, tableName);
-                string whereString = "ID = @ID";
-                object param = new { ID = ID };
-                AppUserUI AppUserUIs = dataPortal.Read(whereString, param).Result;
+                AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
+                
+                AppUserUI AppUserUIs = dataPortal.Read(ID).Result;
                 if (AppUserUIs == null)
                 {
                     result = false;
@@ -92,10 +91,8 @@ namespace AuthServices
         {
             try
             {
-                GenericDataPortal<AppUserUI> dataPortal = new GenericDataPortal<AppUserUI>(connectionString, tableName);
-                string whereString = "Number = @Number";
-                object param = new { Number = Number };
-                AppUserUI AppUserUIs = dataPortal.Read(whereString, param).Result;
+                AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
+                AppUserUI AppUserUIs = dataPortal.Read(Number).Result;
                 if (AppUserUIs == null)
                 {
                     result = false;
@@ -122,7 +119,7 @@ namespace AuthServices
 
         public async Task<BODataProcessResult> Create(BaseAppUser data)
         {
-            GenericDataPortal<AppUserUI> dataPortal = new GenericDataPortal<AppUserUI>(connectionString, tableName);
+            AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
@@ -130,7 +127,7 @@ namespace AuthServices
                 AppUserUI AppUserUI = mappingHelper.Map(data);
 
                 //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
-                var result = await dataPortal.InsertAsync(AppUserUI, null);
+                var result = await dataPortal.Insert(AppUserUI);
                 if (result == true)
                 {
                     processResult.OK = true;
@@ -157,7 +154,7 @@ namespace AuthServices
 
         public async Task<BODataProcessResult> Update(BaseAppUser data)
         {
-            GenericDataPortal<AppUserUI> dataPortal = new GenericDataPortal<AppUserUI>(connectionString, tableName);
+            AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
@@ -165,7 +162,7 @@ namespace AuthServices
                 AppUserUI AppUserUI = mappingHelper.Map(data);
 
                 //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
-                var result = await dataPortal.UpdateAsync(AppUserUI, null);
+                var result = await dataPortal.Update(AppUserUI);
                 if (result == true)
                 {
                     processResult.OK = true;

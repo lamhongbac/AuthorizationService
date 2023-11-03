@@ -1,8 +1,10 @@
 ﻿using AuthenticationDAL.DTO;
 using Dapper;
+using Dapper.Contrib.Extensions;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AuthenticationDAL
@@ -14,6 +16,109 @@ namespace AuthenticationDAL
         public AppUserDataPortal(string connectionString)
         {
             _connectionString = connectionString;
+        }
+
+        public async Task<List<AppUserUI>> ReadList(int companyAppID)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_connectionString))
+                {
+                    string whereString = " WHERE CompanyAppID = @CompanyAppID";
+                    string sql = "SELECT * FROM " + tableName + whereString;
+                    object param = new { };
+                    var dataUIs = await connection.QueryAsync<AppUserUI>(sql, param);
+                    return dataUIs.ToList();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<AppUserUI> Read(int ID)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_connectionString))
+                {
+                    string whereString = " WHERE ID = @ID";
+                    string sql = "SELECT * FROM " + tableName + whereString;
+                    object param = new { ID = ID };
+                    var dataUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, param);
+                    return dataUI;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<AppUserUI> Read(string Number)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_connectionString))
+                {
+                    string whereString = " WHERE Number = @Number";
+                    string sql = "SELECT * FROM " + tableName + whereString;
+                    object param = new { Number = Number };
+                    var dataUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, param);
+                    return dataUI;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> Insert(AppUserUI data)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_connectionString))
+                { 
+                    var result = await connection.InsertAsync(data);
+                    if(result <= 0)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch 
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> Update(AppUserUI data)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_connectionString))
+                {
+                    var result = await connection.UpdateAsync(data);
+                    if (result == false)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
