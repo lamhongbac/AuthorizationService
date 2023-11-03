@@ -1,4 +1,5 @@
 ﻿using AuthServices;
+using SharedLib.Models;
 
 namespace AuthorizationService.Service
 {
