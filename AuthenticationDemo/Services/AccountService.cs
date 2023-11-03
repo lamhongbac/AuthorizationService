@@ -5,6 +5,8 @@ using System.Security.Claims;
 using System.Text;
 using AuthenticationDemo.Models;
 using SharedLib;
+using AuthServices;
+using SharedLib.Models;
 
 namespace AuthenticationDemo.Services
 {
@@ -34,11 +36,11 @@ namespace AuthenticationDemo.Services
             StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(strUrl, data);
             string result = await response.Content.ReadAsStringAsync();
-            LoginInfo loginInfo = JsonConvert.DeserializeObject<LoginInfo>(result);
+            SharedLib.LoginInfo loginInfo = JsonConvert.DeserializeObject<SharedLib.LoginInfo>(result);
 
             //save cookier JwtData
             JwtUtil jwtUtil = new JwtUtil();
-            UserInfo userInfo = jwtUtil.GetUserInfo(loginInfo.JwtData.Jwt);
+            UserInfo userInfo = jwtUtil.GetUserInfo(loginInfo.JwtData.AccessToken);
 
             List<Claim> claims = new List<Claim>()
             {
