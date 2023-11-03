@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AuthServices.Helpers;
 using static System.Net.Mime.MediaTypeNames;
+using System.Linq;
 
 namespace AuthServices
 {
@@ -148,41 +149,63 @@ namespace AuthServices
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// Update Role
+        /// Co the phat sinh role moi
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public async Task<BODataProcessResult> Update(BaseAppRole data)
         {
             AppRoleDataPortal dataPortal = new AppRoleDataPortal(connectionString);
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                var existsRoleData = dataPortal.GetAppUserData(data.Number);
-                if (existsRoleData == null)
+                AppRoleData existsAppRoleData =await dataPortal.GetAppUserData(data.Number);
+                if (existsAppRoleData == null)
                 {
                     processResult.OK = false;
                     processResult.Message = "Data not found";
                     return processResult;
                 }
-
-                IMappingHelper<AppRoleUI, BaseAppRole> mappingHelper = new IMappingHelper<AppRoleUI, BaseAppRole>();
-                AppRoleUI AppRoleUI = mappingHelper.Map(data);
-
-                // cac right dang co trong CSDL
-                List<RoleRightUI> existRight = data.Rights;
-
+                //b1 xac dinh data update bang AppRole
+                IMappingHelper<AppRoleUI, BaseAppRole> mappingHelper = new IMappingHelper<AppRoleUI, BaseAppRole>();                
+                //Exist AppRoleUI
+                AppRoleUI updateAppRoleUI = mappingHelper.Map(data);
+                //b2 xac dinh data to insert or Update bang RoleRight
+               
 
                 IMappingHelper<RoleRightUI, BaseRoleRight> mappingRightHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
-                
-                
-                List<RoleRightUI> roleRightUIs = mappingRightHelper.Map(data.Rights);
+
+                //Exist Rights= cac right dang co trong CSDL
+                List<RoleRightUI> existRights = existsAppRoleData.RoleRightUIs;
+
+                List<RoleRightUI> tobeUpdateRights = mappingRightHelper.Map(data.Rights);
+                List<RoleRightUI> insertRights = new List<RoleRightUI>();
+                List<RoleRightUI> updateRights = new List<RoleRightUI>();
+                // lay 1 dong trong exist do voi data tu para, neu no kg ton tai la insert,
+                //nguoc lai la Update
+                foreach (var item in existRights)
+                {
+                    //neu ton tai trong danh sach can update la old items=> can update
+                    if (tobeUpdateRights.FirstOrDefault(x=>x.Id==item.Id)!=null)
+                    {
+                        updateRights.Add(item); 
+                    }
+                    else
+                    {
+                        insertRights.Add(item);
+                    }
+                }
+
+              
 
                 //AppRoleUI AppRoleUI = mapper.Map<AppRoleUI>(data);
                 //List<RoleRightUI> roleRightUIs = mapper.Map<List<RoleRightUI>>(data.Rights);
 
-                AppRoleData appRoleData = new AppRoleData();
-                appRoleData.AppRoleUI = AppRoleUI;
-                appRoleData.RoleRightUIs = roleRightUIs;
-
-                var result = await dataPortal.Update(appRoleData);
+                
+                var result = await dataPortal.Update(updateAppRoleUI, insertRights,updateRights);
                 if (result == true)
                 {
                     processResult.OK = true;
