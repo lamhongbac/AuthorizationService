@@ -12,6 +12,8 @@ namespace SharedLib
         public string FullName { get; set; }
         public string EmailAddress { get; set; }
         public string Roles { get; set; }
+        public int AppID { get; set; }
+        public int CompanyID { get; set; }
     }
     public class LoginInfo
     {
