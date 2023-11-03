@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AuthServices.Helpers;
 using AutoMapper.Execution;
 using SharedLib;
+using SharedLib.Models;
 
 namespace AuthServices
 {
@@ -225,6 +226,40 @@ namespace AuthServices
 
                 //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
                 var result = await dataPortal.MarkDelete(ExistUI);
+                if (result == true)
+                {
+                    processResult.OK = true;
+                    processResult.Message = "Success";
+                }
+                else
+                {
+                    processResult.Message = "Fail";
+                    processResult.OK = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+            }
+            return processResult;
+        }
+
+        public async Task<BODataProcessResult> AdminChangePass(ChangePwdModel model)
+        {
+            AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                AppUserUI ExistUI = await dataPortal.Read(model.UserName);
+                if (ExistUI == null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Data not found";
+                    return processResult;
+                }
+                ExistUI.Pwd = model.NewPassword;
+                var result = await dataPortal.Update(ExistUI);
                 if (result == true)
                 {
                     processResult.OK = true;
