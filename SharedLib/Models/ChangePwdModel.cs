@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AuthServices
+namespace SharedLib.Models
 {
     public class ChangePwdModel: BaseAccountModel
     {

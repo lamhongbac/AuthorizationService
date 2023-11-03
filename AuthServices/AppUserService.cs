@@ -136,11 +136,6 @@ namespace AuthServices
                 IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
                 AppUserUI AppUserUI = mappingHelper.Map(data);
 
-                //Mã hoá Password
-                AppUserUI.PwdKey = MSASecurity.GetSalt();
-                string newPwd = AppUserUI.Pwd + AppUserUI.PwdKey;
-                AppUserUI.Pwd = MSASecurity.GetHash(newPwd);
-
                 //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
                 var result = await dataPortal.Insert(AppUserUI);
                 if (result == true)
