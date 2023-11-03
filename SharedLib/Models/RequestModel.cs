@@ -1,4 +1,8 @@
-﻿namespace AuthorizationService.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace SharedLib.Models
 {
     public class RequestModel
     {
