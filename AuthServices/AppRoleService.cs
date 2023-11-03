@@ -155,8 +155,8 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                var exists = dataPortal.GetAppUserData(data.Number);
-                if (exists == null)
+                var existsRoleData = dataPortal.GetAppUserData(data.Number);
+                if (existsRoleData == null)
                 {
                     processResult.OK = false;
                     processResult.Message = "Data not found";
@@ -166,7 +166,13 @@ namespace AuthServices
                 IMappingHelper<AppRoleUI, BaseAppRole> mappingHelper = new IMappingHelper<AppRoleUI, BaseAppRole>();
                 AppRoleUI AppRoleUI = mappingHelper.Map(data);
 
+                // cac right dang co trong CSDL
+                List<RoleRightUI> existRight = data.Rights;
+
+
                 IMappingHelper<RoleRightUI, BaseRoleRight> mappingRightHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
+                
+                
                 List<RoleRightUI> roleRightUIs = mappingRightHelper.Map(data.Rights);
 
                 //AppRoleUI AppRoleUI = mapper.Map<AppRoleUI>(data);

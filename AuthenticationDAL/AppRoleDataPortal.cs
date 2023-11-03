@@ -140,8 +140,10 @@ namespace AuthenticationDAL
             
         }
 
-        public async Task<bool> Update(AppRoleData data)
+        public async Task<bool> Update(AppRoleUI updateAppRoleUI, List<RoleRightUI> insertRights,
+            List<RoleRightUI> updateRights)
         {
+            bool result = false;
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
                 if (connection.State != ConnectionState.Open)
@@ -152,33 +154,45 @@ namespace AuthenticationDAL
                 {
                     try
                     {
-                        var result = await connection.UpdateAsync(data.AppRoleUI, trans);
+                         result = await connection.UpdateAsync(updateAppRoleUI, trans);
                         if (result == false)
                         {
-                            trans.Dispose();
+                           
                             return false;
                         }
                         else
                         {
-                            var resultSub = await connection.UpdateAsync(data.RoleRightUIs, trans);
-                            if (resultSub == false)
+                            var insert_result = true;
+                            var updated_result = true;
+                            if (updateRights != null && updateRights.Count > 0)
                             {
-                                trans.Dispose();
-                                return false;
+                                updated_result = await connection.UpdateAsync(updateRights, trans);
                             }
-                            trans.Commit();
-                            return true;
+                            if (insertRights != null && insertRights.Count > 0)
+                            {
+                                updated_result = await connection.InsertAsync(insertRights, trans)>0;
+                            }
+                            result = updated_result && insert_result;
+                            if (result)
+                            {
+                                trans.Commit();
+                               
+                            }
+                            else
+                            {
+                                trans.Rollback();    
+                            }
+                            
                         }
                     }
                     catch
                     {
-                        trans.Dispose();
-                        return false;
+                        result = false;
                     }
                 }
 
             }
-
+            return result;
         }
 
         public async Task<bool> Delete(AppRoleData data)
