@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using AuthServices.Helpers;
+using AutoMapper.Execution;
 
 namespace AuthServices
 {
@@ -87,12 +88,12 @@ namespace AuthServices
             }
         }
 
-        public BaseAppUser GetData(string Number, out string errMessage, out bool result)
+        public BaseAppUser GetData(string UserName, out string errMessage, out bool result)
         {
             try
             {
                 AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
-                AppUserUI AppUserUIs = dataPortal.Read(Number).Result;
+                AppUserUI AppUserUIs = dataPortal.Read(UserName).Result;
                 if (AppUserUIs == null)
                 {
                     result = false;
@@ -123,6 +124,14 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
+                AppUserUI ExistUI = await dataPortal.Read(data.UserName);
+                if (ExistUI != null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Data is exist";
+                    return processResult;
+                }
+
                 IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
                 AppUserUI AppUserUI = mappingHelper.Map(data);
 
@@ -158,6 +167,14 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
+                AppUserUI ExistUI = await dataPortal.Read(data.UserName);
+                if (ExistUI == null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Data not found";
+                    return processResult;
+                }
+
                 IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
                 AppUserUI AppUserUI = mappingHelper.Map(data);
 
@@ -185,9 +202,45 @@ namespace AuthServices
         {
             return new BODataProcessResult();
         }
-        public BODataProcessResult MarkDelete(BaseAppUser data)
+        public async Task<BODataProcessResult> MarkDelete(BaseAppUser data)
         {
-            return new BODataProcessResult();
+            AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                AppUserUI ExistUI = await dataPortal.Read(data.UserName);
+                if (ExistUI == null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Data not found";
+                    return processResult;
+                }
+
+                ExistUI.IsDeleted = true;
+                ExistUI.ModifiedOn = data.ModifiedOn;
+                ExistUI.ModifiedBy = data.ModifiedBy;
+                //IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
+                //AppUserUI AppUserUI = mappingHelper.Map(data);
+
+                //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
+                var result = await dataPortal.MarkDelete(ExistUI);
+                if (result == true)
+                {
+                    processResult.OK = true;
+                    processResult.Message = "Success";
+                }
+                else
+                {
+                    processResult.Message = "Fail";
+                    processResult.OK = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+            }
+            return processResult;
         }
     }
 }

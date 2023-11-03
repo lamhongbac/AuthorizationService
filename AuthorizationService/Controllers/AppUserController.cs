@@ -43,14 +43,14 @@ namespace AuthorizationService.Controllers
 
         [Route("GetAppUserByID")]
         [HttpPost]
-        public IActionResult GetData(int ID)
+        public IActionResult GetDataByID(RequestModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
             bool result = false;
             try
             {
-                BaseAppUser baseData = service.GetData(ID, out errMessage, out result);
+                BaseAppUser baseData = service.GetData(model.ID, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
@@ -69,14 +69,14 @@ namespace AuthorizationService.Controllers
 
         [Route("GetAppUserByNumber")]
         [HttpPost]
-        public IActionResult GetData(string Number)
+        public IActionResult GetDataByNumber(RequestModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
             bool result = false;
             try
             {
-                BaseAppUser baseData = service.GetData(Number, out errMessage, out result);
+                BaseAppUser baseData = service.GetData(model.Number, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
@@ -159,14 +159,14 @@ namespace AuthorizationService.Controllers
             return Ok(processResult);
         }
 
-        [Route("MarkDeletaAppUser")]
+        [Route("MarkDeleteAppUser")]
         [HttpPost]
-        public IActionResult MarkDelete(BaseAppUser data)
+        public async Task<IActionResult> MarkDelete(BaseAppUser data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                processResult = service.MarkDelete(data);
+                processResult = await service.MarkDelete(data);
             }
             catch (Exception ex)
             {

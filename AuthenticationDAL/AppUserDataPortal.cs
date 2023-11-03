@@ -56,15 +56,15 @@ namespace AuthenticationDAL
             }
         }
 
-        public async Task<AppUserUI> Read(string Number)
+        public async Task<AppUserUI> Read(string UserName)
         {
             try
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
-                    string whereString = " WHERE Number = @Number";
+                    string whereString = " WHERE UserName = @UserName";
                     string sql = "SELECT * FROM " + tableName + whereString;
-                    object param = new { Number = Number };
+                    object param = new { UserName = UserName };
                     var dataUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, param);
                     return dataUI;
                 }
@@ -99,6 +99,29 @@ namespace AuthenticationDAL
         }
 
         public async Task<bool> Update(AppUserUI data)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_connectionString))
+                {
+                    var result = await connection.UpdateAsync(data);
+                    if (result == false)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> MarkDelete(AppUserUI data)
         {
             try
             {
