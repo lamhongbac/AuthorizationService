@@ -21,8 +21,8 @@
         public int CompanyAppID { get; set; }
         public int AppID { get; set; }
         public BaseCompany Company { get; set; }
-        public string Email { get; set; }
-        public string Mobile { get; set; }
+        public string? Email { get; set; }
+        public string? Mobile { get; set; }
         public bool IsDeleted { get; set; }
         public int RoleID { get; set; }
         public BaseAppRole Role { get; set; }
