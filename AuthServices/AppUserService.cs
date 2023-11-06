@@ -259,6 +259,8 @@ namespace AuthServices
                     return processResult;
                 }
                 ExistUI.Pwd = model.NewPassword;
+                ExistUI.ModifiedBy = model.ModifiedBy;
+                ExistUI.ModifiedOn = DateTime.Now;
                 var result = await dataPortal.Update(ExistUI);
                 if (result == true)
                 {

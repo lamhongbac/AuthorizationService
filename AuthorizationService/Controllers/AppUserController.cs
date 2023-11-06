@@ -181,5 +181,23 @@ namespace AuthorizationService.Controllers
             }
             return Ok(processResult);
         }
+
+        [Route("AdminChangePass")]
+        [HttpPost]
+        public async Task<IActionResult> ChangePass(ChangePwdModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+            try
+            {
+                processResult = await service.AdminChangePass(model);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            return Ok(processResult);
+        }
     }
 }
