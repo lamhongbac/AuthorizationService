@@ -14,6 +14,7 @@ namespace SharedLib.Models
         public string ConfirmPassword { get; set; } = string.Empty;
         public string NewPassword { get; set; } = string.Empty;
         public string ModifiedBy { get; set; } = string.Empty;
+        public string? PwdKey { get; set; }
         public bool IsError { get; set; }
         public int UserID { get; set; }
 
