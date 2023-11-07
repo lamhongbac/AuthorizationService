@@ -141,7 +141,7 @@ namespace AuthenticationDAL
         }
 
         public async Task<bool> Update(AppRoleUI updateAppRoleUI, List<RoleRightUI> insertRights,
-            List<RoleRightUI> updateRights)
+            List<RoleRightUI> updateRights, List<RoleRightUI> deleteRights)
         {
             bool result = false;
             using (IDbConnection connection = new SqlConnection(_connectionString))
@@ -164,15 +164,20 @@ namespace AuthenticationDAL
                         {
                             var insert_result = true;
                             var updated_result = true;
+                            var deleted_result = true;
                             if (updateRights != null && updateRights.Count > 0)
                             {
                                 updated_result = await connection.UpdateAsync(updateRights, trans);
                             }
                             if (insertRights != null && insertRights.Count > 0)
                             {
-                                updated_result = await connection.InsertAsync(insertRights, trans)>0;
+                                insert_result = await connection.InsertAsync(insertRights, trans)>0;
                             }
-                            result = updated_result && insert_result;
+                            if(deleteRights != null && deleteRights.Count > 0)
+                            {
+                                deleted_result = await connection.DeleteAsync(deleteRights, trans);
+                            }
+                            result = updated_result && insert_result && deleted_result;
                             if (result)
                             {
                                 trans.Commit();
@@ -187,6 +192,7 @@ namespace AuthenticationDAL
                     }
                     catch
                     {
+                        trans.Rollback();
                         result = false;
                     }
                 }
