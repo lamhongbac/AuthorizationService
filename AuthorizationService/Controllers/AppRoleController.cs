@@ -76,7 +76,7 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                BaseAppRole baseData = service.GetData(model.Number, out errMessage, out result);
+                BaseAppRole baseData = service.GetData(model.Number, model.ID, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;

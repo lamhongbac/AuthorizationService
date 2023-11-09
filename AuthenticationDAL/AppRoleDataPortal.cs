@@ -48,15 +48,15 @@ namespace AuthenticationDAL
         /// </summary>
         /// <param name="Number"></param>
         /// <returns></returns>
-        public async Task<AppRoleData> GetAppUserData(string Number)
+        public async Task<AppRoleData> GetAppUserData(string Number, int CompanyAppID)
         {
             try
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
                     AppRoleData appRoleData = new AppRoleData();
-                    string sql = "SELECT * FROM " + tableName + " WHERE Number = @Number";
-                    object param = new { Number = Number };
+                    string sql = "SELECT * FROM " + tableName + " WHERE Number = @Number AND CompanyAppID = @CompanyAppID";
+                    object param = new { Number = Number, CompanyAppID = CompanyAppID };
                     var appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(sql, param);
                     if(appRoleUI == null)
                     {

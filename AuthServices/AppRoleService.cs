@@ -63,12 +63,12 @@ namespace AuthServices
             }
         }
 
-        public BaseAppRole GetData(string Number, out string errMessage, out bool result)
+        public BaseAppRole GetData(string Number, int CompanyAppID, out string errMessage, out bool result)
         {
             try
             {
                 AppRoleDataPortal dataPortal = new AppRoleDataPortal(connectionString);
-                AppRoleData AppRoleData = dataPortal.GetAppUserData(Number).Result;
+                AppRoleData AppRoleData = dataPortal.GetAppUserData(Number, CompanyAppID).Result;
                 if (AppRoleData == null)
                 {
                     result = false;
@@ -103,7 +103,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppRoleData exists = await dataPortal.GetAppUserData(data.Number);
+                AppRoleData exists = await dataPortal.GetAppUserData(data.Number, data.CompanyAppID);
                 if (exists != null)
                 {
                     processResult.OK = false;
@@ -162,7 +162,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppRoleData existsAppRoleData =await dataPortal.GetAppUserData(data.Number);
+                AppRoleData existsAppRoleData =await dataPortal.GetAppUserData(data.Number, data.CompanyAppID);
                 if (existsAppRoleData == null)
                 {
                     processResult.OK = false;
@@ -241,7 +241,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                var exists = dataPortal.GetAppUserData(data.Number);
+                var exists = dataPortal.GetAppUserData(data.Number, data.CompanyAppID);
                 if (exists == null)
                 {
                     processResult.OK = false;
@@ -280,7 +280,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                var exists = dataPortal.GetAppUserData(data.Number);
+                var exists = dataPortal.GetAppUserData(data.Number, data.CompanyAppID);
                 if (exists == null)
                 {
                     processResult.OK = false;

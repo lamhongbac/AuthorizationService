@@ -1,6 +1,7 @@
 ﻿using AuthorizationService.BaseObjects;
 using AuthServices;
 using Microsoft.AspNetCore.Mvc;
+using SharedLib.Models;
 
 namespace AuthorizationService.Controllers
 {
@@ -9,22 +10,33 @@ namespace AuthorizationService.Controllers
     public class AppObjectController : ControllerBase
     {
         AppObjectService service;
-        public AppObjectController(AppObjectService service)
+        CompanyApplicationService companyApplicationService;
+        public AppObjectController(AppObjectService service, CompanyApplicationService companyApplicationService)
         {
             this.service = service;
+            this.companyApplicationService = companyApplicationService;
+
         }
         [Route("GetAppObjects")]
         [HttpPost]
-        public IActionResult GetDatas()
+        public IActionResult GetDatas(RequestModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
             bool result = false;
             try
             {
+                BaseCompanyApplication baseCompany = companyApplicationService.GetData(model.ID, out errMessage, out result);
+                if(baseCompany == null)
+                {
+                    processResult.OK = result;
+                    processResult.Message = errMessage;
+                    return Ok(processResult);
+                }
                 List<BaseAppObject> baseDatas = service.GetDatas(out errMessage, out result);
                 if (result == true)
                 {
+                    baseDatas = baseDatas.Where(x => x.AppID == baseCompany.AppID).ToList();
                     processResult.Content = baseDatas;
                 }
                 processResult.OK = result;
