@@ -16,7 +16,7 @@ namespace AuthorizationService.Controllers
         }
         [Route("GetAppRoles")]
         [HttpPost]
-        public IActionResult GetDatas()
+        public IActionResult GetDatas(RequestModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
@@ -26,6 +26,7 @@ namespace AuthorizationService.Controllers
                 List<BaseAppRole> baseDatas = service.GetDatas(out errMessage, out result);
                 if (result == true)
                 {
+                    baseDatas = baseDatas.Where(x => x.CompanyAppID == model.ID).ToList();
                     processResult.Content = baseDatas;
                 }
                 processResult.OK = result;
