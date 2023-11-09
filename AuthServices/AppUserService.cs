@@ -90,12 +90,12 @@ namespace AuthServices
             }
         }
 
-        public BaseAppUser GetData(string UserName, out string errMessage, out bool result)
+        public BaseAppUser GetData(string UserName, int CompanyAppID, out string errMessage, out bool result)
         {
             try
             {
                 AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
-                AppUserUI AppUserUIs = dataPortal.Read(UserName).Result;
+                AppUserUI AppUserUIs = dataPortal.Read(UserName, CompanyAppID).Result;
                 if (AppUserUIs == null)
                 {
                     result = false;
@@ -126,7 +126,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppUserUI ExistUI = await dataPortal.Read(data.UserName);
+                AppUserUI ExistUI = await dataPortal.Read(data.UserName, data.CompanyAppID);
                 if (ExistUI != null)
                 {
                     processResult.OK = false;
@@ -169,7 +169,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppUserUI ExistUI = await dataPortal.Read(data.UserName);
+                AppUserUI ExistUI = await dataPortal.Read(data.UserName, data.CompanyAppID);
                 if (ExistUI == null)
                 {
                     processResult.OK = false;
@@ -210,7 +210,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppUserUI ExistUI = await dataPortal.Read(data.UserName);
+                AppUserUI ExistUI = await dataPortal.Read(data.UserName, data.CompanyAppID);
                 if (ExistUI == null)
                 {
                     processResult.OK = false;
@@ -251,7 +251,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppUserUI ExistUI = await dataPortal.Read(model.UserName);
+                AppUserUI ExistUI = await dataPortal.Read(model.UserName, model.CompanyAppID);
                 if (ExistUI == null)
                 {
                     processResult.OK = false;

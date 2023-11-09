@@ -56,15 +56,15 @@ namespace AuthenticationDAL
             }
         }
 
-        public async Task<AppUserUI> Read(string UserName)
+        public async Task<AppUserUI> Read(string UserName, int CompanyAppID)
         {
             try
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
-                    string whereString = " WHERE UserName = @UserName";
+                    string whereString = " WHERE UserName = @UserName AND CompanyAppID = @CompanyAppID";
                     string sql = "SELECT * FROM " + tableName + whereString;
-                    object param = new { UserName = UserName };
+                    object param = new { UserName = UserName, CompanyAppID = CompanyAppID };
                     var dataUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, param);
                     return dataUI;
                 }

@@ -17,6 +17,7 @@ namespace SharedLib.Models
         public string? PwdKey { get; set; }
         public bool IsError { get; set; }
         public int UserID { get; set; }
+        public int CompanyAppID { get; set; }
 
     }
 }
