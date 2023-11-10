@@ -8,5 +8,6 @@ namespace SharedLib.Models
     {
         public string AccessToken { get; set; } //Jwt
         public string RefreshToken { get; set; }
+        public string Jwt { get; set; }
     }
 }
