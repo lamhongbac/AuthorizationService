@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SharedLib.Services.ClientHelper
+namespace SharedLib.Services
 {
     public interface IHttpClientHelper<T>
     {
