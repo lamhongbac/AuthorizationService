@@ -17,5 +17,6 @@ namespace SharedLib.BaseObjects.Checklist
         public string ModifedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
+        public bool IsNoteRequired { get; set; }
     }
 }
