@@ -1,7 +1,9 @@
 ﻿using AuthorizationService.BaseObjects;
 using AuthServices;
 using Microsoft.AspNetCore.Mvc;
+using SharedLib.BaseObjects.Checklist;
 using SharedLib.Models;
+using SharedLib.Services;
 
 namespace AuthorizationService.Controllers
 {
@@ -27,6 +29,13 @@ namespace AuthorizationService.Controllers
                 if (result == true)
                 {
                     baseDatas = baseDatas.Where(x => x.CompanyAppID == model.ID).ToList();
+
+                    if(model.PageIndex != 0 && model.PageSize != 0)
+                    {
+                        PageDataService<BaseAppRole> pageData = new PageDataService<BaseAppRole>();
+                        baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
+                    }
+
                     processResult.Content = baseDatas;
                 }
                 processResult.OK = result;

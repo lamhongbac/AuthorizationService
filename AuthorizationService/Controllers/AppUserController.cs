@@ -2,6 +2,7 @@
 using AuthServices;
 using Microsoft.AspNetCore.Mvc;
 using SharedLib.Models;
+using SharedLib.Services;
 
 namespace AuthorizationService.Controllers
 {
@@ -27,6 +28,8 @@ namespace AuthorizationService.Controllers
                 List<BaseAppUser> baseDatas = service.GetDatas(companyAppID, out errMessage, out result);
                 if (result == true)
                 {
+                    PageDataService<BaseAppUser> pageData = new PageDataService<BaseAppUser>();
+                    baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
                     processResult.Content = baseDatas;
                 }
                 processResult.OK = result;

@@ -53,14 +53,14 @@ namespace AuthorizationService.Controllers
 
         [Route("GetAppObjectByID")]
         [HttpPost]
-        public IActionResult GetData(int ID)
+        public IActionResult GetData(RequestModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
             bool result = false;
             try
             {
-                BaseAppObject baseData = service.GetData(ID, out errMessage, out result);
+                BaseAppObject baseData = service.GetData(model.ID, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
@@ -79,14 +79,14 @@ namespace AuthorizationService.Controllers
 
         [Route("GetAppObjectByNumber")]
         [HttpPost]
-        public IActionResult GetData(string Number)
+        public IActionResult GetDataByNumber(RequestModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
             bool result = false;
             try
             {
-                BaseAppObject baseData = service.GetData(Number, out errMessage, out result);
+                BaseAppObject baseData = service.GetData(model.Number, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
