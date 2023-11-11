@@ -32,8 +32,8 @@ namespace AuthorizationService.Controllers
 
                     if(model.PageIndex != 0 && model.PageSize != 0)
                     {
-                        PageDataService<BaseAppRole> pageData = new PageDataService<BaseAppRole>();
-                        baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
+                        //PageDataService<BaseAppRole> pageData = new PageDataService<BaseAppRole>();
+                        //baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
                     }
 
                     processResult.Content = baseDatas;

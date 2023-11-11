@@ -28,8 +28,11 @@ namespace AuthorizationService.Controllers
                 List<BaseAppUser> baseDatas = service.GetDatas(companyAppID, out errMessage, out result);
                 if (result == true)
                 {
-                    PageDataService<BaseAppUser> pageData = new PageDataService<BaseAppUser>();
-                    baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
+                    if (model.PageIndex != 0 && model.PageSize != 0)
+                    {
+                        //PageDataService<BaseAppUser> pageData = new PageDataService<BaseAppUser>();
+                        //baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
+                    }
                     processResult.Content = baseDatas;
                 }
                 processResult.OK = result;
