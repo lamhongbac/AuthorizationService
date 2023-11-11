@@ -54,6 +54,8 @@ namespace SharedLib
         BadRequest
     }
 
+    public enum ESortOrder { Ascending = 0, Descending = 1 }
+
     public enum ELogicErrorCode
     {
         Can_Not_Find_Any_Roles,
