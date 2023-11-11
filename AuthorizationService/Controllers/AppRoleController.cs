@@ -31,31 +31,31 @@ namespace AuthorizationService.Controllers
                 if (result == true)
                 {
                     baseDatas = baseDatas.Where(x => x.CompanyAppID == model.CompanyAppID).ToList();
-
-                    if (!string.IsNullOrWhiteSpace(model.SearchText))
-                    {
-                        model.SearchText = model.SearchText.ToLower();
-                        baseDatas = baseDatas.Where(x => x.Number.ToLower().Contains(model.SearchText)
-                        || x.Name.ToLower().Contains(model.SearchText)).ToList();
-                    }
-
-                    ESortOrder eSortOrder = ESortOrder.Ascending;
-                    if (!string.IsNullOrWhiteSpace(model.sortOrder))
-                    {
-                        try
-                        {
-                            eSortOrder = Enum.Parse<ESortOrder>(model.sortOrder);
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-
-                    baseDatas = DoSort(baseDatas, model.SortProperty, eSortOrder);
-
                     if (model.PageIndex != 0 && model.PageSize != 0)
                     {
+                        if (!string.IsNullOrWhiteSpace(model.SearchText))
+                        {
+                            model.SearchText = model.SearchText.ToLower();
+                            baseDatas = baseDatas.Where(x => x.Number.ToLower().Contains(model.SearchText)
+                            || x.Name.ToLower().Contains(model.SearchText)).ToList();
+                        }
+
+                        ESortOrder eSortOrder = ESortOrder.Ascending;
+                        if (!string.IsNullOrWhiteSpace(model.sortOrder))
+                        {
+                            try
+                            {
+                                eSortOrder = Enum.Parse<ESortOrder>(model.sortOrder);
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+
+                        baseDatas = DoSort(baseDatas, model.SortProperty, eSortOrder);
+
+
                         PageDataService<BaseAppRole> pageData = new PageDataService<BaseAppRole>();
                         baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
                     }
