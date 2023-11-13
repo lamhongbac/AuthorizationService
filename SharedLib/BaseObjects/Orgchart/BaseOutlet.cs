@@ -47,5 +47,6 @@ namespace SharedLib.BaseObjects.Orgchart
         public string? EnDescription { get; set; }
         public string? EnAddress { get; set; }
         public string? EnName { get; set; }
+        public int? GroupId { get; set; }
     }
 }

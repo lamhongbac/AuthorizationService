@@ -8,16 +8,16 @@
             Number = " ";
         }
         public int ID { get; set; }
-        public string GuidID { get; set; }
-        public string Number { get; set; }
+        public string? GuidID { get; set; }
+        public string? Number { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
     }
 
     public class UpdateDataRequestModel : RequestModel
     {
-        public string CompanyCode { get; set; }
-        public string UserID { get; set; }
+        public string? CompanyCode { get; set; }
+        public string? UserID { get; set; }
         public object? DataUpdate { get; set; }
     }
 }
