@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SharedLib.Models
 {
@@ -12,10 +10,11 @@ namespace SharedLib.Models
             Number = " ";
         }
         public int ID { get; set; }
+        public Guid GuidID { get; set; }
         public string Number { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
     }
 
-    
+
 }
