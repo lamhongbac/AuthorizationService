@@ -21,6 +21,11 @@ namespace SharedLib.Models
         public int DistrictID { get; set; }
     }
 
+    public class OutletGroupRequestDatasModel: RequestDatasModel
+    {
+        public string? CompanyCode { get; set; }
+    }
+
     public class AppUserRequestDatasModel : RequestDatasModel
     {
         public int CompanyAppID { get; set; }

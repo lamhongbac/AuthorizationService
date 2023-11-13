@@ -16,5 +16,10 @@ namespace SharedLib.Models
         public int PageSize { get; set; }
     }
 
-
+    public class UpdateDataRequestModel: RequestModel
+    {
+        public string CompanyCode { get; set; }
+        public string UserID { get; set; }
+        public object? DataUpdate { get; set; }
+    }
 }
