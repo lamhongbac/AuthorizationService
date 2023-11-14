@@ -37,8 +37,9 @@ namespace AuthenticationDAL
             }
         }
 
-        public async Task<AppUserUI> Read(int ID)
+        public async Task<AppUserData> Read(int ID)
         {
+            AppUserData data = new AppUserData();
             try
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
@@ -47,7 +48,23 @@ namespace AuthenticationDAL
                     string sql = "SELECT * FROM " + tableName + whereString;
                     object param = new { ID = ID };
                     var dataUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, param);
-                    return dataUI;
+                    if(dataUI != null)
+                    {
+                        data.AppUser = dataUI;
+
+                        string userStoreTableName = "UserStores";
+                        string userStoreWhereString = "WHERE UserID = @UserID";
+                        string userStoreSQL = "SELECT * FROM " + userStoreTableName + userStoreWhereString;
+                        object userStoreParam = new { UserID = ID };
+                        var userStoreUI = await connection.QueryAsync<UserStoreUI>(userStoreSQL, userStoreParam);
+                        if(userStoreUI != null)
+                        {
+                            data.UserStores = userStoreUI.ToList();
+                        }
+                    }
+                    
+
+                    return data;
                 }
             }
             catch
@@ -56,8 +73,9 @@ namespace AuthenticationDAL
             }
         }
 
-        public async Task<AppUserUI> Read(string UserName, int CompanyAppID)
+        public async Task<AppUserData> Read(string UserName, int CompanyAppID)
         {
+            AppUserData data = new AppUserData();
             try
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
@@ -66,7 +84,21 @@ namespace AuthenticationDAL
                     string sql = "SELECT * FROM " + tableName + whereString;
                     object param = new { UserName = UserName, CompanyAppID = CompanyAppID };
                     var dataUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, param);
-                    return dataUI;
+                    if (dataUI != null)
+                    {
+                        data.AppUser = dataUI;
+
+                        string userStoreTableName = "UserStores";
+                        string userStoreWhereString = "WHERE UserID = @UserID";
+                        string userStoreSQL = "SELECT * FROM " + userStoreTableName + userStoreWhereString;
+                        object userStoreParam = new { UserID = dataUI.ID };
+                        var userStoreUI = await connection.QueryAsync<UserStoreUI>(userStoreSQL, userStoreParam);
+                        if (userStoreUI != null)
+                        {
+                            data.UserStores = userStoreUI.ToList();
+                        }
+                    }
+                    return data;
                 }
             }
             catch
@@ -75,50 +107,111 @@ namespace AuthenticationDAL
             }
         }
 
-        public async Task<bool> Insert(AppUserUI data)
+        public async Task<bool> Insert(AppUserData data)
         {
-            try
+            using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                using (IDbConnection connection = new SqlConnection(_connectionString))
-                { 
-                    var result = await connection.InsertAsync(data);
-                    if(result <= 0)
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+                using (var trans = connection.BeginTransaction())
+                {
+                    try
                     {
+                        var result = await connection.InsertAsync(data.AppUser, trans);
+                        if (result <= 0)
+                        {
+                            trans.Rollback();
+                            return false;
+                        }
+                        else
+                        {
+                            if(data.UserStores != null && data.UserStores.Count > 0)
+                            {
+                                foreach (var item in data.UserStores)
+                                {
+                                    item.UserID = result;
+                                }
+                                var resultSub = await connection.InsertAsync(data.UserStores, trans);
+                                if (resultSub <= 0)
+                                {
+                                    trans.Rollback();
+                                    return false;
+                                }
+                            }
+                            trans.Commit();
+                            return true;
+                        }
+                    }
+                    catch
+                    {
+                        trans.Rollback();
                         return false;
                     }
-                    else
-                    {
-                        return true;
-                    }
                 }
+                
             }
-            catch 
-            {
-                return false;
-            }
+            
         }
 
-        public async Task<bool> Update(AppUserUI data)
+        public async Task<bool> Update(AppUserUI data, List<UserStoreUI> insertDatas, List<UserStoreUI> updateDatas, List<UserStoreUI> deleteDatas)
         {
-            try
+            using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                using (IDbConnection connection = new SqlConnection(_connectionString))
+                if (connection.State != ConnectionState.Open)
                 {
-                    var result = await connection.UpdateAsync(data);
-                    if (result == false)
+                    connection.Open();
+                }
+                using (var trans = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        var result = await connection.UpdateAsync(data, trans);
+                        if (result == false)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            var insert_result = true;
+                            var updated_result = true;
+                            var deleted_result = true;
+                            if (updateDatas != null && updateDatas.Count > 0)
+                            {
+                                updated_result = await connection.UpdateAsync(updateDatas, trans);
+                            }
+                            if (insertDatas != null && insertDatas.Count > 0)
+                            {
+                                insert_result = await connection.InsertAsync(insertDatas, trans) > 0;
+                            }
+                            if (deleteDatas != null && deleteDatas.Count > 0)
+                            {
+                                deleted_result = await connection.DeleteAsync(deleteDatas, trans);
+                            }
+                            result = updated_result && insert_result && deleted_result;
+                            if (result)
+                            {
+                                trans.Commit();
+                                return true;
+
+                            }
+                            else
+                            {
+                                trans.Rollback();
+                                return false;
+                            }
+                            
+                        }
+                    }
+                    catch
                     {
                         return false;
                     }
-                    else
-                    {
-                        return true;
-                    }
                 }
+                
             }
-            catch
-            {
-                return false;
-            }
+            
         }
 
         public async Task<bool> MarkDelete(AppUserUI data)
@@ -127,6 +220,7 @@ namespace AuthenticationDAL
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
+                    
                     var result = await connection.UpdateAsync(data);
                     if (result == false)
                     {
