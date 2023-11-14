@@ -53,7 +53,7 @@ namespace AuthenticationDAL
                         data.AppUser = dataUI;
 
                         string userStoreTableName = "UserStores";
-                        string userStoreWhereString = "WHERE UserID = @UserID";
+                        string userStoreWhereString = " WHERE UserID = @UserID";
                         string userStoreSQL = "SELECT * FROM " + userStoreTableName + userStoreWhereString;
                         object userStoreParam = new { UserID = ID };
                         var userStoreUI = await connection.QueryAsync<UserStoreUI>(userStoreSQL, userStoreParam);
@@ -89,7 +89,7 @@ namespace AuthenticationDAL
                         data.AppUser = dataUI;
 
                         string userStoreTableName = "UserStores";
-                        string userStoreWhereString = "WHERE UserID = @UserID";
+                        string userStoreWhereString = " WHERE UserID = @UserID";
                         string userStoreSQL = "SELECT * FROM " + userStoreTableName + userStoreWhereString;
                         object userStoreParam = new { UserID = dataUI.ID };
                         var userStoreUI = await connection.QueryAsync<UserStoreUI>(userStoreSQL, userStoreParam);
