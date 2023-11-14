@@ -157,6 +157,23 @@ namespace AuthServices
                 IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
                 AppUserData.AppUser = mappingHelper.Map(data);
 
+                //Kiểm tra role selected là RM hay không
+                GenericDataPortal<AppRoleUI> genericDataPortal = new GenericDataPortal<AppRoleUI>(connectionString, "AppRoles");
+                string whereString = "ID = @ID";
+                object param = new { ID = data.RoleID };
+                AppRoleUI existRole = await genericDataPortal.Read(whereString, param);
+                if (existRole == null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Role note found";
+                    return processResult;
+                }
+
+                if(existRole.IsStoreAdmin == false)
+                {
+                    data.BaseUserStores = new List<BaseUserStore>();
+                }
+
                 IMappingHelper<UserStoreUI, BaseUserStore> mappingUserStoreHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
                 AppUserData.UserStores = mappingUserStoreHelper.Map(data.BaseUserStores);
 
@@ -204,6 +221,23 @@ namespace AuthServices
                 IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
                 AppUserUI updateUserUI = mappingHelper.Map(data);
 
+                //Kiểm tra role selected là RM hay không
+                GenericDataPortal<AppRoleUI> genericDataPortal = new GenericDataPortal<AppRoleUI>(connectionString, "AppRoles");
+                string whereString = "ID = @ID";
+                object param = new { ID = data.RoleID };
+                AppRoleUI existRole = await genericDataPortal.Read(whereString, param);
+                if (existRole == null)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Role note found";
+                    return processResult;
+                }
+
+                if (existRole.IsStoreAdmin == false)
+                {
+                    data.BaseUserStores = new List<BaseUserStore>();
+                }
+
                 IMappingHelper<UserStoreUI, BaseUserStore> mappingUserStoreHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
                 List<UserStoreUI> updateUserStores = mappingUserStoreHelper.Map(data.BaseUserStores);
 
@@ -212,7 +246,7 @@ namespace AuthServices
                 List<UserStoreUI> updateDatas = new List<UserStoreUI>();
                 List<UserStoreUI> deleteDatas = new List<UserStoreUI>();
 
-                if(updateUserStores != null && updateUserStores.Count > 0)
+                if(updateUserStores != null)
                 {
                     foreach(var item in updateUserStores)
                     {
@@ -227,6 +261,10 @@ namespace AuthServices
                             {
                                 insertDatas.Add(item);
                             }
+                        }
+                        else
+                        {
+                            insertDatas.Add(item);
                         }
                     }
 
