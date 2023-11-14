@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SharedLib.BaseObjects.Checklist
 {
@@ -14,7 +12,7 @@ namespace SharedLib.BaseObjects.Checklist
         public string EContent { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string ModifedBy { get; set; }
+        public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsNoteRequired { get; set; }
