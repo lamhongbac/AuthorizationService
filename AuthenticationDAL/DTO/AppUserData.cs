@@ -15,5 +15,6 @@ namespace AuthenticationDAL.DTO
         public CompanyUI Company { get; set; }
         public AppRoleUI AppRole { get; set; }
         public List<RoleRightUI> RoleRights { get; set; }
+        public List<UserStoreUI> UserStores { get; set; }
     }
 }
