@@ -17,5 +17,6 @@ namespace AuthenticationDAL.DTO
         public string Mobile { get; set; }
         public bool? IsDeleted { get; set; }
         public int? RoleID { get; set; }
+        public int? ManagerID { get; set; }
     }
 }

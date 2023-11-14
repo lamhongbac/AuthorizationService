@@ -110,7 +110,7 @@ namespace AuthenticationDAL
                         var result = await connection.InsertAsync(data.AppRoleUI, trans);
                         if (result <= 0)
                         {
-                            trans.Dispose();
+                            trans.Rollback();
                             return false;
                         }
                         else
@@ -122,7 +122,7 @@ namespace AuthenticationDAL
                             var resultSub = await connection.InsertAsync(data.RoleRightUIs, trans);
                             if (resultSub <= 0)
                             {
-                                trans.Dispose();
+                                trans.Rollback();
                                 return false;
                             }
                             trans.Commit();
@@ -131,7 +131,7 @@ namespace AuthenticationDAL
                     }
                     catch
                     {
-                        trans.Dispose();
+                        trans.Rollback();
                         return false;
                     }
                 }
@@ -157,7 +157,7 @@ namespace AuthenticationDAL
                          result = await connection.UpdateAsync(updateAppRoleUI, trans);
                         if (result == false)
                         {
-                           
+                            trans.Rollback();
                             return false;
                         }
                         else

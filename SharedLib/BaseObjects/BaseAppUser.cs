@@ -1,4 +1,6 @@
-﻿namespace AuthorizationService.BaseObjects
+﻿using System.Collections.Generic;
+
+namespace AuthorizationService.BaseObjects
 {
     /// <summary>
     /// 1 User se truc thuong 1 cty
@@ -25,6 +27,8 @@
         public string? Mobile { get; set; }
         public bool IsDeleted { get; set; }
         public int RoleID { get; set; }
+        public int? ManagerID { get; set; }
         public BaseAppRole Role { get; set; }
+        public List<BaseUserStore> BaseUserStores { get; set; }
     }
 }

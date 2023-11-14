@@ -25,6 +25,7 @@ namespace SharedLib.BaseObjects.Checklist
         public int StoreID { get; set; }
         public string RestaurantStaffs { get; set; }
         public decimal SuccessPercent { get; set; }
+        public decimal PointBSC { get; set; }
         public string ResultStatus { get; set; }
         public DateTime CheckDate { get; set; }
         public DateTime StartTime { get; set; }

@@ -6,14 +6,16 @@ namespace AuthenticationDAL.DTO
     {
         public AppUserData()
         {
-            AppUser = new AppUserUI();
+            AppUser = null;
             Company = new CompanyUI();
             AppRole = new AppRoleUI();
             RoleRights = new List<RoleRightUI>();
+            UserStores = null;
         }
         public AppUserUI AppUser { get; set; }
         public CompanyUI Company { get; set; }
         public AppRoleUI AppRole { get; set; }
         public List<RoleRightUI> RoleRights { get; set; }
+        public List<UserStoreUI> UserStores { get; set; }
     }
 }
