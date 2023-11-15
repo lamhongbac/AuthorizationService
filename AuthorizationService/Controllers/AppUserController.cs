@@ -73,6 +73,58 @@ namespace AuthorizationService.Controllers
             return Ok(processResult);
         }
 
+        [Route("GetAppUsersByDepartment")]
+        [HttpPost]
+        public IActionResult GetDatasByDepartment(AppUserRequestDatasModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+            string errMessage = string.Empty;
+            bool result = false;
+            try
+            {
+                List<BaseAppUser> baseDatas = service.GetDatas(model.CompanyAppID, model.Department, out errMessage, out result);
+                if(baseDatas != null)
+                {
+                    processResult.Content = baseDatas;
+                }
+                processResult.OK = result;
+                processResult.Message = errMessage;
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            return Ok(processResult);
+        }
+
+        [Route("GetAppUsersByManager")]
+        [HttpPost]
+        public IActionResult GetDatasByManager(AppUserRequestDatasModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+            string errMessage = string.Empty;
+            bool result = false;
+            try
+            {
+                List<BaseAppUser> baseDatas = service.GetDatas(model.CompanyAppID, model.Department, model.ManagerID, out errMessage, out result);
+                if (baseDatas != null)
+                {
+                    processResult.Content = baseDatas;
+                }
+                processResult.OK = result;
+                processResult.Message = errMessage;
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            return Ok(processResult);
+        }
+
         [Route("GetAppUserByID")]
         [HttpPost]
         public IActionResult GetDataByID(RequestModel model)
