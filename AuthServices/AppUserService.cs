@@ -60,6 +60,68 @@ namespace AuthServices
             }
         }
 
+        public List<BaseAppUser> GetDatas(int companyAppID, string department, out string errMessage, out bool result)
+        {
+            try
+            {
+                AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
+                string whereString = string.Empty;
+                List<AppUserUI> AppUserUIs = dataPortal.ReadList(companyAppID, department).Result;
+                if (AppUserUIs == null)
+                {
+                    result = false;
+                    errMessage = "Data not Found";
+                    return null;
+                }
+
+                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
+
+                //List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
+                result = true;
+                errMessage = "Success";
+                return BaseAppUsers;
+
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                errMessage = ex.Message;
+                return null;
+            }
+        }
+
+        public List<BaseAppUser> GetDatas(int companyAppID, string department, int managerID,  out string errMessage, out bool result)
+        {
+            try
+            {
+                AppUserDataPortal dataPortal = new AppUserDataPortal(connectionString);
+                string whereString = string.Empty;
+                List<AppUserUI> AppUserUIs = dataPortal.ReadList(companyAppID, department, managerID).Result;
+                if (AppUserUIs == null)
+                {
+                    result = false;
+                    errMessage = "Data not Found";
+                    return null;
+                }
+
+                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
+
+                //List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
+                result = true;
+                errMessage = "Success";
+                return BaseAppUsers;
+
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                errMessage = ex.Message;
+                return null;
+            }
+        }
+
         public BaseAppUser GetData(int ID, out string errMessage, out bool result)
         {
             AppUserData AppUserData = new AppUserData();

@@ -29,6 +29,8 @@ namespace SharedLib.Models
     public class AppUserRequestDatasModel : RequestDatasModel
     {
         public int CompanyAppID { get; set; }
+        public string? Department { get; set; }
+        public int ManagerID { get; set; }
     }
 
     public class AppRoleRequestDatasModel : RequestDatasModel

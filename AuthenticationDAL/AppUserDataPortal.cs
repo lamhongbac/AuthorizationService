@@ -18,6 +18,11 @@ namespace AuthenticationDAL
             _connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Đọc danh sách user theo CompanyAppID
+        /// </summary>
+        /// <param name="companyAppID"></param>
+        /// <returns></returns>
         public async Task<List<AppUserUI>> ReadList(int companyAppID)
         {
             try
@@ -27,6 +32,57 @@ namespace AuthenticationDAL
                     string whereString = " WHERE CompanyAppID = @CompanyAppID";
                     string sql = "SELECT * FROM " + tableName + whereString;
                     object param = new { CompanyAppID = companyAppID };
+                    var dataUIs = await connection.QueryAsync<AppUserUI>(sql, param);
+                    return dataUIs.ToList();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Đọc danh sách user làm manager theo phòng ban
+        /// </summary>
+        /// <param name="companyAppID"></param>
+        /// <param name="department"></param>
+        /// <returns></returns>
+        public async Task<List<AppUserUI>> ReadList(int companyAppID, string department)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_connectionString))
+                {
+                    string whereString = " WHERE CompanyAppID = @CompanyAppID AND Department = @Department AND IsManager = @IsManager";
+                    string sql = "SELECT * FROM " + tableName + whereString;
+                    object param = new { CompanyAppID = companyAppID, Department = department, IsManager = true };
+                    var dataUIs = await connection.QueryAsync<AppUserUI>(sql, param);
+                    return dataUIs.ToList();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Đọc danh sách user theo phòng ban và ManagerID
+        /// </summary>
+        /// <param name="companyAppID"></param>
+        /// <param name="department"></param>
+        /// <param name="managerID"></param>
+        /// <returns></returns>
+        public async Task<List<AppUserUI>> ReadList(int companyAppID, string department, int managerID)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_connectionString))
+                {
+                    string whereString = " WHERE CompanyAppID = @CompanyAppID AND Department = @Department AND ManagerID = @ManagerID";
+                    string sql = "SELECT * FROM " + tableName + whereString;
+                    object param = new { CompanyAppID = companyAppID, Department = department, ManagerID = managerID };
                     var dataUIs = await connection.QueryAsync<AppUserUI>(sql, param);
                     return dataUIs.ToList();
                 }
