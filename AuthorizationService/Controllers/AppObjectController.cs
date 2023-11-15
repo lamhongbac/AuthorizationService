@@ -86,7 +86,14 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                BaseAppObject baseData = service.GetData(model.Number, out errMessage, out result);
+                BaseCompanyApplication baseCompany = companyApplicationService.GetData(model.ID, out errMessage, out result);
+                if (baseCompany == null)
+                {
+                    processResult.OK = result;
+                    processResult.Message = errMessage;
+                    return Ok(processResult);
+                }
+                BaseAppObject baseData = service.GetData(model.Number, baseCompany.AppID, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
