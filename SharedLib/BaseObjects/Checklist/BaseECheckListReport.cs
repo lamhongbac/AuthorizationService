@@ -19,7 +19,9 @@ namespace SharedLib.BaseObjects.Checklist
         public DateTime CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
+        public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string Status { get; set; }
         public List<BaseECheckListDetailReport> ECheckListDetailReports { get; set; }
     }
 }
