@@ -30,7 +30,7 @@ namespace AuthorizationService.BaseObjects
         public int? ManagerID { get; set; }
         public bool IsManager { get; set; }
         public string? Department { get; set; }
-        public BaseAppRole Role { get; set; }
-        public List<BaseUserStore> BaseUserStores { get; set; }
+        public BaseAppRole? Role { get; set; }
+        public List<BaseUserStore>? BaseUserStores { get; set; }
     }
 }
