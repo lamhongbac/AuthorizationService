@@ -31,6 +31,7 @@ namespace SharedLib.BaseObjects.Checklist
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string SummaryNotes { get; set; }
+        public string ViolationStatus { get; set; }
         public List<BaseQASubQuestionReport> QASubQuestionReports { get; set; }
     }
 }
