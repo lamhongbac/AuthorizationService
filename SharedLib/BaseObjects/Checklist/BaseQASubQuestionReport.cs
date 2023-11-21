@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SharedLib.BaseObjects.Checklist
 {
@@ -24,5 +22,6 @@ namespace SharedLib.BaseObjects.Checklist
         public DateTime CreatedOn { get; set; }
         public string ModifedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
+        public decimal Point { get; set; }
     }
 }
