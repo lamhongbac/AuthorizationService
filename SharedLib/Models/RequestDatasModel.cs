@@ -13,6 +13,11 @@ namespace SharedLib.Models
         public int PageSize { get; set; }
     }
 
+    public class FormQACheckListRequestDatasModel: RequestDatasModel
+    {
+        public List<int>? StoreIDs { get; set; }
+    }
+
     public class OutletRequestDatasModel: RequestDatasModel
     {
         public string? CompanyCode { get; set; }
