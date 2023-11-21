@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SharedLib.BaseObjects.Checklist
 {
@@ -28,8 +27,8 @@ namespace SharedLib.BaseObjects.Checklist
         public decimal PointBSC { get; set; }
         public string ResultStatus { get; set; }
         public DateTime CheckDate { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
         public string SummaryNotes { get; set; }
         public string ViolationStatus { get; set; }
         public List<BaseQASubQuestionReport> QASubQuestionReports { get; set; }
