@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedLib.BaseObjects.Orgchart;
+using System;
 using System.Collections.Generic;
 
 namespace SharedLib.BaseObjects.Checklist
@@ -8,6 +9,7 @@ namespace SharedLib.BaseObjects.Checklist
         public BaseQACheckListReport()
         {
             QASubQuestionReports = new List<BaseQASubQuestionReport>();
+            Outlet = new BaseOutlet();
         }
         public int ID { get; set; }
         public int FormID { get; set; }
@@ -31,6 +33,7 @@ namespace SharedLib.BaseObjects.Checklist
         public TimeSpan EndTime { get; set; }
         public string SummaryNotes { get; set; }
         public string ViolationStatus { get; set; }
+        public BaseOutlet Outlet { get; set; }
         public List<BaseQASubQuestionReport> QASubQuestionReports { get; set; }
     }
 }
