@@ -2,5 +2,6 @@
 {
     public class BaseCreateRequestModel : RequestModel
     {
+        public object? Data { get; set; }
     }
 }

@@ -2,5 +2,6 @@
 {
     public class BaseUpdateRequestModel : RequestModel
     {
+        public object? Data { get; set; }
     }
 }
