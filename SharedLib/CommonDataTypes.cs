@@ -31,6 +31,13 @@ namespace SharedLib
         Vn
     }
 
+    public enum EDepartmentType
+    {
+        QA,
+        IT,
+        R
+    }
+
     public class JsonUtil<T>
     {
         public T Read(string _filePath)

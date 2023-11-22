@@ -26,6 +26,39 @@ namespace SharedLib.Models
         public int DistrictID { get; set; }
     }
 
+    public class QAChecklistRequestDatasModel : RequestDatasModel
+    {
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public string? Result { get; set; }
+        public QAManagerFilter? QAManagerFilter { get; set; }
+        public RestaurantFilter? RestaurantFilter { get; set; }
+        public QAOfficerFilter? QAOfficerFilter { get; set; }
+    }
+
+    public class QAManagerFilter
+    {
+        public QAManagerFilter()
+        {
+            QAOfficerIDs = new List<string>();
+        }
+        public List<string>? QAOfficerIDs { get; set; }
+    }
+
+    public class RestaurantFilter
+    {
+        public RestaurantFilter()
+        {
+            StoreIDs = new List<int>();
+        }
+        public List<int>? StoreIDs { get; set; }
+    }
+
+    public class QAOfficerFilter
+    {
+        public string? QAOfficerID { get; set; }
+    }
+
     public class OutletGroupRequestDatasModel: RequestDatasModel
     {
         public string? CompanyCode { get; set; }
