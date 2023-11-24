@@ -29,8 +29,8 @@ namespace SharedLib.BaseObjects.Checklist
         public decimal PointBSC { get; set; }
         public string ResultStatus { get; set; }
         public DateTime CheckDate { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
         public string SummaryNotes { get; set; }
         public string ViolationStatus { get; set; }
         public BaseOutlet Outlet { get; set; }
