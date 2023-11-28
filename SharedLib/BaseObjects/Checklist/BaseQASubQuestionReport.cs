@@ -20,7 +20,7 @@ namespace SharedLib.BaseObjects.Checklist
         public int Priority { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string ModifedBy { get; set; }
+        public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public decimal Point { get; set; }
     }
