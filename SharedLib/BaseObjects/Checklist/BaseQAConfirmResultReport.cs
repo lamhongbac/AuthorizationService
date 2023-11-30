@@ -18,5 +18,6 @@ namespace SharedLib.BaseObjects.Checklist
         public DateTime CreatedOn { get; set; }
         public string ModifedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
+        public List<BaseQAReviewSubDetailReport> BaseQAReviewSubDetails { get; set; }
     }
 }
