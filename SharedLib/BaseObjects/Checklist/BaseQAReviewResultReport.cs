@@ -18,5 +18,6 @@ namespace SharedLib.BaseObjects.Checklist
         public string QAMCode { get; set; }
         public DateTime ConfirmedDate { get; set; }
         public string Note { get; set; }
+        public List<BaseQAReviewSubDetailReport> BaseQAReviewSubDetails { get; set; }
     }
 }
