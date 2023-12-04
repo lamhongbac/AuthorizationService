@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SharedLib.BaseObjects.Checklist
 {
@@ -12,11 +10,12 @@ namespace SharedLib.BaseObjects.Checklist
         public string Description { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string ModifedBy { get; set; }
+        public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public Guid ParentID { get; set; }
         public string PlanContent { get; set; }
         public DateTime CompletedDate { get; set; }
         public string Images { get; set; }
+        public bool IsDelete { get; set; }
     }
 }

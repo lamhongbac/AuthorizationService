@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SharedLib.BaseObjects.Checklist
 {
@@ -8,9 +7,10 @@ namespace SharedLib.BaseObjects.Checklist
     {
         public BaseQAActionPlan()
         {
-            QAActionPlanDetails = new List<BaseQAActionPlanDetail> ();
+            QAActionPlanDetails = new List<BaseQAActionPlanDetail>();
         }
         public Guid ID { get; set; }
+        public Guid QASubReportID { get; set; }
         public int QAReportID { get; set; }
         public int QuestionID { get; set; }
         public int SubQuestionID { get; set; }
@@ -19,7 +19,7 @@ namespace SharedLib.BaseObjects.Checklist
         public string Description { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string ModifedBy { get; set; }
+        public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public List<BaseQAActionPlanDetail> QAActionPlanDetails { get; set; }
     }
