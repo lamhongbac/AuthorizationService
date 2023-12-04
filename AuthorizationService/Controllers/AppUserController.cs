@@ -55,11 +55,13 @@ namespace AuthorizationService.Controllers
                         }
 
                         baseDatas = DoSort(baseDatas, model.SortProperty, eSortOrder);
-
-                        PageDataService<BaseAppUser> pageData = new PageDataService<BaseAppUser>();
+                        int totalCount = baseDatas.Count;
+                        processResult.ErrorNumber = totalCount;
+                        PageDataService <BaseAppUser> pageData = new PageDataService<BaseAppUser>();
                         baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
                     }
                     processResult.Content = baseDatas;
+                    
                 }
                 processResult.OK = result;
                 processResult.Message = errMessage;

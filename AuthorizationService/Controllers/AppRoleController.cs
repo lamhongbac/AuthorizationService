@@ -54,7 +54,8 @@ namespace AuthorizationService.Controllers
                         }
 
                         baseDatas = DoSort(baseDatas, model.SortProperty, eSortOrder);
-
+                        int totalCount = baseDatas.Count;
+                        processResult.ErrorNumber = totalCount;
 
                         PageDataService<BaseAppRole> pageData = new PageDataService<BaseAppRole>();
                         baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
