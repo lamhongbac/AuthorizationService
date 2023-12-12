@@ -34,6 +34,7 @@ namespace SharedLib.BaseObjects.Checklist
         public string SummaryNotes { get; set; }
         public string ViolationStatus { get; set; }
         public BaseOutlet Outlet { get; set; }
+        public string ProcessStatus { get; set; }
         public List<BaseQASubQuestionReport> QASubQuestionReports { get; set; }
     }
 }
