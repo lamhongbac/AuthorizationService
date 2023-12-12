@@ -69,6 +69,13 @@ namespace SharedLib
         BadRequest
     }
 
+    public enum EProcessStatus
+    {
+        QAOCheck,
+        RMConfirm,
+        QAMReview
+    }
+
     public enum ESortOrder { Ascending = 0, Descending = 1 }
 
     public enum ELogicErrorCode
