@@ -23,6 +23,7 @@ namespace SharedLib.BaseObjects.Checklist
         public int ParentID { get; set; }
         public decimal Point { get; set; }
         public bool IsDeleted { get; set; }
+        public int ImportantCoefficient { get; set; }
         public List<BaseQASubQuestion> QASubQuestions { get; set; }
     }
 }
