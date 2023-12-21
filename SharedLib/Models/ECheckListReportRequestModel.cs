@@ -8,7 +8,7 @@ namespace SharedLib.Models
         {
             FormID = Guid.NewGuid();
         }
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
         public Guid? FormID { get; set; }
     }
 }
