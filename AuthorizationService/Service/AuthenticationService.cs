@@ -19,11 +19,13 @@ namespace AuthorizationService.Service
     public class AuthenticationService
     {
         AccountService _accountService;
+        AppObjectService _appObjectService;
         JwtConfig jwtConfig;
         private IConfiguration _config;
         RefreshTokenDatas _tokenDatas;
         IMapper _mapper;
         public AuthenticationService(IConfiguration config,
+            AppObjectService appObjectService,
             RefreshTokenDatas tokenDatas,
             AccountService accountService,
             IMapper mapper)
@@ -33,6 +35,7 @@ namespace AuthorizationService.Service
             jwtConfig = _config.GetSection("JwtConfig").Get<JwtConfig>();
             _accountService = accountService;
             _mapper = mapper;
+            _appObjectService = appObjectService;
         }
         public async Task<UserInfo> AuthenticateUser(LoginModel model)
         {
@@ -40,10 +43,60 @@ namespace AuthorizationService.Service
             BaseAppUser appUser = await _accountService.GetUserInfo(model.UserName, model.CompanyID, model.AppID);
             if (appUser != null)
             {
-                if (appUser.Pwd == model.Password)
+                string saltPass = model.Password + appUser.PwdKey;
+                saltPass = MSASecurity.GetHash(saltPass);
+                if (appUser.Pwd == saltPass)
                 {
+                    string errMessage = string.Empty;
+                    bool result = false;
+                    List<BaseAppObject> baseAppObjects = _appObjectService.GetDatas(out errMessage, out result);
+                    if(result == true)
+                    {
+                        baseAppObjects = baseAppObjects.Where(x => x.AppID ==  model.AppID).ToList();
+                    }
+
+
+                    userInfo = new UserInfo();
+                    userInfo.ID = appUser.ID.ToString();
+                    userInfo.UserName = appUser.UserName;
+                    userInfo.FullName = appUser.FullName;
+                    userInfo.EmailAddress = appUser.Email;
+                    if(appUser.Role != null)
+                    {
+                        userInfo.Roles.Add(appUser.Role.Number.ToLower());
+                        if (appUser.Role.Rights != null && appUser.Role.Rights.Count > 0)
+                        {
+                            foreach(var item in appUser.Role.Rights)
+                            {
+                                var baseAppObject = baseAppObjects.FirstOrDefault(x => x.ID == item.AppObjectID);
+                                if (baseAppObject != null && !userInfo.ObjectRights.ContainsKey(baseAppObject.MainFunction.ToLower()))
+                                {
+                                    List<string> objectRights = new List<string>();
+                                    if(item.CanRead == true)
+                                    {
+                                        objectRights.Add("read");
+                                    }
+                                    if(item.CanCreate == true)
+                                    {
+                                        objectRights.Add("create");
+                                    }
+                                    if(item.CanUpdate == true)
+                                    {
+                                        objectRights.Add("update");
+                                    }
+                                    if(item.CanDelete == true)
+                                    {
+                                        objectRights.Add("delete");
+                                    }
+                                    if(objectRights.Count > 0)
+                                    {
+                                        userInfo.ObjectRights.Add(baseAppObject.MainFunction.ToLower(), objectRights);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     
-                    userInfo = _mapper.Map<UserInfo>(appUser);
                     userInfo.CompanyID = appUser.Company.ID;
                     userInfo.AppID = model.AppID;
                     return userInfo;
@@ -68,10 +121,10 @@ namespace AuthorizationService.Service
                 claims.Add(new Claim(JwtRegisteredClaimNames.Email, userInfo.EmailAddress));
                
             }
-            else
-            {
-                throw new Exception("Email is not allow empty");
-            }
+            //else
+            //{
+            //    throw new Exception("Email is not allow empty");
+            //}
             
 
             if (userInfo.UserName != null)

@@ -10,6 +10,7 @@ namespace SharedLib
         public UserInfo()
         {
             ObjectRights = new Dictionary<string, List<string>>();
+            Roles = new List<string>();
         }
         public string ID { get; set; }
         public string UserName { get; set; }

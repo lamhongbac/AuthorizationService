@@ -332,7 +332,7 @@ namespace AuthenticationDAL
                             data.AppUser = appUserUI;
                             //Get AppRoleUI
                             Sql = "SELECT * FROM AppRoles WHERE ID=@ID";
-                            parametter = new { ID = appID };
+                            parametter = new { ID = appUserUI.RoleID };
                             AppRoleUI appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(Sql, parametter);
                             data.AppRole = appRoleUI;
 

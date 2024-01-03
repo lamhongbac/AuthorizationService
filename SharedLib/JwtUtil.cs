@@ -21,7 +21,11 @@ namespace SharedLib
 
             userInfo.FullName = fullname;
             userInfo.EmailAddress = tokenS.Claims.First(claim => claim.Type == "EmailAddress").Value;
-            userInfo.Roles = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
+            var role = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
+            if (!string.IsNullOrWhiteSpace(role))
+            {
+                userInfo.Roles.Add(role);
+            }
             userInfo.UserName = tokenS.Claims.First(claim => claim.Type == "UserName").Value;
             userInfo.ID = tokenS.Claims.First(claim => claim.Type == "ID").Value;
             return userInfo;
