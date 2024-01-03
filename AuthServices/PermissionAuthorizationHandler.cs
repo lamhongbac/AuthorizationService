@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
+using SharedLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +26,19 @@ namespace AuthServices
             //lay ra danh sach quyen tuong ung voi object tren doi tuong User
 
             var claims = context.User.Claims.Where(x => x.Type.ToLower() == objectName.ToLower());
+            Dictionary<string, List<string>> user_permissions = new Dictionary<string, List<string>>();
+            List<string> permissions = new List<string>();
+            string userRights = context.User.Claims.First(x => x.Type.ToLower() == "objectrights").Value;
+            if (!string.IsNullOrEmpty(userRights))
+            {
+                user_permissions = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(userRights);
+                //userInfo.ObjectRights = user_permissions;
+                if (user_permissions != null && user_permissions.ContainsKey(objectName))
+                 permissions = user_permissions[objectName];
+            }
+            
 
-            List<string> user_permissions = context.User.Claims.Where(x => x.Type.ToLower() == objectName.ToLower())
-                 .Select(x => x.Value).ToList();
-            if (user_permissions.Count == 0)
+            if (permissions.Count == 0)
             {
                 context.Fail(); return Task.CompletedTask;
             }
@@ -37,7 +48,7 @@ namespace AuthServices
 
             //kiem tra xem quyen cua user dang co , co thỏa mãn hay kg?
             bool authorized = false;
-            foreach (var permission in user_permissions)
+            foreach (var permission in permissions)
             {
                 if (requirement.RequiredPermissions.Contains(permission))
                 {
