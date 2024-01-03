@@ -12,37 +12,82 @@
         /// Add new token
         /// </summary>
         /// <param name="token"></param>
-        public void AddToken(RefreshTokenData token)
+        public bool AddToken(RefreshTokenData newtoken)
         {
-            int index = RefreshTokens.IndexOf(token);
-            if (index==-1)
+            if (RefreshTokens != null)
             {
-                RefreshTokens.Add(token);
-                //update vao mongo DB
+                var exist = RefreshTokens.FirstOrDefault(x => x.Id == newtoken.Id);
+                if (exist != null)
+                {
+                    throw new Exception("new token is exist");
+                    //fasle
+                }
+                else
+                {
+                    RefreshTokens.Add(newtoken);
+                    return true;
+                }
             }
+            else
+            {
+                RefreshTokens = new List<RefreshTokenData>
+                {
+                    newtoken
+                };
+                return true;
+            }
+
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="token"></param>
-        public void RemoveToken(RefreshTokenData token)
+        public bool RemoveToken(RefreshTokenData oldtoken)
         {
-            int index = RefreshTokens.IndexOf(token);
-            if (index>=0)
+            if (RefreshTokens != null)
             {
-                RefreshTokens.Remove(token);
-                //update vao mongo DB
+                var exist = RefreshTokens.FirstOrDefault(x => x.Id == oldtoken.Id);
+                int index = RefreshTokens.IndexOf(exist);
+                if (index != -1)
+                {
+                    RefreshTokens.RemoveAt(index);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            else
+            {
+                //RefreshTokens = new List<RefreshTokenModel>();
+
+                throw new Exception("old token is not exist");
             }
         }
 
-        public void Update(RefreshTokenData token)
+        public bool Update(RefreshTokenData storedToken)
         {
-            RefreshTokenData oldTk=  RefreshTokens.FirstOrDefault(x => x.Id == token.Id); 
-            if (oldTk!=null)
+            if (RefreshTokens != null)
             {
-                int index = RefreshTokens.IndexOf(oldTk);
-                RefreshTokens[index] = token;
-                //update vao mongo DB
+                var exist = RefreshTokens.FirstOrDefault(x => x.Id == storedToken.Id);
+                int index = RefreshTokens.IndexOf(exist);
+                if (index != -1)
+                {
+                    RefreshTokens[index] = storedToken;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            else
+            {
+                //RefreshTokens = new List<RefreshTokenModel>();
+                throw new Exception("old token is not exist");
             }
         }
     }

@@ -19,7 +19,8 @@ namespace AuthorizationService.Controllers
 
         }
         /// <summary>
-        /// 
+        /// client khi login vao API se su dung ham nay
+        /// tra ve KQ la JwtData
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -27,6 +28,7 @@ namespace AuthorizationService.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
+            BODataProcessResult processResult = new BODataProcessResult();
             IActionResult response = Unauthorized();
             UserInfo user = await _authenticationService.AuthenticateUser(model);
             SharedLib.LoginInfo loginInfo = new SharedLib.LoginInfo();
@@ -34,11 +36,23 @@ namespace AuthorizationService.Controllers
             {
                 JwtData jwtData = _authenticationService.GenerateJSONWebToken(user);
                 loginInfo.JwtData = jwtData;
-                response = Ok(user);
-            }
+                
+                processResult.OK = true;
+                processResult.Content = loginInfo;
 
+                response = Ok(processResult);
+            }
+            else
+            {
+                response = Unauthorized();
+            }
             return response;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("Logout")]
         [HttpPost]
         public IActionResult Logout(LogOutModel model)
@@ -46,6 +60,11 @@ namespace AuthorizationService.Controllers
             var logutResult = _authenticationService.Logout(model);
             return Ok(logutResult);
         }
+        /// <summary>
+        /// khi can cung cap lai Access token thi dung ham nay
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("RenewToken")]
         [HttpPost]
         public IActionResult RenewToken(JwtData model)

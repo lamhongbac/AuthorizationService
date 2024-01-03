@@ -17,7 +17,7 @@ builder.Services.AddScoped<ApiKeyAuthFilter>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-JwtConfig jwtconfiguration = builder.Configuration.GetSection("Jwt").Get<JwtConfig>();
+JwtConfig jwtConfig = builder.Configuration.GetSection("Jwt").Get<JwtConfig>();
 DBConfiguration dBConfiguration = builder.Configuration.GetSection("DBConfiguration").Get<DBConfiguration>();
 builder.Services.AddAutoMapper(typeof(ModelMappingProfile));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -31,14 +31,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtconfiguration.Issuer,
-            ValidAudience = jwtconfiguration.Issuer,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtconfiguration.Key)),
+            ValidIssuer = jwtConfig.Issuer,
+            ValidAudience = jwtConfig.Issuer,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey)),
 
         };
     });
-IMapper mapper;
-builder.Services.AddSingleton(jwtconfiguration);
+
+builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddSingleton(dBConfiguration);
 builder.Services.AddSingleton<RefreshTokenDatas>();
 builder.Services.AddSingleton<AuthenticationService>();
@@ -78,6 +78,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

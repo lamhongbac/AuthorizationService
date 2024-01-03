@@ -1,9 +1,11 @@
 ﻿using AuthorizationService.BaseObjects;
 using AuthServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CompanyController : ControllerBase
@@ -15,6 +17,7 @@ namespace AuthorizationService.Controllers
         }
         [Route("GetCompanys")]
         [HttpPost]
+        [HasPermission("company;read")]
         public IActionResult GetDatas()
         {
             BODataProcessResult processResult = new BODataProcessResult();
@@ -41,6 +44,7 @@ namespace AuthorizationService.Controllers
 
         [Route("GetCompanyByID")]
         [HttpPost]
+        [HasPermission("company;read")]
         public IActionResult GetData(int ID)
         {
             BODataProcessResult processResult = new BODataProcessResult();
@@ -67,6 +71,7 @@ namespace AuthorizationService.Controllers
 
         [Route("GetCompanyByNumber")]
         [HttpPost]
+        [HasPermission("company;read")]
         public IActionResult GetData(string Number)
         {
             BODataProcessResult processResult = new BODataProcessResult();
@@ -93,6 +98,7 @@ namespace AuthorizationService.Controllers
 
         [Route("CreateCompany")]
         [HttpPost]
+        [HasPermission("company;create")]
         public async Task<IActionResult> Create(BaseCompany data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
@@ -115,6 +121,7 @@ namespace AuthorizationService.Controllers
 
         [Route("UpdateCompany")]
         [HttpPost]
+        [HasPermission("company;update")]
         public async Task<IActionResult> Update(BaseCompany data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
@@ -137,6 +144,7 @@ namespace AuthorizationService.Controllers
 
         [Route("DeleteCompany")]
         [HttpPost]
+        [HasPermission("company;delete")]
         public IActionResult Delete(BaseCompany data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
@@ -159,6 +167,7 @@ namespace AuthorizationService.Controllers
 
         [Route("MarkDeletaCompany")]
         [HttpPost]
+        [HasPermission("company;delete")]
         public IActionResult MarkDelete(BaseCompany data)
         {
             BODataProcessResult processResult = new BODataProcessResult();

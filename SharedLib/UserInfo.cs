@@ -7,11 +7,19 @@ namespace SharedLib
 {
     public class UserInfo
     {
+        public UserInfo()
+        {
+            ObjectRights = new Dictionary<string, List<string>>();
+        }
         public string ID { get; set; }
         public string UserName { get; set; }
         public string FullName { get; set; }
         public string EmailAddress { get; set; }
-        public string Roles { get; set; }
+        public List<string> Roles { get; set; }
+
+        //objectName;right1,right2
+        public Dictionary<string,List<string>> ObjectRights { get; set; }
+        
         public int AppID { get; set; }
         public int CompanyID { get; set; }
     }
