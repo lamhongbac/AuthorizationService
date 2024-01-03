@@ -63,12 +63,12 @@ namespace AuthServices
             }
         }
 
-        public BaseAppRole GetData(string Number, out string errMessage, out bool result)
+        public BaseAppRole GetData(string Number, int CompanyAppID, out string errMessage, out bool result)
         {
             try
             {
                 AppRoleDataPortal dataPortal = new AppRoleDataPortal(connectionString);
-                AppRoleData AppRoleData = dataPortal.GetAppUserData(Number).Result;
+                AppRoleData AppRoleData = dataPortal.GetAppUserData(Number, CompanyAppID).Result;
                 if (AppRoleData == null)
                 {
                     result = false;
@@ -103,7 +103,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppRoleData exists = await dataPortal.GetAppUserData(data.Number);
+                AppRoleData exists = await dataPortal.GetAppUserData(data.Number, data.CompanyAppID);
                 if (exists != null)
                 {
                     processResult.OK = false;
@@ -162,7 +162,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppRoleData existsAppRoleData =await dataPortal.GetAppUserData(data.Number);
+                AppRoleData existsAppRoleData =await dataPortal.GetAppUserData(data.Number, data.CompanyAppID);
                 if (existsAppRoleData == null)
                 {
                     processResult.OK = false;
@@ -184,12 +184,14 @@ namespace AuthServices
                 List<RoleRightUI> tobeUpdateRights = mappingRightHelper.Map(data.Rights);
                 List<RoleRightUI> insertRights = new List<RoleRightUI>();
                 List<RoleRightUI> updateRights = new List<RoleRightUI>();
+                List<RoleRightUI> deleteRights = new List<RoleRightUI>();
                 // lay 1 dong trong exist do voi data tu para, neu no kg ton tai la insert,
                 //nguoc lai la Update
-                foreach (var item in existRights)
+                foreach (var item in tobeUpdateRights)
                 {
+                    RoleRightUI newRight = existRights.FirstOrDefault(x => x.AppObjectID == item.AppObjectID);
                     //neu ton tai trong danh sach can update la old items=> can update
-                    if (tobeUpdateRights.FirstOrDefault(x=>x.Id==item.Id)!=null)
+                    if (newRight != null && newRight.Id != 0)
                     {
                         updateRights.Add(item); 
                     }
@@ -199,13 +201,22 @@ namespace AuthServices
                     }
                 }
 
+                foreach(var item in existRights)
+                {
+                    RoleRightUI newRight = tobeUpdateRights.FirstOrDefault(x => x.AppObjectID == item.AppObjectID);
+                    if(newRight == null)
+                    {
+                        deleteRights.Add(item);
+                    }
+                }
+
               
 
                 //AppRoleUI AppRoleUI = mapper.Map<AppRoleUI>(data);
                 //List<RoleRightUI> roleRightUIs = mapper.Map<List<RoleRightUI>>(data.Rights);
 
                 
-                var result = await dataPortal.Update(updateAppRoleUI, insertRights,updateRights);
+                var result = await dataPortal.Update(updateAppRoleUI, insertRights,updateRights, deleteRights);
                 if (result == true)
                 {
                     processResult.OK = true;
@@ -230,7 +241,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                var exists = dataPortal.GetAppUserData(data.Number);
+                var exists = dataPortal.GetAppUserData(data.Number, data.CompanyAppID);
                 if (exists == null)
                 {
                     processResult.OK = false;
@@ -269,7 +280,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                var exists = dataPortal.GetAppUserData(data.Number);
+                var exists = dataPortal.GetAppUserData(data.Number, data.CompanyAppID);
                 if (exists == null)
                 {
                     processResult.OK = false;

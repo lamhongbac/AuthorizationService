@@ -1,7 +1,11 @@
 ﻿using AuthorizationService.BaseObjects;
-using AuthorizationService.Models;
 using AuthServices;
 using Microsoft.AspNetCore.Mvc;
+using SharedLib;
+using SharedLib.BaseObjects.Checklist;
+using SharedLib.Models;
+using SharedLib.Services;
+using System.Data.SqlClient;
 
 namespace AuthorizationService.Controllers
 {
@@ -16,7 +20,7 @@ namespace AuthorizationService.Controllers
         }
         [Route("GetAppRoles")]
         [HttpPost]
-        public IActionResult GetDatas()
+        public IActionResult GetDatas(AppRoleRequestDatasModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string errMessage = string.Empty;
@@ -26,6 +30,37 @@ namespace AuthorizationService.Controllers
                 List<BaseAppRole> baseDatas = service.GetDatas(out errMessage, out result);
                 if (result == true)
                 {
+                    baseDatas = baseDatas.Where(x => x.CompanyAppID == model.CompanyAppID).ToList();
+                    if (model.PageIndex != 0 && model.PageSize != 0)
+                    {
+                        if (!string.IsNullOrWhiteSpace(model.SearchText))
+                        {
+                            model.SearchText = model.SearchText.ToLower();
+                            baseDatas = baseDatas.Where(x => x.Number.ToLower().Contains(model.SearchText)
+                            || x.Name.ToLower().Contains(model.SearchText)).ToList();
+                        }
+
+                        ESortOrder eSortOrder = ESortOrder.Ascending;
+                        if (!string.IsNullOrWhiteSpace(model.sortOrder))
+                        {
+                            try
+                            {
+                                eSortOrder = Enum.Parse<ESortOrder>(model.sortOrder);
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+
+                        baseDatas = DoSort(baseDatas, model.SortProperty, eSortOrder);
+                        int totalCount = baseDatas.Count;
+                        processResult.ErrorNumber = totalCount;
+
+                        PageDataService<BaseAppRole> pageData = new PageDataService<BaseAppRole>();
+                        baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
+                    }
+
                     processResult.Content = baseDatas;
                 }
                 processResult.OK = result;
@@ -75,7 +110,7 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                BaseAppRole baseData = service.GetData(model.Number, out errMessage, out result);
+                BaseAppRole baseData = service.GetData(model.Number, model.ID, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
@@ -178,6 +213,39 @@ namespace AuthorizationService.Controllers
 
             }
             return Ok(processResult);
+        }
+
+        private List<BaseAppRole> DoSort(List<BaseAppRole> items, string SortProperty, ESortOrder sortOrder)
+        {
+            try
+            {
+                if (SortProperty.ToLower() == "number")
+                {
+                    if (sortOrder == ESortOrder.Ascending)
+                        items = items.OrderBy(n => n.Number).ThenByDescending(x => x.ModifiedOn).ToList();
+                    else
+                        items = items.OrderByDescending(n => n.Number).ThenByDescending(x => x.ModifiedOn).ToList();
+                }
+                if (SortProperty.ToLower() == "name")
+                {
+                    if (sortOrder == ESortOrder.Ascending)
+                        items = items.OrderBy(n => n.Name).ThenByDescending(x => x.ModifiedOn).ToList();
+                    else
+                        items = items.OrderByDescending(n => n.Name).ThenByDescending(x => x.ModifiedOn).ToList();
+                }
+                if (SortProperty.ToLower() == "description")
+                {
+                    if (sortOrder == ESortOrder.Ascending)
+                        items = items.OrderBy(n => n.Description).ThenByDescending(x => x.ModifiedOn).ToList();
+                    else
+                        items = items.OrderByDescending(n => n.Description).ThenByDescending(x => x.ModifiedOn).ToList();
+                }
+                return items;
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

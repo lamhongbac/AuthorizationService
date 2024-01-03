@@ -48,15 +48,15 @@ namespace AuthenticationDAL
         /// </summary>
         /// <param name="Number"></param>
         /// <returns></returns>
-        public async Task<AppRoleData> GetAppUserData(string Number)
+        public async Task<AppRoleData> GetAppUserData(string Number, int CompanyAppID)
         {
             try
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
                     AppRoleData appRoleData = new AppRoleData();
-                    string sql = "SELECT * FROM " + tableName + " WHERE Number = @Number";
-                    object param = new { Number = Number };
+                    string sql = "SELECT * FROM " + tableName + " WHERE Number = @Number AND CompanyAppID = @CompanyAppID";
+                    object param = new { Number = Number, CompanyAppID = CompanyAppID };
                     var appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(sql, param);
                     if(appRoleUI == null)
                     {
@@ -110,7 +110,7 @@ namespace AuthenticationDAL
                         var result = await connection.InsertAsync(data.AppRoleUI, trans);
                         if (result <= 0)
                         {
-                            trans.Dispose();
+                            trans.Rollback();
                             return false;
                         }
                         else
@@ -122,7 +122,7 @@ namespace AuthenticationDAL
                             var resultSub = await connection.InsertAsync(data.RoleRightUIs, trans);
                             if (resultSub <= 0)
                             {
-                                trans.Dispose();
+                                trans.Rollback();
                                 return false;
                             }
                             trans.Commit();
@@ -131,7 +131,7 @@ namespace AuthenticationDAL
                     }
                     catch
                     {
-                        trans.Dispose();
+                        trans.Rollback();
                         return false;
                     }
                 }
@@ -141,7 +141,7 @@ namespace AuthenticationDAL
         }
 
         public async Task<bool> Update(AppRoleUI updateAppRoleUI, List<RoleRightUI> insertRights,
-            List<RoleRightUI> updateRights)
+            List<RoleRightUI> updateRights, List<RoleRightUI> deleteRights)
         {
             bool result = false;
             using (IDbConnection connection = new SqlConnection(_connectionString))
@@ -157,22 +157,27 @@ namespace AuthenticationDAL
                          result = await connection.UpdateAsync(updateAppRoleUI, trans);
                         if (result == false)
                         {
-                           
+                            trans.Rollback();
                             return false;
                         }
                         else
                         {
                             var insert_result = true;
                             var updated_result = true;
+                            var deleted_result = true;
                             if (updateRights != null && updateRights.Count > 0)
                             {
                                 updated_result = await connection.UpdateAsync(updateRights, trans);
                             }
                             if (insertRights != null && insertRights.Count > 0)
                             {
-                                updated_result = await connection.InsertAsync(insertRights, trans)>0;
+                                insert_result = await connection.InsertAsync(insertRights, trans)>0;
                             }
-                            result = updated_result && insert_result;
+                            if(deleteRights != null && deleteRights.Count > 0)
+                            {
+                                deleted_result = await connection.DeleteAsync(deleteRights, trans);
+                            }
+                            result = updated_result && insert_result && deleted_result;
                             if (result)
                             {
                                 trans.Commit();
@@ -187,6 +192,7 @@ namespace AuthenticationDAL
                     }
                     catch
                     {
+                        trans.Rollback();
                         result = false;
                     }
                 }

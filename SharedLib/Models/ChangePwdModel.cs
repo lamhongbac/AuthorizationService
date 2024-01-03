@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AuthServices
+namespace SharedLib.Models
 {
     public class ChangePwdModel: BaseAccountModel
     {
@@ -13,6 +13,11 @@ namespace AuthServices
         public string OldPassword { get; set; } = string.Empty;
         public string ConfirmPassword { get; set; } = string.Empty;
         public string NewPassword { get; set; } = string.Empty;
+        public string ModifiedBy { get; set; } = string.Empty;
+        public string? PwdKey { get; set; }
+        public bool IsError { get; set; }
+        public int UserID { get; set; }
+        public int CompanyAppID { get; set; }
 
     }
 }

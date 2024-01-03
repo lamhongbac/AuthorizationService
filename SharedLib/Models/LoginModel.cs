@@ -12,7 +12,7 @@ namespace AuthServices
         public string UserType { get; set; } = AppUserType.Email.ToString();
         public string Password { get; set; } = string.Empty;
         public bool KeepLogined { get; set; }
-        
+
 
 
     }

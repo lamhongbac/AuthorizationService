@@ -1,4 +1,6 @@
-﻿namespace AuthorizationService.BaseObjects
+﻿using System.Collections.Generic;
+
+namespace AuthorizationService.BaseObjects
 {
     /// <summary>
     /// 1 User se truc thuong 1 cty
@@ -17,13 +19,18 @@
         public string UserType { get; set; }
         public string FullName { get; set; }
         public string Pwd { get; set; }
+        public string PwdKey { get; set; }
         public int CompanyAppID { get; set; }
         public int AppID { get; set; }
         public BaseCompany Company { get; set; }
-        public string Email { get; set; }
-        public string Mobile { get; set; }
+        public string? Email { get; set; }
+        public string? Mobile { get; set; }
         public bool IsDeleted { get; set; }
         public int RoleID { get; set; }
-        public BaseAppRole Role { get; set; }
+        public int? ManagerID { get; set; }
+        public bool IsManager { get; set; }
+        public string? Department { get; set; }
+        public BaseAppRole? Role { get; set; }
+        public List<BaseUserStore>? BaseUserStores { get; set; }
     }
 }

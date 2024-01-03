@@ -88,13 +88,13 @@ namespace AuthServices
             }
         }
 
-        public BaseAppObject GetData(string Number, out string errMessage, out bool result)
+        public BaseAppObject GetData(string Number, int AppID, out string errMessage, out bool result)
         {
             try
             {
                 GenericDataPortal<AppObjectUI> dataPortal = new GenericDataPortal<AppObjectUI>(connectionString, tableName);
-                string whereString = "Number = @Number";
-                object param = new { Number = Number };
+                string whereString = "MainFunction = @MainFunction AND AppID = @AppID";
+                object param = new { MainFunction = Number, AppID = AppID };
                 AppObjectUI AppObjectUIs = dataPortal.Read(whereString, param).Result;
                 if (AppObjectUIs == null)
                 {

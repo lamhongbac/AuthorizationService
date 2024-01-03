@@ -5,8 +5,9 @@ using System.Security.Claims;
 using System.Text;
 using AuthenticationDemo.Models;
 using SharedLib;
-using AuthServices;
+//using AuthServices.LoginInfo;
 using SharedLib.Models;
+using AuthServices;
 
 namespace AuthenticationDemo.Services
 {
