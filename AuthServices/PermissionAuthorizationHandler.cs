@@ -15,7 +15,8 @@ namespace AuthServices
         /// 
         /// </summary>
         /// <param name="context"></param>
-        /// <param name="requirement">la thuoc tinh tren action (objectName, rights)</param>
+        /// <param name="requirement">la thuoc tinh right can thiet de access  actionmethod 
+        /// no dung de so sanh voi user right trong context.User </param>
         /// <returns></returns>
         protected override Task HandleRequirementAsync
             (AuthorizationHandlerContext context,
@@ -25,10 +26,18 @@ namespace AuthServices
 
             //lay ra danh sach quyen tuong ung voi object tren doi tuong User
 
-            var claims = context.User.Claims.Where(x => x.Type.ToLower() == objectName.ToLower());
+            
             Dictionary<string, List<string>> user_permissions = new Dictionary<string, List<string>>();
             List<string> permissions = new List<string>();
-            string userRights = context.User.Claims.First(x => x.Type.ToLower() == "objectrights").Value;
+
+            var claims = context.User.Claims.FirstOrDefault(x => x.Type.ToLower() == "objectrights");
+
+            if (claims == null)
+            {
+                context.Fail(); return Task.CompletedTask;
+            }
+            string userRights = claims.Value;
+
             if (!string.IsNullOrEmpty(userRights))
             {
                 user_permissions = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(userRights);
@@ -44,19 +53,26 @@ namespace AuthServices
             }
             // yc de dc phep (authorized)
             List<string> requirementPermission = requirement.RequiredPermissions;
-
-
             //kiem tra xem quyen cua user dang co , co thỏa mãn hay kg?
             bool authorized = false;
-            foreach (var permission in permissions)
+
+            if (requirementPermission == null)
             {
-                if (requirement.RequiredPermissions.Contains(permission))
+                authorized = true;
+            }
+            else
+            {
+
+                
+                foreach (var permission in permissions)
                 {
-                    authorized = true;
-                    break;
+                    if (requirement.RequiredPermissions.Contains(permission))
+                    {
+                        authorized = true;
+                        break;
+                    }
                 }
             }
-
             if (authorized)
             {
                 context.Succeed(requirement);

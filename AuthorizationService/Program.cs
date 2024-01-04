@@ -20,7 +20,7 @@ builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizat
 
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<ApiKeyAuthFilter>();
+//builder.Services.AddScoped<ApiKeyAuthFilter>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
