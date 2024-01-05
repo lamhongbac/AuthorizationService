@@ -1,7 +1,7 @@
 ﻿using AuthorizationService.Service;
 using AuthServices;
 using Microsoft.AspNetCore.Mvc;
-using SharedLib.Models;
+using AuthServices.Models;
 
 namespace AuthorizationService.Controllers
 {

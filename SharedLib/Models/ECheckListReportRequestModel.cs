@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharedLib.Models
+namespace AuthServices.Models
 {
     public class ECheckListReportRequestModel : RequestModel
     {

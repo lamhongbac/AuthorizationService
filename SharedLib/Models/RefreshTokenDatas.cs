@@ -1,4 +1,8 @@
-﻿namespace AuthorizationService.Data
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace AuthServices.Models
 {
     public class RefreshTokenDatas
     {
@@ -6,7 +10,7 @@
         {
             RefreshTokens = new List<RefreshTokenData>();
         }
-        public List<RefreshTokenData> RefreshTokens { get; set; }
+        private static List<RefreshTokenData> RefreshTokens { get; set; }
 
         /// <summary>
         /// Add new token
@@ -89,6 +93,16 @@
                 //RefreshTokens = new List<RefreshTokenModel>();
                 throw new Exception("old token is not exist");
             }
+        }
+
+        public RefreshTokenData? GetRefreshToken(string refreshToken)
+        {
+            if (RefreshTokens != null)
+            {
+                var exist = RefreshTokens.FirstOrDefault(x=>x.Token == refreshToken);
+                return exist;
+            }
+            return null;
         }
     }
 }

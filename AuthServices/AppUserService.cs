@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using AuthServices.Helpers;
 using AutoMapper.Execution;
 using SharedLib;
-using SharedLib.Models;
+using AuthServices.Models;
 using System.Linq;
 
 namespace AuthServices

@@ -1,9 +1,10 @@
 ﻿using AuthorizationService.BaseObjects;
 using AuthServices;
+using AuthServices.Models;
 using Microsoft.AspNetCore.Mvc;
 using SharedLib;
 using SharedLib.BaseObjects.Checklist;
-using SharedLib.Models;
+//using SharedLib.Models;
 using SharedLib.Services;
 using System.Data.SqlClient;
 

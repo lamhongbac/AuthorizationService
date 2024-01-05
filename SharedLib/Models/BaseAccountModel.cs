@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SharedLib.Models
+namespace AuthServices.Models
 {
     public class BaseAccountModel
     {

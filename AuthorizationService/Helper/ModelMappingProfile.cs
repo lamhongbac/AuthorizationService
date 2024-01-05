@@ -1,6 +1,7 @@
 ﻿using AuthenticationDAL.DTO;
 using AuthorizationService.BaseObjects;
 using AuthorizationService.Data;
+using AuthServices.Models;
 using AutoMapper;
 using SharedLib;
 

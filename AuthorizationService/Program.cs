@@ -2,6 +2,8 @@ using AuthorizationService.Data;
 using AuthorizationService.Helper;
 using AuthorizationService.Service;
 using AuthServices;
+using AuthServices.Models;
+using AuthServices.Util;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +35,8 @@ builder.Services.AddAutoMapper(typeof(ModelMappingProfile));
 
 builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddSingleton(dBConfiguration);
+builder.Services.AddSingleton<JwtUtil>();
+
 builder.Services.AddSingleton<RefreshTokenDatas>();
 builder.Services.AddSingleton<AuthenticationService>();
 builder.Services.AddSingleton<AccountService>();
@@ -56,10 +60,10 @@ builder.Services.AddSingleton<CompanyService>(x => new CompanyService(dBConfigur
 builder.Services.AddSingleton<RoleRightService>(x => new RoleRightService(dBConfiguration.ConnectionString));
 builder.Services.AddSingleton<UserRoleService>(x => new UserRoleService(dBConfiguration.ConnectionString));
 builder.Services.AddSingleton<UserStoreService>(x => new UserStoreService(dBConfiguration.ConnectionString));
-builder.Services.AddAuthorization(x =>
-{
-    x.AddPolicy(IdentityData.AdminUserPolicyName, p => p.RequireClaim(IdentityData.AdminUserClaimName));
-});
+//builder.Services.AddAuthorization(x =>
+//{
+//    x.AddPolicy(IdentityData.AdminUserPolicyName, p => p.RequireClaim(IdentityData.AdminUserClaimName));
+//});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

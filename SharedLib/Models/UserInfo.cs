@@ -1,9 +1,9 @@
-﻿using SharedLib.Models;
+﻿using AuthServices.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SharedLib
+namespace AuthServices.Models
 {
     public class UserInfo
     {

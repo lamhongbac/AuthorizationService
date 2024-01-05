@@ -1,4 +1,6 @@
-﻿namespace AuthorizationService.Data
+﻿using System;
+
+namespace AuthServices.Models
 {
    
     public class RefreshTokenData

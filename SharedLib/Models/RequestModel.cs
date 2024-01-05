@@ -1,4 +1,4 @@
-﻿namespace SharedLib.Models
+﻿namespace AuthServices.Models
 {
     public class RequestModel
     {

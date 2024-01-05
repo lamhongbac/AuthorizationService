@@ -1,9 +1,10 @@
 ﻿using AuthorizationService.Data;
 using AuthorizationService.Service;
 using AuthServices;
+using AuthServices.Models;
 using Microsoft.AspNetCore.Mvc;
 using SharedLib;
-using SharedLib.Models;
+
 
 namespace AuthorizationService.Controllers
 {
@@ -30,21 +31,16 @@ namespace AuthorizationService.Controllers
         {
             BODataProcessResult processResult = new BODataProcessResult();
             IActionResult response = Unauthorized();
-            UserInfo user = await _authenticationService.AuthenticateUser(model);
-            SharedLib.LoginInfo loginInfo = new SharedLib.LoginInfo();
-            if (user != null)
+            processResult = await _authenticationService.Login(model);
+          
+            if (processResult.OK)
             {
-                JwtData jwtData = _authenticationService.GenerateJSONWebToken(user);
-                loginInfo.JwtData = jwtData;
-                
-                processResult.OK = true;
-                processResult.Content = loginInfo;
-
+               
                 response = Ok(processResult);
             }
-            else
+           else
             {
-                response = Unauthorized();
+                //dich message?
             }
             return response;
         }

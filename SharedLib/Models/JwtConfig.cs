@@ -1,4 +1,4 @@
-﻿namespace AuthorizationService.Data
+﻿namespace AuthServices.Models
 {
     public class JwtConfig
     {
