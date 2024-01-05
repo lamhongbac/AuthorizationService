@@ -78,9 +78,16 @@ namespace SharedLib
 
     public enum EProcessStatus
     {
-        QAOCheck,
-        RMConfirm,
-        QAMReview
+        QAOChecking,
+        QAOChecked,
+        RMConfirming,
+        RMConfirmed,
+        QAMReviewing,
+        QAMReviewed,
+        RMCreatingAP,
+        RMCreatedAP,
+        QAOReviewingAP,
+        QAReviewedAP
     }
 
     public enum ESortOrder { Ascending = 0, Descending = 1 }
