@@ -38,6 +38,13 @@ namespace SharedLib
         R
     }
 
+    public enum ECheckStatus
+    {
+        Na,
+        V,
+        X
+    }
+
     public class JsonUtil<T>
     {
         public T Read(string _filePath)

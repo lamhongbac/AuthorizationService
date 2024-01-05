@@ -25,5 +25,6 @@ namespace SharedLib.BaseObjects.Checklist
         public decimal Point { get; set; }
         public bool IsNotAvailable { get; set; }
         public string ProcessStatsus { get; set; }
+        public string CheckStatus { get; set; }
     }
 }
