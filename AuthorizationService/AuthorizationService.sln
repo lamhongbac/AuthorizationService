@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationDemo", "..\Au
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationDAL", "..\AuthenticationDAL\AuthenticationDAL.csproj", "{47F9EB97-783E-4607-B7D0-205053A8A232}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServices", "..\AuthServices\AuthServices.csproj", "{2A04D495-9D3A-4886-86E0-EB268DCE6E36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServiceLibrary", "..\AuthServices\AuthServiceLibrary.csproj", "{2A04D495-9D3A-4886-86E0-EB268DCE6E36}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLib", "..\SharedLib\SharedLib.csproj", "{13FFDD1C-44D4-4493-AD75-21AEC16E39C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtectResourceService", "..\ProtectedResources\ProtectResourceService\ProtectResourceService.csproj", "{98962ED5-9339-420C-8647-E117834204B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtectResourceService", "..\ProtectedResources\ProtectResourceService\ProtectResourceService.csproj", "{98962ED5-9339-420C-8647-E117834204B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

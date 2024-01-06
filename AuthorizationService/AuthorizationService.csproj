@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AuthenticationDAL\AuthenticationDAL.csproj" />
-    <ProjectReference Include="..\AuthServices\AuthServices.csproj" />
+    <ProjectReference Include="..\AuthServices\AuthServiceLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
