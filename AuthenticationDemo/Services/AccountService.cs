@@ -52,7 +52,7 @@ namespace AuthenticationDemo.Services
                 KeepLogined = viewModel.KeepLogined,
                 Password = viewModel.Password,
                 UserName = viewModel.UserName,
-                UserType = AppUserType.Email.ToString(),
+                UserType = "UserID",
 
             };
             try
