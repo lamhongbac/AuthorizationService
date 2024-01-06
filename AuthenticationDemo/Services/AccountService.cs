@@ -16,6 +16,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace AuthenticationDemo.Services
 {
+    /// <summary>
+    /// cung cap dich vu ve tai khoan cho ung dung
+    /// </summary>
     public class AccountService
     {
         IHttpContextAccessor _httpContextAccessor;

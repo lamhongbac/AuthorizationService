@@ -17,8 +17,8 @@ namespace AuthenticationDemo.Controllers
         }
         public IActionResult Login()
         {
-            
-            return View();
+            LoginViewModel model=new LoginViewModel();
+            return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
