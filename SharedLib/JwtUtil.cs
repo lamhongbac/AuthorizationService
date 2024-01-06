@@ -10,6 +10,7 @@ using System.Text;
 using AuthServices.Models;
 using System.Security.Cryptography;
 using SharedLib;
+using Newtonsoft.Json.Linq;
 
 namespace AuthServices.Util
 {
@@ -357,6 +358,19 @@ namespace AuthServices.Util
             var dateTimeInterval = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dateTimeInterval.AddSeconds(utcExpired).ToUniversalTime();
             return dateTimeInterval;
+        }
+
+        public ClaimsIdentity GetClaims(string accessToken)
+        {
+            //kiem tra token is valid truoc khi tra ve
+
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(accessToken);
+            var tokenS = jsonToken as JwtSecurityToken;
+
+            // using JwtSecurityToken
+            //var fullname = tokenS.Claims.First(claim => claim.Type == "FullName").Value;
+            return new ClaimsIdentity(tokenS.Claims);
         }
     }
 }

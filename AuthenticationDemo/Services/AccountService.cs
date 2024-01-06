@@ -33,9 +33,9 @@ namespace AuthenticationDemo.Services
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task Login(LoginModel model)
+        public async Task<bool> Login(LoginModel model)
         {
-
+            bool isLogin = false;
 
             // qua trinh login cua MVC
             //Cap nhat cookie information
@@ -45,20 +45,21 @@ namespace AuthenticationDemo.Services
             string result = await response.Content.ReadAsStringAsync();
             LoginInfo loginInfo = JsonConvert.DeserializeObject<LoginInfo>(result);
 
+            isLogin = loginInfo != null && loginInfo.JwtData != null;
             //save cookier JwtData
-            
-            UserInfo userInfo = jwtUtil.GetUserInfo(loginInfo.JwtData.AccessToken);
 
-            List<Claim> claims = new List<Claim>()
-            {
-                    new Claim(ClaimTypes.NameIdentifier,userInfo.FullName),
-                    new Claim("Roles", string.Join(",", userInfo.Roles)),
-                    new Claim(ClaimTypes.Email,userInfo.EmailAddress),
+            //UserInfo userInfo = jwtUtil.GetUserInfo(loginInfo.JwtData.AccessToken);
 
-                //new Claim(ClaimTypes.StreetAddress,account.Address)
-            };
-            ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //List<Claim> claims = new List<Claim>()
+            //{
+            //        new Claim(ClaimTypes.NameIdentifier,userInfo.FullName),
+            //        new Claim("Roles", string.Join(",", userInfo.Roles)),
+            //        new Claim(ClaimTypes.Email,userInfo.EmailAddress),
 
+            //    //new Claim(ClaimTypes.StreetAddress,account.Address)
+            //};
+            //ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            ClaimsIdentity identity = jwtUtil.GetClaims(loginInfo.JwtData.AccessToken);
             AuthenticationProperties properties = new AuthenticationProperties()
             {
                 AllowRefresh = true,
@@ -67,6 +68,8 @@ namespace AuthenticationDemo.Services
 
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity), properties);
+
+            return isLogin;
         }
 
         public JwtData ReNewToken(JwtData jwtData)
