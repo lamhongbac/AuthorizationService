@@ -16,8 +16,16 @@ builder.Services.AddHttpClient("rs", hc =>
     hc.BaseAddress = new Uri(serviceConfig.ProtectedServiceBaseAddress);
 });
 
-//builder.Services.AddHttpClient<AccountService>(client =>
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<AccountService>();
+    //client =>
 //client.BaseAddress = new Uri(appConfig.AuthBaseAddress));
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -41,7 +49,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();

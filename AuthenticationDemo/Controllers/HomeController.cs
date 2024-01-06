@@ -1,6 +1,7 @@
 ﻿using AuthenticationDemo.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace AuthenticationDemo.Controllers
 {
@@ -15,7 +16,15 @@ namespace AuthenticationDemo.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            ClaimsPrincipal claimsPrincipal = HttpContext.User;
+            if (claimsPrincipal == null || !claimsPrincipal.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public IActionResult Privacy()

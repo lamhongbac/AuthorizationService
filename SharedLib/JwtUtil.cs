@@ -23,6 +23,10 @@ namespace AuthServices.Util
             _tokenDatas = tokenDatas;
             this.jwtConfig = jwtConfig;
         }
+        public JwtUtil()
+        {
+
+        }
         public void SetConfig(JwtConfig jwtConfig )
         {
             this.jwtConfig = jwtConfig;
@@ -195,6 +199,7 @@ namespace AuthServices.Util
 
         public BODataProcessResult RenewToken(JwtData model)
         {
+            JwtClientUtil jwtClientUtil=new JwtClientUtil();
             BODataProcessResult processResult = new BODataProcessResult();
             JwtSecurityTokenHandler tokenSecurityTokenHandler = new JwtSecurityTokenHandler();
             
@@ -280,7 +285,7 @@ namespace AuthServices.Util
                 storedRefToken.IsRevoked = true;
                 storedRefToken.IsUsed = true;
                 _tokenDatas.Update(storedRefToken);
-                UserInfo userInfo = GetUserInfoFromToken(model.AccessToken);
+                UserInfo userInfo = jwtClientUtil.GetUserInfoFromToken(model.AccessToken);
 
                 //su dung old token de lay lai cac thong tin cu
                 // username
@@ -305,19 +310,31 @@ namespace AuthServices.Util
             }
 
         }
-        /// <summary>
-        /// chuyen doi jwt access ve User de su dung lai ham GenerateToken
-        /// </summary>
-        /// <param name="validToken"></param>
-        /// <returns></returns>
-      public  UserInfo GetUserInfoFromToken(string validToken)
+        
+        private DateTime ConvertUnixTimeToDate(long utcExpired)
+        {
+            var dateTimeInterval = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTimeInterval.AddSeconds(utcExpired).ToUniversalTime();
+            return dateTimeInterval;
+        }
+
+        
+    }
+
+    public class JwtClientUtil
+    {/// <summary>
+     /// chuyen doi jwt access ve User de su dung lai ham GenerateToken
+     /// </summary>
+     /// <param name="validToken"></param>
+     /// <returns></returns>
+        public UserInfo GetUserInfoFromToken(string validToken)
         {
             UserInfo userInfo = new UserInfo();
             try
             {
                 JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey));
-                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                //var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey));
+                //var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
 
                 var jsonToken = jwtSecurityTokenHandler.ReadToken(validToken);
@@ -353,14 +370,7 @@ namespace AuthServices.Util
             return userInfo;
         }
 
-        private DateTime ConvertUnixTimeToDate(long utcExpired)
-        {
-            var dateTimeInterval = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTimeInterval.AddSeconds(utcExpired).ToUniversalTime();
-            return dateTimeInterval;
-        }
-
-        public ClaimsIdentity GetClaims(string accessToken)
+        public List<Claim> GetClaims(string accessToken)
         {
             //kiem tra token is valid truoc khi tra ve
 
@@ -370,7 +380,29 @@ namespace AuthServices.Util
 
             // using JwtSecurityToken
             //var fullname = tokenS.Claims.First(claim => claim.Type == "FullName").Value;
-            return new ClaimsIdentity(tokenS.Claims);
+            return tokenS.Claims.ToList();
+        }
+        public UserInfo GetUserInfo(string token)
+        {
+            UserInfo userInfo = new UserInfo();
+
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token);
+            var tokenS = jsonToken as JwtSecurityToken;
+
+            // using JwtSecurityToken
+            var fullname = tokenS.Claims.First(claim => claim.Type == "FullName").Value;
+
+            userInfo.FullName = fullname;
+            userInfo.EmailAddress = tokenS.Claims.First(claim => claim.Type == "EmailAddress").Value;
+            var role = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
+            if (!string.IsNullOrWhiteSpace(role))
+            {
+                userInfo.Roles.Add(role);
+            }
+            userInfo.UserName = tokenS.Claims.First(claim => claim.Type == "UserName").Value;
+            userInfo.ID = tokenS.Claims.First(claim => claim.Type == "ID").Value;
+            return userInfo;
         }
     }
 }

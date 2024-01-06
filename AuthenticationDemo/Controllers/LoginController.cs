@@ -21,16 +21,23 @@ namespace AuthenticationDemo.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             ClaimsPrincipal claimsPrincipal = HttpContext.User;
             if (claimsPrincipal != null && claimsPrincipal.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
+            bool isLogin =await accountService.Login(model);
 
-            accountService.Login(model);
-            return View();
+            if (isLogin)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }

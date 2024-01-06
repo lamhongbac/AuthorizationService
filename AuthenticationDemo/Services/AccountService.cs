@@ -12,6 +12,7 @@ using AuthServices.Models;
 using AuthServices.Util;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace AuthenticationDemo.Services
 {
@@ -19,65 +20,83 @@ namespace AuthenticationDemo.Services
     {
         IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _factory;
-        const string strUrl = "";
-        JwtUtil jwtUtil;
-        public AccountService(IHttpClientFactory factory, 
-            IHttpContextAccessor httpContextAccessor,
-            JwtUtil jwtUtil)
+        IConfiguration _configuration;
+        ServiceConfig _serviceConfig;
+        AppConfig _appConfig;
+        public AccountService(IHttpClientFactory factory,
+            IHttpContextAccessor httpContextAccessor, IConfiguration configuration
+            )
         {
             _factory = factory;
             _httpContextAccessor = httpContextAccessor;
-            this.jwtUtil = jwtUtil;
+            _configuration = configuration;
+            _serviceConfig = _configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
+            _appConfig = _configuration.GetSection("AppConfig").Get<AppConfig>();
+
+
         }
         /// <summary>
-        /// 
+        ///  httpClient.DefaultRequestHeaders.Authorization =
+        ///  new AuthenticationHeaderValue("Bearer", "Your Oauth token");
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task<bool> Login(LoginModel model)
+        public async Task<bool> Login(LoginViewModel viewModel)
         {
-            HttpClient _httpClient = _factory.CreateClient("auth");
-    //        httpClient.DefaultRequestHeaders.Authorization =
-    //new AuthenticationHeaderValue("Bearer", "Your Oauth token");
             bool isLogin = false;
-
-            // qua trinh login cua MVC
-            //Cap nhat cookie information
-            string json = JsonConvert.SerializeObject(model);
-            StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(strUrl, data);
-            string result = await response.Content.ReadAsStringAsync();
-            BODataProcessResult processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
-
-            isLogin = processResult != null && processResult.OK;
-
-            //save cookier JwtData
-            LoginInfo loginInfo =(LoginInfo)processResult.Content;
-
-
-
-
-            //UserInfo userInfo = jwtUtil.GetUserInfo(loginInfo.JwtData.AccessToken);
-
-            //List<Claim> claims = new List<Claim>()
-            //{
-            //        new Claim(ClaimTypes.NameIdentifier,userInfo.FullName),
-            //        new Claim("Roles", string.Join(",", userInfo.Roles)),
-            //        new Claim(ClaimTypes.Email,userInfo.EmailAddress),
-
-            //    //new Claim(ClaimTypes.StreetAddress,account.Address)
-            //};
-            //ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            ClaimsIdentity identity = jwtUtil.GetClaims(loginInfo.JwtData.AccessToken);
-            AuthenticationProperties properties = new AuthenticationProperties()
+            LoginModel model = new LoginModel()
             {
-                AllowRefresh = true,
-                IsPersistent = model.KeepLogined
-            };
+                AppID = _appConfig.AppID,
+                CompanyID = _appConfig.CompanyID,
+                KeepLogined = viewModel.KeepLogined,
+                Password = viewModel.Password,
+                UserName = viewModel.UserName,
+                UserType = AppUserType.Email.ToString(),
 
-            await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(identity), properties);
+            };
+            try
+            {
+                HttpClient _httpClient = _factory.CreateClient("auth");
+                string strLoginURL = _serviceConfig.Login;
+
+                //===call api
+                string json = JsonConvert.SerializeObject(model);
+                StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(strLoginURL, data);
+                string result = await response.Content.ReadAsStringAsync();
+                BODataProcessResult processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
+                isLogin = processResult != null && processResult.OK;
+                LoginInfo loginInfo = (LoginInfo)processResult.Content;
+
+                if (!isLogin)
+                {
+                    return isLogin;
+                
+                    
+                }
+                string strLoginInfo = JsonConvert.SerializeObject(loginInfo).ToString();
+                //save cookier JwtData
+                _httpContextAccessor.HttpContext.Session.SetObject("LoginInfo", strLoginInfo);
+
+                //LoginInfo loginInfo = (LoginInfo)processResult.Content;
+                //===end call
+
+                JwtClientUtil jwtUtil = new JwtClientUtil();
+                List<Claim> claims = jwtUtil.GetClaims(loginInfo.JwtData.AccessToken);
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                AuthenticationProperties properties = new AuthenticationProperties()
+                {
+                    AllowRefresh = true,
+                    IsPersistent = model.KeepLogined
+                };
+
+                await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(identity), properties);
+            }catch(Exception ex)
+            {
+                string err = ex.Message;
+            }
 
             return isLogin;
         }
