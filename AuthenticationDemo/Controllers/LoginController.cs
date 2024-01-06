@@ -1,6 +1,7 @@
 ﻿using AuthenticationDemo.Models;
 using AuthenticationDemo.Services;
 using AuthServices;
+using AuthServices.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using System.Security.Claims;

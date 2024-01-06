@@ -6,8 +6,10 @@ using System.Text;
 using AuthenticationDemo.Models;
 using SharedLib;
 //using AuthServices.LoginInfo;
-using SharedLib.Models;
+//using SharedLib.Models;
 using AuthServices;
+using AuthServices.Models;
+using AuthServices.Util;
 
 namespace AuthenticationDemo.Services
 {
@@ -16,10 +18,14 @@ namespace AuthenticationDemo.Services
         IHttpContextAccessor _httpContextAccessor;
         HttpClient _httpClient;
         const string strUrl = "";
-        public AccountService(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
+        JwtUtil jwtUtil;
+        public AccountService(HttpClient httpClient, 
+            IHttpContextAccessor httpContextAccessor,
+            JwtUtil jwtUtil)
         {
             _httpClient = httpClient;
             _httpContextAccessor = httpContextAccessor;
+            this.jwtUtil = jwtUtil;
         }
         /// <summary>
         /// 
@@ -37,10 +43,10 @@ namespace AuthenticationDemo.Services
             StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(strUrl, data);
             string result = await response.Content.ReadAsStringAsync();
-            SharedLib.LoginInfo loginInfo = JsonConvert.DeserializeObject<SharedLib.LoginInfo>(result);
+            LoginInfo loginInfo = JsonConvert.DeserializeObject<LoginInfo>(result);
 
             //save cookier JwtData
-            JwtUtil jwtUtil = new JwtUtil();
+            
             UserInfo userInfo = jwtUtil.GetUserInfo(loginInfo.JwtData.AccessToken);
 
             List<Claim> claims = new List<Claim>()

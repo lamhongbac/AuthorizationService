@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using AuthServices.Models;
+using System.Security.Claims;
 
 namespace StudyApiAuth.Models
 {
