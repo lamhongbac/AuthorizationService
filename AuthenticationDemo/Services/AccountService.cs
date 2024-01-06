@@ -10,20 +10,22 @@ using SharedLib;
 using AuthServices;
 using AuthServices.Models;
 using AuthServices.Util;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace AuthenticationDemo.Services
 {
     public class AccountService
     {
         IHttpContextAccessor _httpContextAccessor;
-        HttpClient _httpClient;
+        private readonly IHttpClientFactory _factory;
         const string strUrl = "";
         JwtUtil jwtUtil;
-        public AccountService(HttpClient httpClient, 
+        public AccountService(IHttpClientFactory factory, 
             IHttpContextAccessor httpContextAccessor,
             JwtUtil jwtUtil)
         {
-            _httpClient = httpClient;
+            _factory = factory;
             _httpContextAccessor = httpContextAccessor;
             this.jwtUtil = jwtUtil;
         }
@@ -35,6 +37,9 @@ namespace AuthenticationDemo.Services
         /// <returns></returns>
         public async Task<bool> Login(LoginModel model)
         {
+            HttpClient _httpClient = _factory.CreateClient("auth");
+    //        httpClient.DefaultRequestHeaders.Authorization =
+    //new AuthenticationHeaderValue("Bearer", "Your Oauth token");
             bool isLogin = false;
 
             // qua trinh login cua MVC
@@ -43,10 +48,15 @@ namespace AuthenticationDemo.Services
             StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(strUrl, data);
             string result = await response.Content.ReadAsStringAsync();
-            LoginInfo loginInfo = JsonConvert.DeserializeObject<LoginInfo>(result);
+            BODataProcessResult processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
 
-            isLogin = loginInfo != null && loginInfo.JwtData != null;
+            isLogin = processResult != null && processResult.OK;
+
             //save cookier JwtData
+            LoginInfo loginInfo =(LoginInfo)processResult.Content;
+
+
+
 
             //UserInfo userInfo = jwtUtil.GetUserInfo(loginInfo.JwtData.AccessToken);
 

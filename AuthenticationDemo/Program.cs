@@ -5,10 +5,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-AppConfig appConfig = builder.Configuration.GetSection("AppConfig").Get<AppConfig>();
+ServiceConfig serviceConfig = builder.Configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
 
-builder.Services.AddHttpClient<AccountService>(client =>
-client.BaseAddress = new Uri(appConfig.AuthBaseAddress));
+builder.Services.AddHttpClient("auth", hc =>
+{
+    hc.BaseAddress = new Uri(serviceConfig.AuthServiceBaseAddress);
+});
+builder.Services.AddHttpClient("rs", hc =>
+{
+    hc.BaseAddress = new Uri(serviceConfig.ProtectedServiceBaseAddress);
+});
+
+//builder.Services.AddHttpClient<AccountService>(client =>
+//client.BaseAddress = new Uri(appConfig.AuthBaseAddress));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
