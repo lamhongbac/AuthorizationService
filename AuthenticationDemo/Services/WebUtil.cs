@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using AuthenticationDemo.Library;
+using AuthServices.Models;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace AuthenticationDemo.Services
@@ -29,7 +31,9 @@ namespace AuthenticationDemo.Services
         {
             if (_httpContextAccessor != null)
             {
-                return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+                LoginInfo loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
+                return loginInfo != null;   
+                //return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
             }
             return false;
         }
