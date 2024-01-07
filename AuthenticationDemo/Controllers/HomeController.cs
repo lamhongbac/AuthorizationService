@@ -1,6 +1,7 @@
 ﻿using AuthenticationDemo.Models;
 using AuthenticationDemo.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -21,6 +22,8 @@ namespace AuthenticationDemo.Controllers
             
             if (!_webUtils.IsLogin())
             {
+                string @returnUrl = Url.Action("Index", "Home");
+
                 return RedirectToAction("Login", "Login");
             }
             else

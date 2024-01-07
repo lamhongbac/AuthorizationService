@@ -29,13 +29,33 @@ namespace AuthenticationDemo.Services
         }
         public  bool IsLogin()
         {
+            bool debug= _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
             if (_httpContextAccessor != null)
             {
                 LoginInfo loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
-                return loginInfo != null;   
-                //return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+                if (loginInfo == null) return false;
+                return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
             }
-            return false;
+            else
+            {
+                return false;
+            }
+        }
+        public bool SetLogin(LoginInfo loginInfo)
+        {
+            _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.LoginInfo, loginInfo);
+            return true;
+        }
+        public bool SetLogout(LoginInfo loginInfo)
+        {
+            _httpContextAccessor.HttpContext.Session.Remove(AppConstants.LoginInfo);
+            return true;
+        }
+        public JwtData GetJwtData() 
+        {
+            LoginInfo loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
+            JwtData jwtData = loginInfo.JwtData;
+            return jwtData;
         }
     }
 }

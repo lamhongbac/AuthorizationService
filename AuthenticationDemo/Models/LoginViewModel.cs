@@ -1,4 +1,5 @@
-﻿using SharedLib;
+﻿using Microsoft.Build.Framework;
+using SharedLib;
 
 namespace AuthenticationDemo.Models
 {
@@ -10,8 +11,11 @@ namespace AuthenticationDemo.Models
             Password = "123456";
             KeepLogined = true;
         }
-        public string UserName { get; set; } = string.Empty;       
-        public string Password { get; set; } = string.Empty;
+        [Required]
+        public string UserName { get; set; } 
+        [Required]
+        public string Password { get; set; } 
+        [Required]
         public bool KeepLogined { get; set; }
     }
 }
