@@ -1,4 +1,5 @@
 ﻿using AuthenticationDemo.Models;
+using AuthenticationDemo.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -8,16 +9,17 @@ namespace AuthenticationDemo.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        WeUtils _webUtils;
+        public HomeController(ILogger<HomeController> logger, WeUtils webUtils)
         {
             _logger = logger;
+            _webUtils= webUtils;
         }
 
         public IActionResult Index()
         {
-            ClaimsPrincipal claimsPrincipal = HttpContext.User;
-            if (claimsPrincipal == null || !claimsPrincipal.Identity.IsAuthenticated)
+            
+            if (!_webUtils.IsLogin())
             {
                 return RedirectToAction("Login", "Login");
             }

@@ -24,6 +24,8 @@ builder.Services.AddHttpClient("rs", client =>
 });
 
 builder.Services.AddHttpContextAccessor();
+//WeUtils
+builder.Services.AddSingleton<WeUtils>();
 builder.Services.AddSingleton<AccountService>();
     //client =>
 //client.BaseAddress = new Uri(appConfig.AuthBaseAddress));

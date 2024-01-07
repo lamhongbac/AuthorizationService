@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using AuthenticationDemo.Library;
+using SharedLib.Models;
 
 namespace AuthenticationDemo.Services
 {
@@ -62,30 +63,58 @@ namespace AuthenticationDemo.Services
             try
             {
                 HttpClient _httpClient = _factory.CreateClient("auth");
-                string strLoginURL = AppConstants.AccountApiRoute+_serviceConfig.Login;
-
+                string strLoginURL = AppConstants.AccountApiRoute + _serviceConfig.Login;
+                LoginInfo loginInfo = null;
+                BODataProcessResult processResult = new BODataProcessResult(); ;
                 //===>call api===>
                 string json = JsonConvert.SerializeObject(model);
                 StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(strLoginURL, data);
-                string result = await response.Content.ReadAsStringAsync();
-                BODataProcessResult processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
-                isLogin = processResult != null && processResult.OK;
-                LoginInfo loginInfo = JsonConvert.DeserializeObject<LoginInfo>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
-
-                if (!isLogin)
+                if (response.IsSuccessStatusCode)
                 {
-                    return isLogin;                
+                    string result = await response.Content.ReadAsStringAsync();
+                    processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
+                    isLogin = processResult.Content != null && processResult.OK;
                 }
-                string strLoginInfo = JsonConvert.SerializeObject(loginInfo).ToString();
-                //===>save cookier JwtData
-                _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.LoginInfo, strLoginInfo);
-                //===>demo call object from session
-                loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
-
-
+                else
+                {
+                    //xu ly loi http response status
+                    EHttpStatusCode httpStatus = (EHttpStatusCode)response.StatusCode;
+                    switch (httpStatus)
+                    {
+                        case EHttpStatusCode.Moved:
+                            break;
+                        case EHttpStatusCode.OK:
+                            break;
+                        case EHttpStatusCode.Redirect:
+                            break;
+                        case EHttpStatusCode.UnAuthorized:
+                            break;
+                        case EHttpStatusCode.Forbidden:
+                            break;
+                        default:
+                            break;
+                    }
+                    return isLogin;
+                }
                 //===end call api=========>
 
+                if (!isLogin )
+                {
+                    return isLogin;
+                }
+                
+                //==> IsLogin=true Client Login process====>
+
+                loginInfo = JsonConvert.DeserializeObject<LoginInfo>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
+                
+                //===>save cookier JwtData
+                _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.LoginInfo, loginInfo);
+                
+                //===>demo call object from session
+                //loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
+
+                //===>Jwt client process
                 JwtClientUtil jwtUtil = new JwtClientUtil();
                 List<Claim> claims = jwtUtil.GetClaims(loginInfo.JwtData.AccessToken);
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -94,14 +123,20 @@ namespace AuthenticationDemo.Services
                     AllowRefresh = true,
                     IsPersistent = model.KeepLogined
                 };
-
+                
+                //====login into HttpContext
                 await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(identity), properties);
-            }catch(Exception ex)
+                _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(identity);
+                return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+                //===>
+
+            }
+            catch(Exception ex)
             {
                 string err = ex.Message;
             }
-
+            //===> end login process
             return isLogin;
         }
 
