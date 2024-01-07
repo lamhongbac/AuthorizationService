@@ -16,14 +16,16 @@ namespace AuthenticationDemo.Controllers
             _logger = logger;
             _webUtils= webUtils;
         }
-
+        /// <summary>
+        /// neu chua login thi redirec to login view
+        /// neu da login thi display home page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
-        {
-            
+        {            
             if (!_webUtils.IsLogin())
             {
                 string @returnUrl = Url.Action("Index", "Home");
-
                 return RedirectToAction("Login", "Login");
             }
             else

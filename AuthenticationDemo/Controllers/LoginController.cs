@@ -12,9 +12,11 @@ namespace AuthenticationDemo.Controllers
     public class LoginController : Controller
     {
         AccountService accountService;
-        public LoginController(AccountService accountService)
+        WeUtils _webUtils;
+        public LoginController(AccountService accountService, WeUtils webUtils)
         {
             this.accountService = accountService;
+            _webUtils = webUtils;
         }
         /// <summary>
         /// neu da login thi quay ve home
@@ -22,8 +24,8 @@ namespace AuthenticationDemo.Controllers
         /// <returns></returns>
         public IActionResult Login( )
         {
-            ClaimsPrincipal claimsPrincipal = HttpContext.User;
-            if (claimsPrincipal != null && claimsPrincipal.Identity.IsAuthenticated)
+           
+            if (_webUtils.IsLogin())
             {
                 return RedirectToAction("Index", "Home");
             }
