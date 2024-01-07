@@ -40,6 +40,7 @@ namespace AuthenticationDemo.Controllers
         /// new {@returnUrl = Url.Action(ViewContext.RouteData.Values["action"].ToString(), ViewContext.RouteData.Values["controller"].ToString())})
         /// Neu view not valid thi quay ve view de nhap lai
         /// Neu login thanh cong thi quay ve home
+        /// https://dotnettutorials.net/lesson/redirect-to-returnurl-after-login-in-asp-net-core/
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>

@@ -19,6 +19,7 @@ namespace AuthenticationDemo.Controllers
         /// <summary>
         /// neu chua login thi redirec to login view
         /// neu da login thi display home page
+        /// https://dotnettutorials.net/lesson/redirect-to-returnurl-after-login-in-asp-net-core/
         /// </summary>
         /// <returns></returns>
         public IActionResult Index()
