@@ -13,6 +13,7 @@ using AuthServices.Util;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
+using AuthenticationDemo.Library;
 
 namespace AuthenticationDemo.Services
 {
@@ -61,29 +62,29 @@ namespace AuthenticationDemo.Services
             try
             {
                 HttpClient _httpClient = _factory.CreateClient("auth");
-                string strLoginURL = _serviceConfig.Login;
+                string strLoginURL = AppConstants.AccountApiRoute+_serviceConfig.Login;
 
-                //===call api
+                //===>call api===>
                 string json = JsonConvert.SerializeObject(model);
                 StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(strLoginURL, data);
                 string result = await response.Content.ReadAsStringAsync();
                 BODataProcessResult processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
                 isLogin = processResult != null && processResult.OK;
-                LoginInfo loginInfo = (LoginInfo)processResult.Content;
+                LoginInfo loginInfo = JsonConvert.DeserializeObject<LoginInfo>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
 
                 if (!isLogin)
                 {
-                    return isLogin;
-                
-                    
+                    return isLogin;                
                 }
                 string strLoginInfo = JsonConvert.SerializeObject(loginInfo).ToString();
-                //save cookier JwtData
-                _httpContextAccessor.HttpContext.Session.SetObject("LoginInfo", strLoginInfo);
+                //===>save cookier JwtData
+                _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.LoginInfo, strLoginInfo);
+                //===>demo call object from session
+                loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
 
-                //LoginInfo loginInfo = (LoginInfo)processResult.Content;
-                //===end call
+
+                //===end call api=========>
 
                 JwtClientUtil jwtUtil = new JwtClientUtil();
                 List<Claim> claims = jwtUtil.GetClaims(loginInfo.JwtData.AccessToken);

@@ -1,5 +1,6 @@
 using AuthenticationDemo.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,13 +8,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 ServiceConfig serviceConfig = builder.Configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
 
-builder.Services.AddHttpClient("auth", hc =>
+builder.Services.AddHttpClient("auth", client =>
 {
-    hc.BaseAddress = new Uri(serviceConfig.AuthServiceBaseAddress);
+    client.BaseAddress = new Uri(serviceConfig.AuthServiceBaseAddress);
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
 });
-builder.Services.AddHttpClient("rs", hc =>
+builder.Services.AddHttpClient("rs", client =>
 {
-    hc.BaseAddress = new Uri(serviceConfig.ProtectedServiceBaseAddress);
+    client.BaseAddress = new Uri(serviceConfig.ProtectedServiceBaseAddress);
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
 builder.Services.AddHttpContextAccessor();
