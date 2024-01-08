@@ -65,13 +65,13 @@ namespace AuthenticationDemo.Services
             try
             {
                 HttpClient _httpClient = _factory.CreateClient(AppConstants.AuthenticationService);
-                string strLoginURL = AppConstants.AccountApiRoute + _serviceConfig.Login;
+                string strAcessURL = AppConstants.AccountApiRoute + _serviceConfig.Login;
                 LoginInfo loginInfo = null;
                 BODataProcessResult processResult = new BODataProcessResult(); ;
                 //===>call api===>
                 string json = JsonConvert.SerializeObject(model);
                 StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync(strLoginURL, data);
+                var response = await _httpClient.PostAsync(strAcessURL, data);
                 if (response.IsSuccessStatusCode)
                 {
                     string result = await response.Content.ReadAsStringAsync();
@@ -91,6 +91,7 @@ namespace AuthenticationDemo.Services
                         case EHttpStatusCode.Redirect:
                             break;
                         case EHttpStatusCode.UnAuthorized:
+
                             break;
                         case EHttpStatusCode.Forbidden:
                             break;
@@ -128,9 +129,15 @@ namespace AuthenticationDemo.Services
                 //====login into HttpContext
                 await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(identity), properties);
-                _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(identity);
+                //debug
+                isLogin = _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
 
-                return _webUtils.IsLogin();
+                _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(identity);
+                
+                //debug
+                 isLogin= _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+
+                return isLogin;
                 //===>
 
             }

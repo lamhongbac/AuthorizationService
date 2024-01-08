@@ -50,9 +50,22 @@ namespace AuthenticationDemo.Services
         /// <returns></returns>
         public bool SetLogin(LoginInfo loginInfo)
         {
-            _httpContextAccessor.HttpContext.Session.SetString(AppConstants.LoginDate, loginInfo.LoginDate.ToString());
-            _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.JwtData, loginInfo.JwtData);
-            return true;
+            bool OK = false;
+
+            try
+            {
+                OK = loginInfo != null;
+                _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.LoginDate, loginInfo.LoginDate);
+                _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.JwtData, loginInfo.JwtData);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+            }
+            return OK;
         }
         /// <summary>
         /// remove cac thong tin da luu
@@ -67,18 +80,31 @@ namespace AuthenticationDemo.Services
         }
         public JwtData GetJwtData()
         {
-            JwtData jwtData = _httpContextAccessor.HttpContext.Session.GetObject<JwtData>(AppConstants.JwtData);
-
-            return jwtData;
+         string loginDate=   _httpContextAccessor.HttpContext.Session.GetString(AppConstants.LoginDate);
+            JwtData jwtData = null;
+            jwtData = _httpContextAccessor.HttpContext.Session.GetObject<JwtData>(AppConstants.JwtData);
+            if (!string.IsNullOrWhiteSpace(loginDate))
+            {
+                 jwtData = _httpContextAccessor.HttpContext.Session.GetObject<JwtData>(AppConstants.JwtData);
+                return jwtData;
+            }
+            return null;
         }
 
-
-        public void SaveJwtData(JwtData data)
+        /// <summary>
+        /// Save JwtData when renew token only
+        /// </summary>
+        /// <param name="data"></param>
+        public bool SaveJwtData(JwtData data)
         {
-            JwtData jwtData = _httpContextAccessor.HttpContext.Session.GetObject<JwtData>(AppConstants.JwtData);
-            //if islogiDate !=null
-            //
-            _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.JwtData, data);
+            string loginDate = _httpContextAccessor.HttpContext.Session.GetString(AppConstants.LoginDate);
+
+            if (!string.IsNullOrWhiteSpace(loginDate))
+            {
+                _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.JwtData, data);
+                return true;
+            }
+            return false;
         }
     }
 }

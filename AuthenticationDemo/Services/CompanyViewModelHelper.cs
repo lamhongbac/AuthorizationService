@@ -39,6 +39,7 @@ namespace AuthenticationDemo.Services
         }
         public async Task<List<CompanyViewModel>> GetCompanies()
         {
+            string debugError = string.Empty;
             List<CompanyViewModel> companies = new List<CompanyViewModel>();
             try
             {
@@ -63,12 +64,12 @@ namespace AuthenticationDemo.Services
                 }
 
                 _httpClient.DefaultRequestHeaders.Add("Authorization", bearToken);
-                string strLoginURL = AppConstants.CompanyApiRoute + _serviceConfig.GetCompanies;
+                string strAccessURL = AppConstants.CompanyApiRoute + _serviceConfig.GetCompanies;
               
                 BODataProcessResult processResult = new BODataProcessResult(); ;
                 //===>call api===>
                
-                var response = await _httpClient.GetAsync(strLoginURL);
+                var response = await _httpClient.GetAsync(strAccessURL);
                 if (response.IsSuccessStatusCode)
                 {
                     string result = await response.Content.ReadAsStringAsync();
@@ -93,6 +94,7 @@ namespace AuthenticationDemo.Services
                         case EHttpStatusCode.Redirect:
                             break;
                         case EHttpStatusCode.UnAuthorized:
+                            debugError = "Invalid token requirements";
                             break;
                         case EHttpStatusCode.Forbidden:
                             break;

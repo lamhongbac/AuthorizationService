@@ -6,7 +6,7 @@
         public const string AuthenticationService = "auth";
 
         public const  string  AccountApiRoute = "api/Account/";
-        public const string CompanyApiRoute = "api/Account/";
+        public const string CompanyApiRoute = "api/Company/";
 
         public const string RenewToken = "RenewToken";
 

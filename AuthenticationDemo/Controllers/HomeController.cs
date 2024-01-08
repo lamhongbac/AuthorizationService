@@ -46,7 +46,7 @@ namespace AuthenticationDemo.Controllers
         {
             //force logout
 
-            await _accountService.Logout();
+           // await _accountService.Logout();
 
             if (_appConfig.IsForceLogin)
             {
@@ -68,8 +68,9 @@ namespace AuthenticationDemo.Controllers
 
 
         [Authorize]
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
+         
             return View();
         }
 
@@ -83,9 +84,12 @@ namespace AuthenticationDemo.Controllers
         
 
         [Authorize]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            bool result = await _accountService.Logout();
+
+            return RedirectToAction("Index");
+           
         }
         [AllowAnonymous]
         //AccessDenied
