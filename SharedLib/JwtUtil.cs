@@ -11,6 +11,7 @@ using AuthServices.Models;
 using System.Security.Cryptography;
 using SharedLib;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 namespace AuthServices.Util
 {
@@ -197,6 +198,21 @@ namespace AuthServices.Util
         //var handler = new JwtSecurityTokenHandler();
         //var jwtSecurityToken = handler.ReadJwtToken(token);
 
+
+        /// <summary>
+        /// Renew Token base on valid token
+        /// b1 build token validate para
+        /// b2 check A token is Valid
+        /// b3 check A token is  expired
+        /// b4 check R token is existed in DB
+        /// b5 check R token is NOT used/revoked
+        /// b6 Check A token ID in R token is correct
+        /// b7 Update token before using
+        /// b8 Sinh ra UserInfo tren co so para token
+        /// ======> Sinh ra new token <=======
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public BODataProcessResult RenewToken(JwtData model)
         {
             JwtClientUtil jwtClientUtil=new JwtClientUtil();
@@ -219,7 +235,7 @@ namespace AuthServices.Util
 
             try
             {
-                //b2 check token is Valid
+                //b2 check A token is Valid
                 var tokenValidation = tokenSecurityTokenHandler.ValidateToken(model.AccessToken, tokenValidPara
                     , out var validatedToken);
                 if (validatedToken != null && validatedToken is JwtSecurityToken jwtSecurityToken)
@@ -233,9 +249,9 @@ namespace AuthServices.Util
                         return processResult;
                     }
                 }
-                //check expired
+                //b3 check A token is  expired
                 var utcExpired = long.Parse(tokenValidation.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-                var expireDate = ConvertUnixTimeToDate(utcExpired);
+                var expireDate = jwtClientUtil.ConvertUnixTimeToDate(utcExpired);
                 if (expireDate > DateTime.UtcNow)
                 {
                     processResult.OK = false;
@@ -244,7 +260,7 @@ namespace AuthServices.Util
                     return processResult;
 
                 }
-                //check reftoken is existed
+                //b4 check R token is existed in DB
                 RefreshTokenData? storedRefToken = _tokenDatas.GetRefreshToken(model.RefreshToken);
                 if (storedRefToken == null)
                 {
@@ -254,7 +270,7 @@ namespace AuthServices.Util
                     return processResult;
 
                 }
-                //check token is used/revoked
+                //b5 check R token is NOT used/revoked
                 if (storedRefToken.IsUsed)
                 {
                     processResult.OK = false;
@@ -269,7 +285,7 @@ namespace AuthServices.Util
 
                     return processResult;
                 }
-                //Check access token ID is correct
+                //b6 Check access A tokenID in R token is correct
                 var jti = tokenValidation.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value;
 
                 if (storedRefToken.JwtId != jti)
@@ -281,16 +297,20 @@ namespace AuthServices.Util
 
                 }
 
-                //Update token
+                //b7 Update token before using
                 storedRefToken.IsRevoked = true;
                 storedRefToken.IsUsed = true;
                 _tokenDatas.Update(storedRefToken);
+
+                //b8 Sinh ra UserInfo tren co so para token
                 UserInfo userInfo = jwtClientUtil.GetUserInfoFromToken(model.AccessToken);
 
-                //su dung old token de lay lai cac thong tin cu
-                // username
+                //===> Sinh ra new token               
 
                 JwtData token = GenerateJSONWebToken(userInfo);
+
+                //<====== end process=======
+                processResult.Content = token;
                 processResult.OK = false;
                 processResult.Message = JwtStatus.Success.ToString();
 
@@ -311,12 +331,7 @@ namespace AuthServices.Util
 
         }
         
-        private DateTime ConvertUnixTimeToDate(long utcExpired)
-        {
-            var dateTimeInterval = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTimeInterval.AddSeconds(utcExpired).ToUniversalTime();
-            return dateTimeInterval;
-        }
+
 
         
     }
@@ -403,6 +418,51 @@ namespace AuthServices.Util
             userInfo.UserName = tokenS.Claims.First(claim => claim.Type == "UserName").Value;
             userInfo.ID = tokenS.Claims.First(claim => claim.Type == "ID").Value;
             return userInfo;
+        }
+        /// <summary>
+        /// kiem tra token su dung:JwtSecurityToken
+        /// 
+        /// rule 1:kiem tra expired Time
+        /// parse token => get expired time compare with current
+        /// </summary>
+        /// <param name="AccessToken"></param>
+        /// <returns></returns>
+        public bool IsAccessTokenExpired(string AccessToken)
+        {
+            JwtSecurityToken jwtSecurityToken;
+            try
+            {
+                
+                jwtSecurityToken = new JwtSecurityToken(AccessToken);                
+                return jwtSecurityToken.ValidTo > DateTime.UtcNow;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+           
+        }
+        /// <summary>
+        /// kiem tra token su dung
+        /// JwtSecurityTokenHandler
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
+        public bool IsTokenExpiredV1(string accessToken)
+        {
+            var claims = GetClaims(accessToken);
+            var utcExpired = long.Parse(claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            var expireDate = ConvertUnixTimeToDate(utcExpired);
+            return (expireDate > DateTime.UtcNow);
+        }
+    
+        public DateTime ConvertUnixTimeToDate(long utcExpired)
+        {
+            var dateTimeInterval = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTimeInterval.AddSeconds(utcExpired).ToUniversalTime();
+            return dateTimeInterval;
         }
     }
 }

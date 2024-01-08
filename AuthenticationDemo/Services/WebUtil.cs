@@ -26,15 +26,15 @@ namespace AuthenticationDemo.Services
         IHttpContextAccessor _httpContextAccessor;
         public WeUtils(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor= httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
-        public  bool IsLogin()
+        public bool IsLogin()
         {
             //bool debug= _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
             if (_httpContextAccessor != null)
             {
-                LoginInfo loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
-                if (loginInfo == null) return false;
+                JwtData jwtData = _httpContextAccessor.HttpContext.Session.GetObject<JwtData>(AppConstants.JwtData);
+                if (jwtData == null) return false;
                 return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
             }
             else
@@ -42,22 +42,43 @@ namespace AuthenticationDemo.Services
                 return false;
             }
         }
+        /// <summary>
+        /// luu them thong tin vao session ngoai thong tin dc luu boi framework
+        /// _httpContextAccessor.HttpContext
+        /// </summary>
+        /// <param name="loginInfo"></param>
+        /// <returns></returns>
         public bool SetLogin(LoginInfo loginInfo)
         {
-            _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.LoginInfo, loginInfo);
+            _httpContextAccessor.HttpContext.Session.SetString(AppConstants.LoginDate, loginInfo.LoginDate.ToString());
+            _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.JwtData, loginInfo.JwtData);
             return true;
         }
+        /// <summary>
+        /// remove cac thong tin da luu
+        /// </summary>
+        /// <returns></returns>
         public async Task<bool> SetLogout()
         {
-          await  _httpContextAccessor.HttpContext.SignOutAsync();
-            _httpContextAccessor.HttpContext.Session.Remove(AppConstants.LoginInfo);
+            await _httpContextAccessor.HttpContext.SignOutAsync();
+            _httpContextAccessor.HttpContext.Session.Remove(AppConstants.LoginDate);
+            _httpContextAccessor.HttpContext.Session.Remove(AppConstants.JwtData);
             return true;
         }
-        public JwtData GetJwtData() 
+        public JwtData GetJwtData()
         {
-            LoginInfo loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
-            JwtData jwtData = loginInfo.JwtData;
+            JwtData jwtData = _httpContextAccessor.HttpContext.Session.GetObject<JwtData>(AppConstants.JwtData);
+
             return jwtData;
+        }
+
+
+        public void SaveJwtData(JwtData data)
+        {
+            JwtData jwtData = _httpContextAccessor.HttpContext.Session.GetObject<JwtData>(AppConstants.JwtData);
+            //if islogiDate !=null
+            //
+            _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.JwtData, data);
         }
     }
 }

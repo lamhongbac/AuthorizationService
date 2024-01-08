@@ -64,7 +64,7 @@ namespace AuthenticationDemo.Services
             };
             try
             {
-                HttpClient _httpClient = _factory.CreateClient("auth");
+                HttpClient _httpClient = _factory.CreateClient(AppConstants.AuthenticationService);
                 string strLoginURL = AppConstants.AccountApiRoute + _serviceConfig.Login;
                 LoginInfo loginInfo = null;
                 BODataProcessResult processResult = new BODataProcessResult(); ;
@@ -109,10 +109,9 @@ namespace AuthenticationDemo.Services
                 //==> IsLogin=true Client Login process====>
 
                 loginInfo = JsonConvert.DeserializeObject<LoginInfo>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
-                
+
                 //===>save cookier JwtData
-                _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.LoginInfo, loginInfo);
-                
+                _webUtils.SetLogin(loginInfo);
                 //===>demo call object from session
                 //loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
 
@@ -130,7 +129,8 @@ namespace AuthenticationDemo.Services
                 await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(identity), properties);
                 _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(identity);
-                return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+
+                return _webUtils.IsLogin();
                 //===>
 
             }
@@ -142,10 +142,67 @@ namespace AuthenticationDemo.Services
             return isLogin;
         }
 
-        public JwtData ReNewToken(JwtData jwtData)
+        /// <summary>
+        /// renew token base on exist token
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<JwtData> ReNewToken(JwtData model)
         {
             //Cap nhat cookie information
-            return new JwtData();
+           
+            JwtData reNewToken = null;
+            try
+            {
+                HttpClient _httpClient = _factory.CreateClient("auth");
+                string strRenewTokenURL = AppConstants.AccountApiRoute + _serviceConfig.RenewToken;
+                
+                BODataProcessResult processResult = new BODataProcessResult(); ;
+                //===>call api===>
+                string json = JsonConvert.SerializeObject(model);
+                StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(strRenewTokenURL, data);
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
+                    reNewToken = JsonConvert.DeserializeObject<JwtData>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
+                    _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.JwtData, reNewToken);
+
+                    return reNewToken;
+                }
+                else
+                {
+                    //xu ly loi http response status
+                    EHttpStatusCode httpStatus = (EHttpStatusCode)response.StatusCode;
+                    switch (httpStatus)
+                    {
+                        case EHttpStatusCode.Moved:
+                            break;
+                        case EHttpStatusCode.OK:
+                            break;
+                        case EHttpStatusCode.Redirect:
+                            break;
+                        case EHttpStatusCode.UnAuthorized:
+                            break;
+                        case EHttpStatusCode.Forbidden:
+                            break;
+                        default:
+                            break;
+                    }
+                    return reNewToken;
+                }
+                //===end call api=========>
+
+
+
+            }
+            catch (Exception ex)
+            {
+                string err = ex.Message;
+            }
+            //===> end login process
+            return reNewToken;
         }
 
         public async Task<bool> Logout()

@@ -1,3 +1,4 @@
+using AuthenticationDemo.Library;
 using AuthenticationDemo.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net.Http.Headers;
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 ServiceConfig serviceConfig = builder.Configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
 //auth service
-builder.Services.AddHttpClient("auth", client =>
+builder.Services.AddHttpClient(AppConstants.AuthenticationService, client =>
 {
     client.BaseAddress = new Uri(serviceConfig.AuthServiceBaseAddress);
     client.DefaultRequestHeaders.Accept.Clear();
@@ -16,7 +17,7 @@ builder.Services.AddHttpClient("auth", client =>
                 new MediaTypeWithQualityHeaderValue("application/json"));
 });
 //resource service
-builder.Services.AddHttpClient("rs", client =>
+builder.Services.AddHttpClient(AppConstants.ProtectedResourceService, client =>
 {
     client.BaseAddress = new Uri(serviceConfig.ProtectedServiceBaseAddress);
     client.DefaultRequestHeaders.Accept.Clear();
@@ -28,8 +29,10 @@ builder.Services.AddHttpContextAccessor();
 //WeUtils
 builder.Services.AddSingleton<WeUtils>();
 builder.Services.AddSingleton<AccountService>();
-    //client =>
+//client =>
 //client.BaseAddress = new Uri(appConfig.AuthBaseAddress));
+//CompanyViewModelHelper
+builder.Services.AddSingleton<CompanyViewModelHelper>();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromSeconds(10);
