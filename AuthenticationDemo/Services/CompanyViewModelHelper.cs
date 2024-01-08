@@ -45,23 +45,22 @@ namespace AuthenticationDemo.Services
             {
                 HttpClient _httpClient = _factory.CreateClient(AppConstants.ProtectedResourceService);
                 _httpClient.DefaultRequestHeaders.Remove("Authorization");
-                
-                JwtData jwtData = _webUtils.GetJwtData();
+
+                JwtData jwtData = new JwtData();// _webUtils.GetJwtData();
                 
                 JwtClientUtil jwtClientUtil=new JwtClientUtil();
-                
-                string bearToken= jwtData.AccessToken.ToString();
 
-                if (!jwtClientUtil.IsAccessTokenExpired(jwtData.AccessToken))
-                {
-                    jwtData=await _accountService.ReNewToken(jwtData);
-                    _webUtils.SaveJwtData(jwtData);
-                    bearToken = jwtData.AccessToken.ToString();
-                }
-                else
-                {
-                    // kg can lam gi ca
-                }
+                // string bearToken= jwtData.AccessToken.ToString();
+                string bearToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjZTA4NDY0NC0wMzY0LTQ1MzMtYThlOS1lYWI0MmJkMzZkOGUiLCJVc2VyTmFtZSI6ImFkbWluIiwic3ViIjoiYWRtaW4iLCJVc2VySUQiOiI3IiwiRnVsbE5hbWUiOiJQaOG6oW0gSG_DoG5nIMSQ4bqhdCIsIkFwcElEIjoiMyIsIkNvbXBhbnlJRCI6IjMiLCJSb2xlcyI6InFhbWFuYWdlciIsIk9iamVjdFJpZ2h0cyI6IntcImFwcHJvbGVcIjpbXCJyZWFkXCIsXCJjcmVhdGVcIixcInVwZGF0ZVwiLFwiZGVsZXRlXCJdLFwiYXBwdXNlclwiOltcInJlYWRcIixcImNyZWF0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDAxXCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDAyXCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDA0XCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDAzXCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDA1XCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDA2XCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImNvbXBhbnlcIjpbXCJyZWFkXCIsXCJjcmVhdGVcIl19IiwibmJmIjoxNzA0Njk5OTM2LCJleHAiOjE3MDQ3MDAwNTYsImlhdCI6MTcwNDY5OTkzNiwiaXNzIjoibXNhLmNvbS52biIsImF1ZCI6Im1zYS5jb20udm4ifQ.9P8cJm-ztfeuUPfL2P0AyvqfarG7IjaZmCHeQXxsZXk";
+                //{
+                //    jwtData=await _accountService.ReNewToken(jwtData);
+                //    _webUtils.SaveJwtData(jwtData);
+                //    bearToken = jwtData.AccessToken.ToString();
+                //}
+                //else
+                //{
+                //    // kg can lam gi ca
+                //}
 
                 _httpClient.DefaultRequestHeaders.Add("Authorization", bearToken);
                 string strAccessURL = AppConstants.CompanyApiRoute + _serviceConfig.GetCompanies;

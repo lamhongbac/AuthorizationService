@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SharedLib\**" />
+    <Content Remove="SharedLib\**" />
+    <EmbeddedResource Remove="SharedLib\**" />
+    <None Remove="SharedLib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.24" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
   </ItemGroup>
@@ -19,7 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SharedLib\SharedLib.csproj" />
+    <Reference Include="SharedLib">
+      <HintPath>SharedLib\SharedLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
