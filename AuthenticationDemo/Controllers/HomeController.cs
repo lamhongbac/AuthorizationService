@@ -1,4 +1,5 @@
-﻿using AuthenticationDemo.Models;
+﻿using AuthenticationDemo.Library;
+using AuthenticationDemo.Models;
 using AuthenticationDemo.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,17 @@ namespace AuthenticationDemo.Controllers
         private readonly ILogger<HomeController> _logger;
         WeUtils _webUtils;
         IConfiguration _configuration;
-        AppConfig appConfig;
-
-        public HomeController(ILogger<HomeController> logger, WeUtils webUtils,IConfiguration configuration)
+        AppConfig _appConfig;
+        AccountService _accountService;
+        public HomeController(ILogger<HomeController> logger,
+            WeUtils webUtils, AccountService accountService,
+            IConfiguration configuration)
         {
             _logger = logger;
             _webUtils= webUtils;
             _configuration = configuration;
-            appConfig = configuration.GetSection("AppConfig").Get<AppConfig>();
+            _appConfig = configuration.GetSection("AppConfig").Get<AppConfig>();
+            _accountService = accountService;
 
         }
         /// <summary>
@@ -38,12 +42,14 @@ namespace AuthenticationDemo.Controllers
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            if (appConfig.IsForceLogin)
+            //force logout
+
+            await _accountService.Logout();
+
+            if (_appConfig.IsForceLogin)
             {
-
-
                 if (!_webUtils.IsLogin())
                 {
                     string @returnUrl = Url.Action("Index", "Home");

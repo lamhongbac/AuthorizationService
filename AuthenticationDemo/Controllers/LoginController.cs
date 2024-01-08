@@ -22,7 +22,7 @@ namespace AuthenticationDemo.Controllers
         /// neu da login thi quay ve home
         /// </summary>
         /// <returns></returns>
-        public IActionResult Login(string? strReturnUrl=null )
+        public IActionResult Login(string? ReturnUrl = null )
         {
            
             if (_webUtils.IsLogin())
@@ -31,8 +31,9 @@ namespace AuthenticationDemo.Controllers
             }
             else
             {
+                ViewData["ReturnUrl"] = ReturnUrl;
                 LoginViewModel model = new LoginViewModel();
-                return View(model, strReturnUrl);
+                return View(model);
             }
         }
         /// <summary>
@@ -47,7 +48,7 @@ namespace AuthenticationDemo.Controllers
         [HttpPost]        
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string? strReturnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string? ReturnUrl = null)
         {
             if (!ModelState.IsValid)
             {
@@ -58,7 +59,15 @@ namespace AuthenticationDemo.Controllers
 
             if (isLogin)
             {
-                return RedirectToAction("Index", "Home");
+                if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                {
+                    return Redirect(ReturnUrl);
+                }
+                else
+                {
+                    // Redirect to default page
+                    return RedirectToAction("Index", "Home");
+                }
             }
             else
             {

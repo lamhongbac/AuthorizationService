@@ -28,8 +28,10 @@ namespace AuthenticationDemo.Services
         IConfiguration _configuration;
         ServiceConfig _serviceConfig;
         AppConfig _appConfig;
+        WeUtils _webUtils;
         public AccountService(IHttpClientFactory factory,
-            IHttpContextAccessor httpContextAccessor, IConfiguration configuration
+            IHttpContextAccessor httpContextAccessor, 
+            IConfiguration configuration, WeUtils webUtils
             )
         {
             _factory = factory;
@@ -37,7 +39,7 @@ namespace AuthenticationDemo.Services
             _configuration = configuration;
             _serviceConfig = _configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
             _appConfig = _configuration.GetSection("AppConfig").Get<AppConfig>();
-
+            _webUtils= webUtils;
 
         }
         /// <summary>
@@ -144,6 +146,11 @@ namespace AuthenticationDemo.Services
         {
             //Cap nhat cookie information
             return new JwtData();
+        }
+
+        public async Task<bool> Logout()
+        {
+           return await _webUtils.SetLogout();
         }
     }
 }
