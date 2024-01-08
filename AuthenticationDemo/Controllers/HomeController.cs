@@ -1,7 +1,9 @@
 ﻿using AuthenticationDemo.Models;
 using AuthenticationDemo.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -11,23 +13,46 @@ namespace AuthenticationDemo.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         WeUtils _webUtils;
-        public HomeController(ILogger<HomeController> logger, WeUtils webUtils)
+        IConfiguration _configuration;
+        AppConfig appConfig;
+
+        public HomeController(ILogger<HomeController> logger, WeUtils webUtils,IConfiguration configuration)
         {
             _logger = logger;
             _webUtils= webUtils;
+            _configuration = configuration;
+            appConfig = configuration.GetSection("AppConfig").Get<AppConfig>();
+
         }
         /// <summary>
-        /// neu chua login thi redirec to login view
+        /// UCase1
+        /// Bat buoc phai login truoc khi vao hethong
+        /// Thuat giai nhu sau: neu chua login thi redirec to login view
         /// neu da login thi display home page
         /// https://dotnettutorials.net/lesson/redirect-to-returnurl-after-login-in-asp-net-core/
+        /// 
+        /// UCase2:
+        /// Khong bat buoc phai login, chi login khi vao cac action can authorize
+        /// su dung strReturnUrl
+        /// 
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         public IActionResult Index()
-        {            
-            if (!_webUtils.IsLogin())
+        {
+            if (appConfig.IsForceLogin)
             {
-                string @returnUrl = Url.Action("Index", "Home");
-                return RedirectToAction("Login", "Login");
+
+
+                if (!_webUtils.IsLogin())
+                {
+                    string @returnUrl = Url.Action("Index", "Home");
+                    return RedirectToAction("Login", "Login");
+                }
+                else
+                {
+                    return View();
+                }
             }
             else
             {
@@ -35,20 +60,28 @@ namespace AuthenticationDemo.Controllers
             }
         }
 
+
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
         }
 
+
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        
+
+        [Authorize]
         public IActionResult Logout()
         {
             return View();
         }
+        [AllowAnonymous]
         //AccessDenied
         public IActionResult AccessDenied()
         {

@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 ServiceConfig serviceConfig = builder.Configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
-
+//auth service
 builder.Services.AddHttpClient("auth", client =>
 {
     client.BaseAddress = new Uri(serviceConfig.AuthServiceBaseAddress);
@@ -15,6 +15,7 @@ builder.Services.AddHttpClient("auth", client =>
     client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
 });
+//resource service
 builder.Services.AddHttpClient("rs", client =>
 {
     client.BaseAddress = new Uri(serviceConfig.ProtectedServiceBaseAddress);
@@ -36,7 +37,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddHttpContextAccessor();
+//khai bao authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(option =>
     {
@@ -56,11 +57,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//app.UseHttpsRedirection();
+//app.UseHttpsRedirection();=> remove https
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
-
+//2 buoc nay can thuc hien
 app.UseAuthentication();
 app.UseAuthorization();
 

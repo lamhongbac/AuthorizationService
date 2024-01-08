@@ -22,7 +22,7 @@ namespace AuthenticationDemo.Controllers
         /// neu da login thi quay ve home
         /// </summary>
         /// <returns></returns>
-        public IActionResult Login( )
+        public IActionResult Login(string? strReturnUrl=null )
         {
            
             if (_webUtils.IsLogin())
@@ -32,7 +32,7 @@ namespace AuthenticationDemo.Controllers
             else
             {
                 LoginViewModel model = new LoginViewModel();
-                return View(model);
+                return View(model, strReturnUrl);
             }
         }
         /// <summary>
@@ -47,7 +47,7 @@ namespace AuthenticationDemo.Controllers
         [HttpPost]        
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model  )
+        public async Task<IActionResult> Login(LoginViewModel model, string? strReturnUrl = null)
         {
             if (!ModelState.IsValid)
             {
