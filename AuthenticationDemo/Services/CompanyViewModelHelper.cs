@@ -93,9 +93,10 @@ namespace AuthenticationDemo.Services
                         case EHttpStatusCode.Redirect:
                             break;
                         case EHttpStatusCode.UnAuthorized:
-                            debugError = "Invalid token requirements";
+                            debugError = "UnAuthorized requirements";
                             break;
                         case EHttpStatusCode.Forbidden:
+                            debugError = "Forbidden requirements";
                             break;
                         default:
                             break;
@@ -105,6 +106,7 @@ namespace AuthenticationDemo.Services
             }
             catch (Exception ex)
             {
+                debugError = "Bad Request";
             }
             return companies;
         }
