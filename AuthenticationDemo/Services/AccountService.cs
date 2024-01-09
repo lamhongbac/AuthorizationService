@@ -173,10 +173,13 @@ namespace AuthenticationDemo.Services
                 {
                     string result = await response.Content.ReadAsStringAsync();
                     processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
+                    
                     reNewToken = JsonConvert.DeserializeObject<JwtData>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
-                    _httpContextAccessor.HttpContext.Session.SetObject(AppConstants.JwtData, reNewToken);
+                    
+                    
+                    if (reNewToken!=null)
+                        _webUtils.SaveJwtData(reNewToken);
 
-                    return reNewToken;
                 }
                 else
                 {
@@ -197,12 +200,13 @@ namespace AuthenticationDemo.Services
                         default:
                             break;
                     }
-                    return reNewToken;
+                   
                 }
                 //===end call api=========>
+                
+              
 
-
-
+                return reNewToken;
             }
             catch (Exception ex)
             {

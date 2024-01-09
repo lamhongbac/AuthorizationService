@@ -7,11 +7,20 @@ using SharedLib.Models;
 using System.Reflection;
 using System.Text;
 using AuthServices.Util;
+using NuGet.Common;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Collections.Generic;
 
 namespace AuthenticationDemo.Services
 {
     /// <summary>
-    /// company service
+    /// company viewmodel helper
+    /// lop nay co nhiem vu tra ve viewmodel cho controller
+    /// neu co error thi add error vao model state
+    /// 
+    /// note:
+    /// kg dc tra ve BODataProcess
     /// </summary>
     public class CompanyViewModelHelper
     {
@@ -39,78 +48,69 @@ namespace AuthenticationDemo.Services
 
         }
         public string BearToken { get=>bearToken; set =>bearToken=value; }
-        public async Task<List<CompanyViewModel>> GetCompanies()
+        public async Task<CompaniesViewModel> GetCompanies()
         {
-            string debugError = string.Empty;
-            List<CompanyViewModel> companies = new List<CompanyViewModel>();
+            BODataProcessResult processResult = new BODataProcessResult();
+            CompaniesViewModel viewModel = new CompaniesViewModel();
+            RequestHandler requestHandler = RequestHandler.GetInstance();
+
             try
-            {
-                HttpClient _httpClient = _factory.CreateClient(AppConstants.ProtectedResourceService);
-                _httpClient.DefaultRequestHeaders.Remove("Authorization");
-
-                JwtData jwtData = new JwtData();// _webUtils.GetJwtData();
-                
-                JwtClientUtil jwtClientUtil=new JwtClientUtil();
-
-                // string bearToken= jwtData.AccessToken.ToString();
-                
-                //{
-                //    jwtData=await _accountService.ReNewToken(jwtData);
-                //    _webUtils.SaveJwtData(jwtData);
-                //    bearToken = jwtData.AccessToken.ToString();
-                //}
-                //else
-                //{
-                //    // kg can lam gi ca
-                //}
-
-                _httpClient.DefaultRequestHeaders.Add("Authorization", bearToken);
-                string strAccessURL = AppConstants.CompanyApiRoute + _serviceConfig.GetCompanies;
-              
-                BODataProcessResult processResult = new BODataProcessResult(); ;
-                //===>call api===>
-               
-                var response = await _httpClient.GetAsync(strAccessURL);
-                if (response.IsSuccessStatusCode)
+            {                
+                JwtData jwtData  =_webUtils.GetJwtData();                
+                if (jwtData != null)
                 {
-                    string result = await response.Content.ReadAsStringAsync();
-                    processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
-                    if (processResult.OK)
+                    HttpClient _httpClient = _factory.CreateClient(AppConstants.ProtectedResourceService);
+                    _httpClient.DefaultRequestHeaders.Remove("Authorization");                   
+                    JwtData newJwtData = await _accountService.ReNewToken(jwtData);
+                    if (newJwtData != null)
                     {
-                        companies = JsonConvert.DeserializeObject<List<CompanyViewModel>>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
+                        bearToken = newJwtData.AccessToken.ToString();                       
+                        string strAccessURL = AppConstants.CompanyApiRoute + _serviceConfig.GetCompanies;                        
+                        processResult = await requestHandler.GetRequest(_httpClient, strAccessURL, bearToken);
+                        
+                        if (processResult != null && processResult.Content != null && processResult.OK) 
+                        {
+                            string result = JsonConvert.SerializeObject(processResult.Content);
+                            List<CompanyViewModel> companyList = JsonConvert.DeserializeObject<List<CompanyViewModel>>(result);
+                            viewModel.Companies = companyList;
+                        }
+                        else
+                        {
+                            string fieldName="";
+                            string errMessage = processResult.Message;
 
+                            viewModel.AddError(fieldName, errMessage);
+                        }
+                        
+                        
                     }
-                    return companies;
+                    else
+                    {
+                        string fieldName = "";
+                        string errMessage = "Invalid renew JwtData";
+
+                        viewModel.AddError(fieldName, errMessage);
+                    }
+
                 }
                 else
                 {
-                    //xu ly loi http response status
-                    EHttpStatusCode httpStatus = (EHttpStatusCode)response.StatusCode;
-                    switch (httpStatus)
-                    {
-                        case EHttpStatusCode.Moved:
-                            break;
-                        case EHttpStatusCode.OK:
-                            break;
-                        case EHttpStatusCode.Redirect:
-                            break;
-                        case EHttpStatusCode.UnAuthorized:
-                            debugError = "UnAuthorized requirements";
-                            break;
-                        case EHttpStatusCode.Forbidden:
-                            debugError = "Forbidden requirements";
-                            break;
-                        default:
-                            break;
-                    }
-                    return companies;
+                    string fieldName = "";
+                    string errMessage = "Invalid current JwtData";
+
+                    viewModel.AddError(fieldName, errMessage);
                 }
+
             }
             catch (Exception ex)
             {
-                debugError = "Bad Request";
+                string err = ex.Message;
+                string fieldName = "";
+                string errMessage = err;
+
+                viewModel.AddError(fieldName, errMessage);
             }
-            return companies;
+            return viewModel;
         }
     }
 }
