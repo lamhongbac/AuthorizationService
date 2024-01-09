@@ -45,6 +45,12 @@ namespace SharedLib
         X
     }
 
+    public enum EComfirmCheckList
+    {
+        Y,
+        N
+    }
+
     public class JsonUtil<T>
     {
         public T Read(string _filePath)
