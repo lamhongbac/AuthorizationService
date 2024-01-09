@@ -170,7 +170,7 @@ namespace AuthenticationDemo.Services
             JwtData reNewToken = null;
             try
             {
-                HttpClient _httpClient = _factory.CreateClient("auth");
+                HttpClient _httpClient = _factory.CreateClient(AppConstants.AuthenticationService);
                 string strRenewTokenURL = AppConstants.AccountApiRoute + _serviceConfig.RenewToken;
                 
                 BODataProcessResult processResult = new BODataProcessResult(); 

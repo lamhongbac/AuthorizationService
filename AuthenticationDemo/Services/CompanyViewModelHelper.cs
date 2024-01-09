@@ -79,11 +79,18 @@ namespace AuthenticationDemo.Services
                         string strAccessURL = AppConstants.CompanyApiRoute + _serviceConfig.GetCompanies;                        
                         processResult = await requestHandler.GetRequest(_httpClient, strAccessURL, bearToken);
                         
-                        if (processResult != null && processResult.Content != null && processResult.OK) 
+                        if (processResult != null) 
                         {
-                            string result = JsonConvert.SerializeObject(processResult.Content);
-                            List<CompanyViewModel> companyList = JsonConvert.DeserializeObject<List<CompanyViewModel>>(result);
-                            viewModel.Companies = companyList;
+                            if (processResult.Content != null && processResult.OK)
+                            {
+                                string result = JsonConvert.SerializeObject(processResult.Content);
+                                List<CompanyViewModel> companyList = JsonConvert.DeserializeObject<List<CompanyViewModel>>(result);
+                                viewModel.Companies = companyList;
+                            }
+                            else if(!processResult.OK)
+                            {
+                                viewModel.AddError("", processResult.Message);
+                            }
                         }
                         else
                         {

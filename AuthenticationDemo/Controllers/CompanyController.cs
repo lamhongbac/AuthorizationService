@@ -17,13 +17,14 @@ namespace AuthenticationDemo.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-       
+        [Authorize]
         public async Task<IActionResult> Index()
         {
+            CompaniesViewModel viewModel = new CompaniesViewModel();
             List<CompanyViewModel> companies = new List<CompanyViewModel>();
             try
             {
-                CompaniesViewModel viewModel = await _viewModelHelper.GetCompanies();
+                 viewModel = await _viewModelHelper.GetCompanies();
                 if (viewModel != null && viewModel.Errors.Count==0)
                 {
                     companies = viewModel.Companies;
@@ -47,7 +48,25 @@ namespace AuthenticationDemo.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
             }
-            return View(companies);
+            return View(viewModel);
+        }
+
+        public ActionResult Update()
+        {
+            CompanyViewModel vm = new CompanyViewModel();
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(CompanyViewModel vm)
+        {
+           if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+           //save data
+         return  RedirectToAction ("Index");
         }
     }
 }
