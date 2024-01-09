@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using SharedLib;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
+using System.Net.Mail;
 
 namespace AuthServices.Util
 {
@@ -137,28 +138,28 @@ namespace AuthServices.Util
             }
             return Convert.ToBase64String(random);
         }
-        public UserInfo GetUserInfo(string token)
-        {
-            UserInfo userInfo = new UserInfo();
+        //public UserInfo GetUserInfo(string token)
+        //{
+        //    UserInfo userInfo = new UserInfo();
 
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token);
-            var tokenS = jsonToken as JwtSecurityToken;
+        //    var handler = new JwtSecurityTokenHandler();
+        //    var jsonToken = handler.ReadToken(token);
+        //    var tokenS = jsonToken as JwtSecurityToken;
 
-            // using JwtSecurityToken
-            var fullname = tokenS.Claims.First(claim => claim.Type == "FullName").Value;
+        //    // using JwtSecurityToken
+        //    var fullname = tokenS.Claims.First(claim => claim.Type == "FullName").Value;
 
-            userInfo.FullName = fullname;
-            userInfo.EmailAddress = tokenS.Claims.First(claim => claim.Type == "EmailAddress").Value;
-            var role = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
-            if (!string.IsNullOrWhiteSpace(role))
-            {
-                userInfo.Roles.Add(role);
-            }
-            userInfo.UserName = tokenS.Claims.First(claim => claim.Type == "UserName").Value;
-            userInfo.ID = tokenS.Claims.First(claim => claim.Type == "ID").Value;
-            return userInfo;
-        }
+        //    userInfo.FullName = fullname;
+        //    userInfo.EmailAddress = tokenS.Claims.First(claim => claim.Type == "EmailAddress").Value;
+        //    var role = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
+        //    if (!string.IsNullOrWhiteSpace(role))
+        //    {
+        //        userInfo.Roles.Add(role);
+        //    }
+        //    userInfo.UserName = tokenS.Claims.First(claim => claim.Type == "UserName").Value;
+        //    userInfo.ID = tokenS.Claims.First(claim => claim.Type == "ID").Value;
+        //    return userInfo;
+        //}
 
         /// <summary>
         /// kiem tra token is Valid truoc khi goi protect API,neu expired thi xin JWT moi
@@ -286,7 +287,7 @@ namespace AuthServices.Util
                     return processResult;
                 }
                 //b6 Check access A tokenID in R token is correct
-                var jti = tokenValidation.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value;
+                var jti = tokenValidation.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
                 if (storedRefToken.JwtId != jti)
                 {
@@ -306,19 +307,28 @@ namespace AuthServices.Util
                 UserInfo userInfo = jwtClientUtil.GetUserInfoFromToken(model.AccessToken);
 
                 //===> Sinh ra new token               
+                if (userInfo != null)
+                {
+                    JwtData token = GenerateJSONWebToken(userInfo);
 
-                JwtData token = GenerateJSONWebToken(userInfo);
-
-                //<====== end process=======
-                processResult.Content = token;
-                processResult.OK = false;
-                processResult.Message = JwtStatus.Success.ToString();
-
+                    //<====== end process=======
+                    processResult.Content = token;
+                    processResult.OK = true;
+                    processResult.Message = JwtStatus.Success.ToString();
+                }
+                else
+                {
+                    processResult.Content = null;
+                    processResult.OK = false;
+                    processResult.Message = JwtStatus.BadRequest.ToString();
+                }
                 return processResult;
 
             }
-            catch
+            catch (Exception ex)
             {
+                string error = ex.Message;
+
                 processResult.OK = false;
                 processResult.Message = JwtStatus.BadRequest.ToString();
 
@@ -344,45 +354,82 @@ namespace AuthServices.Util
      /// <returns></returns>
         public UserInfo GetUserInfoFromToken(string validToken)
         {
-            UserInfo userInfo = new UserInfo();
+            var claims = GetClaims(validToken);
+           
             try
             {
-                JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-                //var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey));
-                //var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                UserInfo userInfo = new UserInfo();
+                if (claims.FirstOrDefault(claim => claim.Type == "AppID") != null)
+                {
+                    int AppID = Convert.ToInt32(claims.First(claim => claim.Type == "AppID").Value);
+                    userInfo.AppID = AppID;
+                }
+                if (claims.FirstOrDefault(claim => claim.Type == "CompanyID") != null)
+                {
+                    int CompanyID = Convert.ToInt32(claims.First(claim => claim.Type == "CompanyID").Value);
+                    userInfo.CompanyID = CompanyID;
+                }
+                
+                if (claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Email) != null)
+                {
+                    string EmailAddress = claims.First(claim => claim.Type == JwtRegisteredClaimNames.Email).Value;
+                    userInfo.EmailAddress = EmailAddress;
+                }
+                if (claims.FirstOrDefault(claim => claim.Type == "FullName") != null)
+                {
+                    string FullName = claims.First(claim => claim.Type == "FullName").Value;
+                    userInfo.FullName = FullName;
+                }
+                if (claims.FirstOrDefault(claim => claim.Type == "UserName") != null)
+                {
+                    string UserName = claims.First(claim => claim.Type == "UserName").Value;
+                    userInfo.UserName = UserName;
+                }
+                if (claims.FirstOrDefault(claim => claim.Type == "UserID") != null)
+                {
+                    string ID = claims.First(claim => claim.Type == "UserID").Value;
+                    userInfo.ID = ID;
+                }
 
+                
+                
 
-                var jsonToken = jwtSecurityTokenHandler.ReadToken(validToken);
-                var tokenS = jsonToken as JwtSecurityToken;
-
-                userInfo.ID = tokenS.Claims.First(claim => claim.Type == "UserID").Value;
-                userInfo.UserName = tokenS.Claims.First(claim => claim.Type == "UserName").Value;
-                userInfo.EmailAddress = tokenS.Claims.First(claim => claim.Type == "EmailAddress").Value;
-                userInfo.FullName = tokenS.Claims.First(claim => claim.Type == "FullName").Value;
-                userInfo.AppID = Convert.ToInt32(tokenS.Claims.First(claim => claim.Type == "AppID").Value);
-                userInfo.CompanyID = Convert.ToInt32(tokenS.Claims.First(claim => claim.Type == "CompanyID").Value);
-
-                var roleClaims = tokenS.Claims.Where(x => x.Type == "Roles").ToList();
+                
+                var roleClaims = claims.Where(x => x.Type.ToLower() == "roles").ToList();
 
                 foreach (var item in roleClaims)
                 {
                     userInfo.Roles.Add(item.Value);
                 }
-                //userInfo.Roles = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
-                string strObjectRights = tokenS.Claims.First(claim => claim.Type == "ObjectNames").Value;
+                string strObjectRights = claims.First(claim => claim.Type.ToLower() == "objectrights").Value;
 
                 Dictionary<string, List<string>> ObjectRights = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(strObjectRights);
                 userInfo.ObjectRights = ObjectRights;
+
+                return userInfo;
+
+                //JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+                //var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey));
+                //var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+
+                //var jsonToken = jwtSecurityTokenHandler.ReadToken(validToken);
+                //var tokenS = jsonToken as JwtSecurityToken;
+
+                
+                
+                //userInfo.Roles = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
+                
 
 
             }
             catch (Exception ex)
             {
                 string error = ex.Message;
-                userInfo = null;
-                return userInfo;
+                
+                return null;
             }
-            return userInfo;
+
         }
 
         public List<Claim> GetClaims(string accessToken)
@@ -397,28 +444,28 @@ namespace AuthServices.Util
             //var fullname = tokenS.Claims.First(claim => claim.Type == "FullName").Value;
             return tokenS.Claims.ToList();
         }
-        public UserInfo GetUserInfo(string token)
-        {
-            UserInfo userInfo = new UserInfo();
+        //public UserInfo GetUserInfo(string token)
+        //{
+        //    UserInfo userInfo = new UserInfo();
 
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token);
-            var tokenS = jsonToken as JwtSecurityToken;
+        //    var handler = new JwtSecurityTokenHandler();
+        //    var jsonToken = handler.ReadToken(token);
+        //    var tokenS = jsonToken as JwtSecurityToken;
 
-            // using JwtSecurityToken
-            var fullname = tokenS.Claims.First(claim => claim.Type == "FullName").Value;
+        //    // using JwtSecurityToken
+        //    var fullname = tokenS.Claims.First(claim => claim.Type == "FullName").Value;
 
-            userInfo.FullName = fullname;
-            userInfo.EmailAddress = tokenS.Claims.First(claim => claim.Type == "EmailAddress").Value;
-            var role = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
-            if (!string.IsNullOrWhiteSpace(role))
-            {
-                userInfo.Roles.Add(role);
-            }
-            userInfo.UserName = tokenS.Claims.First(claim => claim.Type == "UserName").Value;
-            userInfo.ID = tokenS.Claims.First(claim => claim.Type == "ID").Value;
-            return userInfo;
-        }
+        //    userInfo.FullName = fullname;
+        //    userInfo.EmailAddress = tokenS.Claims.First(claim => claim.Type == "EmailAddress").Value;
+        //    var role = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
+        //    if (!string.IsNullOrWhiteSpace(role))
+        //    {
+        //        userInfo.Roles.Add(role);
+        //    }
+        //    userInfo.UserName = tokenS.Claims.First(claim => claim.Type == "UserName").Value;
+        //    userInfo.ID = tokenS.Claims.First(claim => claim.Type == "ID").Value;
+        //    return userInfo;
+        //}
         /// <summary>
         /// kiem tra token su dung:JwtSecurityToken
         /// 

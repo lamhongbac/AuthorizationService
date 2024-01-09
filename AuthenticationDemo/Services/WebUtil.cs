@@ -144,7 +144,7 @@ namespace AuthenticationDemo.Services
         {
             BODataProcessResult processResult = new BODataProcessResult();
             string httpError = string.Empty;
-            if (string.IsNullOrWhiteSpace(bearToken))
+            if (!string.IsNullOrWhiteSpace(bearToken))
             {
                 client.DefaultRequestHeaders.Remove("Authorization");
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearToken}");

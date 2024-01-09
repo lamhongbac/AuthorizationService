@@ -151,20 +151,29 @@ namespace AuthenticationDemo.Services
 
         /// <summary>
         /// renew token base on exist token
+        /// neu renew thanh cong thi tra ve new token
+        /// neu renew that bai tra ve null
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<JwtData> ReNewToken(JwtData model)
+        public async Task<JwtData?> GetAccessToken(JwtData model)
         {
             //Cap nhat cookie information
            
+            JwtClientUtil jwtClientUtil = new JwtClientUtil();
+            if (jwtClientUtil.IsAccessTokenExpired(model.AccessToken))
+            {
+
+                return model;
+            }
+
             JwtData reNewToken = null;
             try
             {
                 HttpClient _httpClient = _factory.CreateClient("auth");
                 string strRenewTokenURL = AppConstants.AccountApiRoute + _serviceConfig.RenewToken;
                 
-                BODataProcessResult processResult = new BODataProcessResult(); ;
+                BODataProcessResult processResult = new BODataProcessResult(); 
                 //===>call api===>
                 string json = JsonConvert.SerializeObject(model);
                 StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
@@ -173,13 +182,14 @@ namespace AuthenticationDemo.Services
                 {
                     string result = await response.Content.ReadAsStringAsync();
                     processResult = JsonConvert.DeserializeObject<BODataProcessResult>(result);
-                    
-                    reNewToken = JsonConvert.DeserializeObject<JwtData>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
-                    
+                    if (processResult != null && processResult.OK)
+                    {
+                        reNewToken = JsonConvert.DeserializeObject<JwtData>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
+                    }
                     
                     if (reNewToken!=null)
                         _webUtils.SaveJwtData(reNewToken);
-
+                    return reNewToken;
                 }
                 else
                 {
@@ -200,16 +210,17 @@ namespace AuthenticationDemo.Services
                         default:
                             break;
                     }
-                   
+                    return null;
                 }
                 //===end call api=========>
                 
               
 
-                return reNewToken;
+               
             }
             catch (Exception ex)
             {
+                reNewToken = null;
                 string err = ex.Message;
             }
             //===> end login process

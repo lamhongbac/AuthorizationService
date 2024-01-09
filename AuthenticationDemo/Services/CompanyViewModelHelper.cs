@@ -56,12 +56,23 @@ namespace AuthenticationDemo.Services
 
             try
             {                
-                JwtData jwtData  =_webUtils.GetJwtData();                
+                JwtData jwtData  =_webUtils.GetJwtData();
+                
+
                 if (jwtData != null)
                 {
+                    JwtData newJwtData = await _accountService.GetAccessToken(jwtData);
+                    if (newJwtData == null) {
+                        viewModel.AddError("", "can not get access token");
+                        return viewModel;
+                    }
+                    // kiem tra neu la new token==>??
+                    bool isNewToken = jwtData.RefreshToken != newJwtData.RefreshToken;
+                    
+                   
                     HttpClient _httpClient = _factory.CreateClient(AppConstants.ProtectedResourceService);
                     _httpClient.DefaultRequestHeaders.Remove("Authorization");                   
-                    JwtData newJwtData = await _accountService.ReNewToken(jwtData);
+                    
                     if (newJwtData != null)
                     {
                         bearToken = newJwtData.AccessToken.ToString();                       
