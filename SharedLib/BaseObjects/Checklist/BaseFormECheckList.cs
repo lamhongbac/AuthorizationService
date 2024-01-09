@@ -18,6 +18,13 @@ namespace SharedLib.BaseObjects.Checklist
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
+        public string RiskText { get; set; }
+        public string CCPText { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
+        public string Routine { get; set; }
+        public string CheckListType { get; set; }
+        public decimal PassPoint { get; set; }
         public List<BaseFormECheckListDetail> FormECheckListDetails { get; set; }
     }
 }
