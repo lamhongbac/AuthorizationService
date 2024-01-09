@@ -16,9 +16,11 @@ namespace AuthenticationDemo.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+       
         public async Task<IActionResult> Index()
         {
+            _viewModelHelper.BearToken = "";
+
             List<CompanyViewModel> companies =await _viewModelHelper.GetCompanies();
             return View(companies);
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AuthServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudyApiAuth.Models;
@@ -14,11 +15,15 @@ namespace ProtectResourceService.Controllers
         [HasPermission("company;read,list")]
         public IActionResult GetCompanies()
         {
+            BODataProcessResult processResult = new BODataProcessResult();
+
             List<Company> companies = new List<Company>()
             { new Company{ ID=1, Name="Kfc"}, new Company{ ID=2,Name="Golden Gate group"},
             new Company{ ID=3,Name="Sasin Group"}
             };
-            return Ok(companies);
+            processResult.OK = true;
+            processResult.Content = companies;
+            return Ok(processResult);
         }
         [Authorize]
         [HttpPost(Name = "CreateCompany")]

@@ -22,6 +22,7 @@ namespace AuthenticationDemo.Services
         AppConfig _appConfig;
         WeUtils _webUtils;
         AccountService _accountService;
+        string bearToken;
         public CompanyViewModelHelper(IHttpClientFactory factory,
              IHttpContextAccessor httpContextAccessor,
              IConfiguration configuration, WeUtils webUtils,
@@ -37,6 +38,7 @@ namespace AuthenticationDemo.Services
             _webUtils = webUtils;
 
         }
+        public string BearToken { get=>bearToken; set =>bearToken=value; }
         public async Task<List<CompanyViewModel>> GetCompanies()
         {
             string debugError = string.Empty;
@@ -51,7 +53,7 @@ namespace AuthenticationDemo.Services
                 JwtClientUtil jwtClientUtil=new JwtClientUtil();
 
                 // string bearToken= jwtData.AccessToken.ToString();
-                string bearToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjZTA4NDY0NC0wMzY0LTQ1MzMtYThlOS1lYWI0MmJkMzZkOGUiLCJVc2VyTmFtZSI6ImFkbWluIiwic3ViIjoiYWRtaW4iLCJVc2VySUQiOiI3IiwiRnVsbE5hbWUiOiJQaOG6oW0gSG_DoG5nIMSQ4bqhdCIsIkFwcElEIjoiMyIsIkNvbXBhbnlJRCI6IjMiLCJSb2xlcyI6InFhbWFuYWdlciIsIk9iamVjdFJpZ2h0cyI6IntcImFwcHJvbGVcIjpbXCJyZWFkXCIsXCJjcmVhdGVcIixcInVwZGF0ZVwiLFwiZGVsZXRlXCJdLFwiYXBwdXNlclwiOltcInJlYWRcIixcImNyZWF0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDAxXCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDAyXCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDA0XCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDAzXCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDA1XCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImVjaGVja2xpc3RfZm9ybTAwMDA2XCI6W1wicmVhZFwiLFwiY3JlYXRlXCIsXCJ1cGRhdGVcIixcImRlbGV0ZVwiXSxcImNvbXBhbnlcIjpbXCJyZWFkXCIsXCJjcmVhdGVcIl19IiwibmJmIjoxNzA0Njk5OTM2LCJleHAiOjE3MDQ3MDAwNTYsImlhdCI6MTcwNDY5OTkzNiwiaXNzIjoibXNhLmNvbS52biIsImF1ZCI6Im1zYS5jb20udm4ifQ.9P8cJm-ztfeuUPfL2P0AyvqfarG7IjaZmCHeQXxsZXk";
+                
                 //{
                 //    jwtData=await _accountService.ReNewToken(jwtData);
                 //    _webUtils.SaveJwtData(jwtData);
