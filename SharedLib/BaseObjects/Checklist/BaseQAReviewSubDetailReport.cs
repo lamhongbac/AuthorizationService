@@ -25,6 +25,6 @@ namespace SharedLib.BaseObjects.Checklist
         public DateTime ModifiedOn { get; set; }
         public decimal Point { get; set; }
         public int QAQuestionID { get; set; }
-        public string ProcessStatus { get; set; }
+        public string CheckStatus { get; set; }
     }
 }
