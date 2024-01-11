@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SharedLib.Models
 {
@@ -23,7 +22,7 @@ namespace SharedLib.Models
         public List<int>? StoreIDs { get; set; }
     }
 
-    public class OutletRequestDatasModel: RequestDatasModel
+    public class OutletRequestDatasModel : RequestDatasModel
     {
         public string? CompanyCode { get; set; }
         public int NationID { get; set; }
@@ -64,7 +63,7 @@ namespace SharedLib.Models
         public string? QAOfficerID { get; set; }
     }
 
-    public class OutletGroupRequestDatasModel: RequestDatasModel
+    public class OutletGroupRequestDatasModel : RequestDatasModel
     {
         public string? CompanyCode { get; set; }
     }
@@ -79,5 +78,15 @@ namespace SharedLib.Models
     public class AppRoleRequestDatasModel : RequestDatasModel
     {
         public int CompanyAppID { get; set; }
+    }
+
+    public class BrandRequestModel : RequestModel
+    {
+        public BrandRequestModel()
+        {
+            BusinessCatID = -1;
+        }
+        public int CompanyID { get; set; }
+        public int? BusinessCatID { get; set; }
     }
 }
