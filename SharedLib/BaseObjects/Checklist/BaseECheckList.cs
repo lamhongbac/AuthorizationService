@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SharedLib.BaseObjects.Checklist
 {
-    public class BaseFormECheckList
+    public class BaseECheckList
     {
-        public BaseFormECheckList()
+        public BaseECheckList()
         {
-            FormECheckListDetails = new List<BaseFormECheckListDetail>();
+            BaseFormECheckLists = new List<BaseFormECheckList>();
         }
         public Guid ID { get; set; }
         public string Number { get; set; }
@@ -18,14 +19,12 @@ namespace SharedLib.BaseObjects.Checklist
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
-        public string RiskText { get; set; }
-        public string CCPText { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public string Routine { get; set; }
         public string CheckListType { get; set; }
         public decimal PassPoint { get; set; }
-        public Guid ParentID { get; set; }
-        public List<BaseFormECheckListDetail> FormECheckListDetails { get; set; }
+        public string UserGroup { get; set; }
+        public List<BaseFormECheckList> BaseFormECheckLists { get; set; }
     }
 }

@@ -23,5 +23,8 @@ namespace SharedLib.BaseObjects.Checklist
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public decimal Point { get; set; }
+        public bool IsNotAvailable { get; set; }
+        public string ProcessStatsus { get; set; }
+        public string CheckStatus { get; set; }
     }
 }

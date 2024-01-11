@@ -16,5 +16,6 @@ namespace SharedLib.BaseObjects.Checklist
         public DateTime ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsNoteRequired { get; set; }
+        public decimal Point { get; set; }
     }
 }

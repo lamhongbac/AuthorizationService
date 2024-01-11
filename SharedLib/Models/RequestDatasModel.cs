@@ -12,7 +12,12 @@ namespace SharedLib.Models
         public int PageSize { get; set; }
     }
 
-    public class FormQACheckListRequestDatasModel : RequestDatasModel
+    public class ECheckListRequestDatasModel: RequestDatasModel 
+    {
+        public string UserGroup { get; set; }
+    }
+
+    public class FormQACheckListRequestDatasModel: RequestDatasModel
     {
         public List<int>? StoreIDs { get; set; }
     }
