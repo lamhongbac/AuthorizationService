@@ -87,6 +87,15 @@ namespace SharedLib.Models
             BusinessCatID = -1;
         }
         public int CompanyID { get; set; }
+        public string CompanyCode { get; set; }
         public int? BusinessCatID { get; set; }
+    }
+
+    public class BusinessCatgoryRequestModel: RequestModel
+    {
+        public BusinessCatgoryRequestModel()
+        {
+            
+        }
     }
 }
