@@ -12,7 +12,12 @@ namespace SharedLib.Models
         public int PageSize { get; set; }
     }
 
-    public class FormQACheckListRequestDatasModel : RequestDatasModel
+    public class ECheckListRequestDatasModel: RequestDatasModel 
+    {
+        public string UserGroup { get; set; }
+    }
+
+    public class FormQACheckListRequestDatasModel: RequestDatasModel
     {
         public List<int>? StoreIDs { get; set; }
     }
@@ -85,12 +90,11 @@ namespace SharedLib.Models
         public int? BusinessCatID { get; set; }
     }
 
-    public class BusinessCatgoryRequestModel : RequestModel
+    public class BusinessCatgoryRequestModel: RequestModel
     {
         public BusinessCatgoryRequestModel()
         {
-            ID = -1;
+            
         }
-        public int ID { get; set; }
     }
 }
