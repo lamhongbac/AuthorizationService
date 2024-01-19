@@ -21,6 +21,7 @@ namespace SharedLib.BaseObjects.Checklist
         public DateTime CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
+        public string ProcessStatus { get; set; }
         public List<BaseQAActionPlanDetail> QAActionPlanDetails { get; set; }
     }
 }
