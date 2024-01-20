@@ -3,6 +3,7 @@ using AuthenticationDAL.DTO;
 using AuthorizationService.BaseObjects;
 
 using AutoMapper;
+using SharedLib.Authentication;
 using SharedLib.Utils;
 using System;
 using System.Collections.Generic;

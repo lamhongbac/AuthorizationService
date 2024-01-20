@@ -12,6 +12,7 @@ using SharedLib;
 using AuthServices.Models;
 using System.Linq;
 using SharedLib.Utils;
+using SharedLib.Authentication;
 
 namespace AuthServices
 {

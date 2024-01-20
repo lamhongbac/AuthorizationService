@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SharedLib.Utils;
 
+using SharedLib.Authentication;
 
 namespace AuthServices
 {

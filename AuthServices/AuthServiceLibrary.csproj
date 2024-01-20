@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AuthenticationDAL\AuthenticationDAL.csproj" />
+    <ProjectReference Include="..\SharedLib\SharedLib.csproj" />
   </ItemGroup>
 
 </Project>

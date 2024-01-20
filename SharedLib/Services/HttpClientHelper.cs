@@ -10,6 +10,15 @@ using System.Threading.Tasks;
 
 namespace SharedLib.Utils
 {
+    public enum EHttpStatusCode
+    {
+
+        Moved = 301,
+        OK = 200,
+        Redirect = 302,
+        UnAuthorized = 401,
+        Forbidden = 403
+    }
     public interface IHttpClientHelper<T>
     {
         void ToAuthHeaderValue(string username, string password);

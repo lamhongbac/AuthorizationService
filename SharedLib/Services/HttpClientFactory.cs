@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace SharedLib.Utils
 {
-    public class BaseApiService
+    public class HttpClientFactory
     {
 
 
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public BaseApiService(IHttpClientFactory httpClientFactory)
+        public HttpClientFactory(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
 
