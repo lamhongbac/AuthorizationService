@@ -26,14 +26,14 @@ namespace ProtectResourceService.Controllers
             processResult.Content = companies;
             return Ok(processResult);
         }
-        [Authorize]
-        [HttpPost(Name = "CreateCompany")]
-        [HasPermission("company;create")]
-        public IActionResult CreateCompany(Company company)
-        {
-
-            return Ok(company);
-        }
+        
+        //[Authorize]
+        //[HttpPost(Name = "CreateCompany")]
+        //[HasPermission("company;create")]
+        //public IActionResult CreateCompany(Company company)
+        //{
+        //    return Ok(company);
+        //}
         [Authorize]
         [HttpGet(Name = "GetAbout")]
         [HasPermission("about;read,list")]
