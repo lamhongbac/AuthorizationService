@@ -15,7 +15,7 @@ using System.Reflection;
 using System.Net.Mail;
 using SharedLib.Utils;
 
-namespace SharedLib.Authentication
+namespace AuthServices.Models
 {
     /// <summary>
     /// Kieu du lieu nay chi phuc vu Authentication Service

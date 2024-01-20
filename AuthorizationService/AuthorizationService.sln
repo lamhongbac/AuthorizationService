@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServiceLibrary", "..\Au
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtectResourceService", "..\ProtectedResources\ProtectResourceService\ProtectResourceService.csproj", "{98962ED5-9339-420C-8647-E117834204B5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLib", "..\SharedLib\SharedLib.csproj", "{00CE992A-EEAA-474D-B032-57C4438E0817}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthSharedLib", "..\SharedLib\AuthSharedLib.csproj", "{00CE992A-EEAA-474D-B032-57C4438E0817}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

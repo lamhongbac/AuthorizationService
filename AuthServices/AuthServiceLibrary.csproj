@@ -16,7 +16,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AuthenticationDAL\AuthenticationDAL.csproj" />
-    <ProjectReference Include="..\SharedLib\SharedLib.csproj" />
+    <ProjectReference Include="..\SharedLib\AuthSharedLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
