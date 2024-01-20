@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AuthServices.Helpers
+namespace SharedLib.Utils
 {
     public class IMappingHelper<S, T>
     {

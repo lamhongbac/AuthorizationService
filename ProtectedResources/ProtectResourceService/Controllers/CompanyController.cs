@@ -1,7 +1,8 @@
-﻿using AuthServices;
+﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SharedLib.Utils;
 using StudyApiAuth.Models;
 
 namespace ProtectResourceService.Controllers

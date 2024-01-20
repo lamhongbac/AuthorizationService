@@ -3,6 +3,7 @@ using AuthorizationService.BaseObjects;
 using AuthServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SharedLib.Utils;
 
 namespace AuthorizationService.Controllers
 {

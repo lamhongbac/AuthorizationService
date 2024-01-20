@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.Linq;
 
-namespace SharedLib
+namespace SharedLib.Utils
 {
     public interface ILocationDataSource
     {

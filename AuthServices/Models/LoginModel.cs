@@ -3,6 +3,7 @@ using AuthServices.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SharedLib.Utils;
 
 namespace AuthServices.Models
 {

@@ -13,9 +13,14 @@ using SharedLib;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using System.Net.Mail;
+using SharedLib.Utils;
 
-namespace AuthServices.Util
+namespace SharedLib.Authentication
 {
+    /// <summary>
+    /// Kieu du lieu nay chi phuc vu Authentication Service
+    /// 
+    /// </summary>
     public class JwtUtil
     {
         private RefreshTokenDatas _tokenDatas;

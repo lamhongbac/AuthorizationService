@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace SharedLib
+namespace SharedLib.Utils
 {
     public class CommonDataTypes
     {

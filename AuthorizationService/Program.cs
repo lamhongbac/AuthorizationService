@@ -3,13 +3,14 @@ using AuthorizationService.Helper;
 using AuthorizationService.Service;
 using AuthServices;
 using AuthServices.Models;
-using AuthServices.Util;
+
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SharedLib.Authentication;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 

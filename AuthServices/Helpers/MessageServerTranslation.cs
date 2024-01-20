@@ -1,9 +1,10 @@
-﻿using System;
+﻿using SharedLib.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SharedLib.Services
+namespace SharedLib.Utils
 {
     public class MessageServerTranslation
     {

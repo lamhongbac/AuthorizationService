@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SharedLib
+namespace SharedLib.Utils
 {
     /// <summary>
     /// lop nay dung de ma hoa cho saltHash

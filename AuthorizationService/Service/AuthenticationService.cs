@@ -3,13 +3,14 @@ using AuthorizationService.Data;
 using AuthServices;
 
 using AuthServices.Models;
-using AuthServices.Util;
+
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SharedLib;
-
+using SharedLib.Authentication;
+using SharedLib.Utils;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
 using System.Reflection;

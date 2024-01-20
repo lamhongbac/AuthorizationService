@@ -6,11 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AuthServices.Helpers;
+
 using AutoMapper.Execution;
 using SharedLib;
 using AuthServices.Models;
 using System.Linq;
+using SharedLib.Utils;
 
 namespace AuthServices
 {

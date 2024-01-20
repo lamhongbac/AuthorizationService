@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace SharedLib.Services
+namespace SharedLib.Utils
 {
     public class MessageTranslation
     {

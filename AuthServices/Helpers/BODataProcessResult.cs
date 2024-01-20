@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AuthServices
+namespace SharedLib.Utils
 {
     public class BODataProcessResult
     {
