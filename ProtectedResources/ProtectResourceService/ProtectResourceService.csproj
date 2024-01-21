@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AuthorizationService\AuthorizationApiService.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="MSASharedLib">
       <HintPath>..\..\MSAFW\MSASharedLib.dll</HintPath>
     </Reference>
