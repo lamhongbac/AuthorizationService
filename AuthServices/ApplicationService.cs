@@ -5,12 +5,13 @@ using AuthorizationService.DataTypes;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using SharedLib.Authentication;
-using SharedLib.Utils;
+using MSASharedLib.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using MSASharedLib.DataTypes;
 
 namespace AuthServices
 {

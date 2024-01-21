@@ -1,32 +1,33 @@
-﻿using Newtonsoft.Json;
+﻿using MSASharedLib.DataTypes;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 
-namespace SharedLib.Utils
+namespace MSASharedLib.Utils
 {
     public class CommonDataTypes
     {
 
     }
 
-    public class ErrorData
-    {
-        public string ErrorCode { get; set; }
-        public string EN { get; set; }
-        public string VN { get; set; }
-        public string DESC { get; set; }
-    }
+    //public class ErrorData
+    //{
+    //    public string ErrorCode { get; set; }
+    //    public string EN { get; set; }
+    //    public string VN { get; set; }
+    //    public string DESC { get; set; }
+    //}
 
     public class ServerErrorData:ErrorData
     {
         
     }
 
-    public enum ELang
-    {
-        En,
-        Vn
-    }
+    //public enum ELang
+    //{
+    //    En,
+    //    Vn
+    //}
 
     public enum EDepartmentType
     {
@@ -35,18 +36,18 @@ namespace SharedLib.Utils
         R
     }
 
-    public class JsonUtil<T>
-    {
-        public T Read(string _filePath)
-        {
-            string text = File.ReadAllText(_filePath);
-            return JsonConvert.DeserializeObject<T>(File.ReadAllText(_filePath));
-        }
-        public void Write(T model, string _filePath)
-        {
-            File.WriteAllText(_filePath, JsonConvert.SerializeObject(model));
-        }
-    }
+    //public class JsonUtil<T>
+    //{
+    //    public T Read(string _filePath)
+    //    {
+    //        string text = File.ReadAllText(_filePath);
+    //        return JsonConvert.DeserializeObject<T>(File.ReadAllText(_filePath));
+    //    }
+    //    public void Write(T model, string _filePath)
+    //    {
+    //        File.WriteAllText(_filePath, JsonConvert.SerializeObject(model));
+    //    }
+    //}
 
     public enum AppUserType
     {
@@ -54,17 +55,17 @@ namespace SharedLib.Utils
         Email,
         MobileNo
     }
-    public enum JwtStatus
-    {
-        InvalidToken,
-        TokenIsNotExpired,
-        TokenIsNotExist,
-        TokenIsUsed,
-        IsRevoked,
-        AccessTokenIdIsNotMatch,
-        Success,
-        BadRequest
-    }
+    //public enum JwtStatus
+    //{
+    //    InvalidToken,
+    //    TokenIsNotExpired,
+    //    TokenIsNotExist,
+    //    TokenIsUsed,
+    //    IsRevoked,
+    //    AccessTokenIdIsNotMatch,
+    //    Success,
+    //    BadRequest
+    //}
 
     public enum EProcessStatus
     {
@@ -73,7 +74,7 @@ namespace SharedLib.Utils
         QAMReview
     }
 
-    public enum ESortOrder { Ascending = 0, Descending = 1 }
+    //public enum ESortOrder { Ascending = 0, Descending = 1 }
 
     public enum ELogicErrorCode
     {

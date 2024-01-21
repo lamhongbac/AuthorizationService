@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 using SharedLib.Authentication;
 
 using static System.Net.Mime.MediaTypeNames;
-using SharedLib.Utils;
+using MSASharedLib.Utils;
 using AuthorizationService.DataTypes;
 using Microsoft.Extensions.Configuration;
+using MSASharedLib.DataTypes;
 
 namespace AuthServices
 {

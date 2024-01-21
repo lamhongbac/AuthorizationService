@@ -7,11 +7,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedLib.Utils;
+using MSASharedLib.Utils;
 using SharedLib.Authentication;
 using AuthorizationService.DataTypes;
 using Microsoft.Extensions.Configuration;
-
+using MSASharedLib.DataTypes;
 
 namespace AuthServices
 {

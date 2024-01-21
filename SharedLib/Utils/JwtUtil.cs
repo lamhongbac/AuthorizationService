@@ -13,7 +13,8 @@ using SharedLib;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using System.Net.Mail;
-using SharedLib.Utils;
+using MSASharedLib.Utils;
+using MSASharedLib.DataTypes;
 
 namespace AuthServices.Models
 {

@@ -5,12 +5,12 @@ using AuthServices;
 using AuthServices.Models;
 
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SharedLib;
 using SharedLib.Authentication;
-using SharedLib.Utils;
+using MSASharedLib.Utils;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
 using System.Reflection;
@@ -18,6 +18,12 @@ using System.Security.AccessControl;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using MSASharedLib.DataTypes;
+using System;
 
 namespace AuthorizationService.Service
 {

@@ -6,8 +6,10 @@ using SharedLib;
 
 //using SharedLib.Models;
 
-using SharedLib.Utils;
+using MSASharedLib.Utils;
 using System.Data.SqlClient;
+using MSASharedLib.DataTypes.Web;
+using MSASharedLib.DataTypes;
 
 namespace AuthorizationService.Controllers
 {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
-namespace SharedLib.Utils
+namespace MSASharedLib.Utils
 {
     public class JwtClientUtil
     {/// <summary>

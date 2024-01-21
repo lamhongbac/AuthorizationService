@@ -7,12 +7,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using SharedLib.Authentication;
-using SharedLib.Utils;
+using MSASharedLib.Utils;
 using static System.Net.Mime.MediaTypeNames;
 using System.Linq;
 using AuthorizationService.DataTypes;
 using Microsoft.Extensions.Configuration;
-
+using MSASharedLib.DataTypes;
 
 namespace AuthServices
 {

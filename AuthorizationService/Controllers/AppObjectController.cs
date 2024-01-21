@@ -2,7 +2,8 @@
 using AuthServices;
 using AuthServices.Models;
 using Microsoft.AspNetCore.Mvc;
-using SharedLib.Utils;
+using MSASharedLib.DataTypes;
+using MSASharedLib.Utils;
 //using SharedLib.Models;
 
 namespace AuthorizationService.Controllers

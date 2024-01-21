@@ -11,10 +11,11 @@ using AutoMapper.Execution;
 using SharedLib;
 using AuthServices.Models;
 using System.Linq;
-using SharedLib.Utils;
+using MSASharedLib.Utils;
 using SharedLib.Authentication;
 using AuthorizationService.DataTypes;
 using Microsoft.Extensions.Configuration;
+using MSASharedLib.DataTypes;
 
 namespace AuthServices
 {

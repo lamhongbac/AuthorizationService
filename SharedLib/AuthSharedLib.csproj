@@ -12,4 +12,10 @@
     <PackageReference Include="System.Text.Json" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="MSASharedLib">
+      <HintPath>..\MSAFW\MSASharedLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
