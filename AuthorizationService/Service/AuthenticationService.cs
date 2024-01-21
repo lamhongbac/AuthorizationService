@@ -1,5 +1,5 @@
 ﻿using AuthorizationService.BaseObjects;
-using AuthorizationService.Data;
+using AuthorizationService.DataTypes    ;
 using AuthServices;
 
 using AuthServices.Models;

@@ -1,4 +1,4 @@
-﻿namespace AuthorizationService.Data
+﻿namespace AuthorizationService.DataTypes
 {
     public class ApiKeyObject
     {

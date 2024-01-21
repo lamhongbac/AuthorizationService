@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using SharedLib.Utils;
 
 using SharedLib.Authentication;
+using AuthorizationService.DataTypes;
+using Microsoft.Extensions.Configuration;
 
 namespace AuthServices
 {
@@ -17,16 +19,14 @@ namespace AuthServices
         private string connectionString = string.Empty;
         private string tableName = "CompanyApplication";
         IMapper mapper;
-        public CompanyApplicationService(IMapper mapper)
+
+        public CompanyApplicationService(IConfiguration configuration, IMapper mapper)
         {
+            var configSection = configuration.GetSection("AppConfig");
+            AppConfiguration appConfig = configSection.Get<AppConfiguration>();
+            this.connectionString = configuration.GetConnectionString(appConfig.ProductMode);
             this.mapper = mapper;
         }
-
-        public CompanyApplicationService(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
-
         public List<BaseCompanyApplication> GetDatas(out string errMessage, out bool result)
         {
             try

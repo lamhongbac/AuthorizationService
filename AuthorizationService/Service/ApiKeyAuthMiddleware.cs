@@ -1,4 +1,4 @@
-﻿using AuthorizationService.Data;
+﻿using AuthorizationService.DataTypes ;
 
 namespace AuthorizationService.Service
 {

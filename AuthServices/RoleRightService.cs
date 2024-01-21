@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using SharedLib.Utils;
 using SharedLib.Authentication;
+using AuthorizationService.DataTypes;
+using Microsoft.Extensions.Configuration;
 
 
 namespace AuthServices
@@ -17,16 +19,14 @@ namespace AuthServices
         private string connectionString = string.Empty;
         private string tableName = "RoleRights";
         IMapper mapper;
-        public RoleRightService(IMapper mapper)
+        
+        public RoleRightService(IConfiguration configuration, IMapper mapper)
         {
+            var configSection = configuration.GetSection("AppConfig");
+            AppConfiguration appConfig = configSection.Get<AppConfiguration>();
+            this.connectionString = configuration.GetConnectionString(appConfig.ProductMode);
             this.mapper = mapper;
         }
-
-        public RoleRightService(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
-
         public List<BaseRoleRight> GetDatas(out string errMessage, out bool result)
         {
             try

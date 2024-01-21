@@ -1,8 +1,9 @@
 ﻿using AuthenticationDAL;
 using AuthenticationDAL.DTO;
 using AuthorizationService.BaseObjects;
-
+using AuthorizationService.DataTypes;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using SharedLib.Authentication;
 using SharedLib.Utils;
 using System;
@@ -18,16 +19,15 @@ namespace AuthServices
         private string connectionString = string.Empty;
         private string tableName = "Applications";
         IMapper mapper;
-        public ApplicationService(string connectionString)
+        public ApplicationService(IConfiguration configuration, IMapper mapper)
         {
-            this.connectionString = connectionString;
-        }
-
-        public ApplicationService(IMapper mapper)
-        {
+            var configSection = configuration.GetSection("AppConfig");
+            AppConfiguration appConfig = configSection.Get<AppConfiguration>();
+            this.connectionString = configuration.GetConnectionString(appConfig.ProductMode);
             this.mapper = mapper;
         }
 
+     
         public List<BaseApplication> GetDatas(out string errMessage, out bool result)
         {
             try

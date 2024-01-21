@@ -10,6 +10,8 @@ using SharedLib.Authentication;
 
 using static System.Net.Mime.MediaTypeNames;
 using SharedLib.Utils;
+using AuthorizationService.DataTypes;
+using Microsoft.Extensions.Configuration;
 
 namespace AuthServices
 {
@@ -23,9 +25,12 @@ namespace AuthServices
             this.mapper = mapper;
         }
 
-        public AppObjectService(string connectionString)
+        public AppObjectService(IConfiguration configuration, IMapper mapper)
         {
-            this.connectionString = connectionString;
+            var configSection = configuration.GetSection("AppConfig");
+            AppConfiguration appConfig = configSection.Get<AppConfiguration>();
+            this.connectionString = configuration.GetConnectionString(appConfig.ProductMode);
+            this.mapper = mapper;
         }
 
         public List<BaseAppObject> GetDatas(out string errMessage, out bool result)

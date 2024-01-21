@@ -1,4 +1,4 @@
-﻿using AuthorizationService.Data;
+﻿using AuthorizationService.DataTypes;
 using AuthorizationService.Service;
 using AuthServices;
 using AuthServices.Models;

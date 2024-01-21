@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 using SharedLib.Utils;
 using SharedLib.Authentication;
+using AuthorizationService.DataTypes;
+using Microsoft.Extensions.Configuration;
 
 
 namespace AuthServices
@@ -18,16 +20,14 @@ namespace AuthServices
         private string connectionString = string.Empty;
         private string tableName = "UserRoles";
         IMapper mapper;
-        public UserRoleService(IMapper mapper)
+        
+        public UserRoleService(IConfiguration configuration, IMapper mapper)
         {
+            var configSection = configuration.GetSection("AppConfig");
+            AppConfiguration appConfig = configSection.Get<AppConfiguration>();
+            this.connectionString = configuration.GetConnectionString(appConfig.ProductMode);
             this.mapper = mapper;
         }
-
-        public UserRoleService(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
-
         public List<BaseUserRole> GetDatas(out string errMessage, out bool result)
         {
             try

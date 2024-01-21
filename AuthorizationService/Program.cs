@@ -1,4 +1,4 @@
-using AuthorizationService.Data;
+using AuthorizationService.DataTypes;
 using AuthorizationService.Helper;
 using AuthorizationService.Service;
 using AuthServices;
@@ -30,12 +30,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigOption>();
 
 JwtConfig jwtConfig = builder.Configuration.GetSection("JwtConfig").Get<JwtConfig>();
-DBConfiguration dBConfiguration = builder.Configuration.GetSection("DBConfiguration").Get<DBConfiguration>();
 builder.Services.AddAutoMapper(typeof(ModelMappingProfile));
 
 
 builder.Services.AddSingleton(jwtConfig);
-builder.Services.AddSingleton(dBConfiguration);
 builder.Services.AddSingleton<JwtUtil>();
 
 builder.Services.AddSingleton<RefreshTokenDatas>();
@@ -51,16 +49,6 @@ builder.Services.AddSingleton<CompanyService>();
 builder.Services.AddSingleton<RoleRightService>();
 builder.Services.AddSingleton<UserRoleService>();
 builder.Services.AddSingleton<UserStoreService>();
-
-builder.Services.AddSingleton<ApplicationService>(x => new ApplicationService(dBConfiguration.ConnectionString));
-builder.Services.AddSingleton<AppObjectService>(x => new AppObjectService(dBConfiguration.ConnectionString));
-builder.Services.AddSingleton<AppRoleService>(x => new AppRoleService(dBConfiguration.ConnectionString));
-builder.Services.AddSingleton<AppUserService>(x => new AppUserService(dBConfiguration.ConnectionString));
-builder.Services.AddSingleton<CompanyApplicationService>(x => new CompanyApplicationService(dBConfiguration.ConnectionString));
-builder.Services.AddSingleton<CompanyService>(x => new CompanyService(dBConfiguration.ConnectionString));
-builder.Services.AddSingleton<RoleRightService>(x => new RoleRightService(dBConfiguration.ConnectionString));
-builder.Services.AddSingleton<UserRoleService>(x => new UserRoleService(dBConfiguration.ConnectionString));
-builder.Services.AddSingleton<UserStoreService>(x => new UserStoreService(dBConfiguration.ConnectionString));
 //builder.Services.AddAuthorization(x =>
 //{
 //    x.AddPolicy(IdentityData.AdminUserPolicyName, p => p.RequireClaim(IdentityData.AdminUserClaimName));

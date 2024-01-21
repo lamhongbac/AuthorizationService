@@ -13,6 +13,8 @@ using AuthServices.Models;
 using System.Linq;
 using SharedLib.Utils;
 using SharedLib.Authentication;
+using AuthorizationService.DataTypes;
+using Microsoft.Extensions.Configuration;
 
 namespace AuthServices
 {
@@ -21,16 +23,14 @@ namespace AuthServices
         private string connectionString = string.Empty;
         private string tableName = "AppUsers";
         IMapper mapper;
-        public AppUserService(IMapper mapper)
+   
+        public AppUserService(IConfiguration configuration, IMapper mapper)
         {
+            var configSection = configuration.GetSection("AppConfig");
+            AppConfiguration appConfig = configSection.Get<AppConfiguration>();
+            this.connectionString = configuration.GetConnectionString(appConfig.ProductMode);
             this.mapper = mapper;
         }
-
-        public AppUserService(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
-
         public List<BaseAppUser> GetDatas(int companyAppID, out string errMessage, out bool result)
         {
             try
