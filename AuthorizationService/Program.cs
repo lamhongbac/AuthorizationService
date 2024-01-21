@@ -34,7 +34,7 @@ builder.Services.AddAutoMapper(typeof(ModelMappingProfile));
 
 
 builder.Services.AddSingleton(jwtConfig);
-builder.Services.AddSingleton<JwtUtil>();
+builder.Services.AddSingleton<AuthJwtUtil>();
 
 builder.Services.AddSingleton<RefreshTokenDatas>();
 builder.Services.AddSingleton<AuthenticationService>();

@@ -18,19 +18,100 @@ using SharedLib.Utils;
 namespace AuthServices.Models
 {
     /// <summary>
-    /// Kieu du lieu nay chi phuc vu Authentication Service
+    /// lop nay phu thuoc 
+    /// Kieu du lieu cua Authentication Service
     /// 
     /// </summary>
-    public class JwtUtil
+    public class AuthJwtUtil
     {
+        public UserInfo GetUserInfoFromToken(string validToken)
+        {
+            JwtClientUtil jwtClientUtil = new JwtClientUtil();
+            var claims = jwtClientUtil.GetClaims(validToken);
+
+            try
+            {
+                UserInfo userInfo = new UserInfo();
+                if (claims.FirstOrDefault(claim => claim.Type == "AppID") != null)
+                {
+                    int AppID = Convert.ToInt32(claims.First(claim => claim.Type == "AppID").Value);
+                    userInfo.AppID = AppID;
+                }
+                if (claims.FirstOrDefault(claim => claim.Type == "CompanyID") != null)
+                {
+                    int CompanyID = Convert.ToInt32(claims.First(claim => claim.Type == "CompanyID").Value);
+                    userInfo.CompanyID = CompanyID;
+                }
+
+                if (claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Email) != null)
+                {
+                    string EmailAddress = claims.First(claim => claim.Type == JwtRegisteredClaimNames.Email).Value;
+                    userInfo.EmailAddress = EmailAddress;
+                }
+                if (claims.FirstOrDefault(claim => claim.Type == "FullName") != null)
+                {
+                    string FullName = claims.First(claim => claim.Type == "FullName").Value;
+                    userInfo.FullName = FullName;
+                }
+                if (claims.FirstOrDefault(claim => claim.Type == "UserName") != null)
+                {
+                    string UserName = claims.First(claim => claim.Type == "UserName").Value;
+                    userInfo.UserName = UserName;
+                }
+                if (claims.FirstOrDefault(claim => claim.Type == "UserID") != null)
+                {
+                    string ID = claims.First(claim => claim.Type == "UserID").Value;
+                    userInfo.ID = ID;
+                }
+
+
+
+
+
+                var roleClaims = claims.Where(x => x.Type.ToLower() == "roles").ToList();
+
+                foreach (var item in roleClaims)
+                {
+                    userInfo.Roles.Add(item.Value);
+                }
+                string strObjectRights = claims.First(claim => claim.Type.ToLower() == "objectrights").Value;
+
+                Dictionary<string, List<string>> ObjectRights = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(strObjectRights);
+                userInfo.ObjectRights = ObjectRights;
+
+                return userInfo;
+
+                //JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+                //var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey));
+                //var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+
+                //var jsonToken = jwtSecurityTokenHandler.ReadToken(validToken);
+                //var tokenS = jsonToken as JwtSecurityToken;
+
+
+
+                //userInfo.Roles = tokenS.Claims.First(claim => claim.Type == "Roles").Value;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+
+                return null;
+            }
+
+        }
         private RefreshTokenDatas _tokenDatas;
         JwtConfig jwtConfig;
-        public JwtUtil(RefreshTokenDatas tokenDatas, JwtConfig jwtConfig)
+        public AuthJwtUtil(RefreshTokenDatas tokenDatas, JwtConfig jwtConfig)
         {
             _tokenDatas = tokenDatas;
             this.jwtConfig = jwtConfig;
         }
-        public JwtUtil()
+        public AuthJwtUtil()
         {
 
         }
@@ -309,7 +390,7 @@ namespace AuthServices.Models
                 _tokenDatas.Update(storedRefToken);
 
                 //b8 Sinh ra UserInfo tren co so para token
-                UserInfo userInfo = jwtClientUtil.GetUserInfoFromToken(model.AccessToken);
+                UserInfo userInfo = GetUserInfoFromToken(model.AccessToken);
 
                 //===> Sinh ra new token               
                 if (userInfo != null)

@@ -17,12 +17,9 @@ namespace SharedLib.Utils
         public string DESC { get; set; }
     }
 
-    public class ServerErrorData
+    public class ServerErrorData:ErrorData
     {
-        public string ErrorCode { get; set; }
-        public string EN { get; set; }
-        public string VN { get; set; }
-        public string DESC { get; set; }
+        
     }
 
     public enum ELang

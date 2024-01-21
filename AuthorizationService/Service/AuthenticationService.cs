@@ -27,11 +27,11 @@ namespace AuthorizationService.Service
         AppObjectService _appObjectService;
         
         private IConfiguration _config;
-       JwtUtil _jwtUtil;
+       AuthJwtUtil _jwtUtil;
         IMapper _mapper;
         public AuthenticationService(IConfiguration config,
             AppObjectService appObjectService,
-             JwtUtil jwtUtil,
+             AuthJwtUtil jwtUtil,
         AccountService accountService,
             IMapper mapper)
         {
