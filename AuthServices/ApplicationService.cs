@@ -42,11 +42,11 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                IMappingHelper<BaseApplication, ApplicationUI> mappingHelper = new IMappingHelper<BaseApplication, ApplicationUI>();
-                List<BaseApplication> baseApplications = mappingHelper.Map(applicationUIs);
-
-
+                //IMappingHelper<BaseApplication, ApplicationUI> mappingHelper = new IMappingHelper<BaseApplication, ApplicationUI>();
                 //List<BaseApplication> baseApplications = mapper.Map<List<BaseApplication>>(applicationUIs);
+
+
+                List<BaseApplication> baseApplications = mapper.Map<List<BaseApplication>>(applicationUIs);
                 result = true;
                 errMessage = "Success";
                 return baseApplications;
@@ -75,10 +75,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseApplication, ApplicationUI> mappingHelper = new IMappingHelper<BaseApplication, ApplicationUI>();
-                BaseApplication baseApplication = mappingHelper.Map(applicationUI);
+                //IMappingHelper<BaseApplication, ApplicationUI> mappingHelper = new IMappingHelper<BaseApplication, ApplicationUI>();
+                //BaseApplication baseApplication = mappingHelper.Map(applicationUI);
 
-                //BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUI);
+                BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUI);
                 result = true;
                 errMessage = "Success";
                 return baseApplication;
@@ -107,10 +107,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseApplication, ApplicationUI> mappingHelper = new IMappingHelper<BaseApplication, ApplicationUI>();
-                BaseApplication baseApplication = mappingHelper.Map(applicationUI);
+                //IMappingHelper<BaseApplication, ApplicationUI> mappingHelper = new IMappingHelper<BaseApplication, ApplicationUI>();
+                //BaseApplication baseApplication = mappingHelper.Map(applicationUI);
 
-                //BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUIs);
+                BaseApplication baseApplication = mapper.Map<BaseApplication>(applicationUI);
                 result = true;
                 errMessage = "Success";
                 return baseApplication;
@@ -130,10 +130,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<ApplicationUI, BaseApplication> mappingHelper = new IMappingHelper<ApplicationUI, BaseApplication>();
-                ApplicationUI applicationUI = mappingHelper.Map(data);
+                //IMappingHelper<ApplicationUI, BaseApplication> mappingHelper = new IMappingHelper<ApplicationUI, BaseApplication>();
+                //ApplicationUI applicationUI = mappingHelper.Map(data);
 
-                //ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
+                ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
                 var result = await dataPortal.InsertAsync(applicationUI, null);
                 if(result == true)
                 {
@@ -165,10 +165,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<ApplicationUI, BaseApplication> mappingHelper = new IMappingHelper<ApplicationUI, BaseApplication>();
-                ApplicationUI applicationUI = mappingHelper.Map(data);
+                //IMappingHelper<ApplicationUI, BaseApplication> mappingHelper = new IMappingHelper<ApplicationUI, BaseApplication>();
+                //ApplicationUI applicationUI = mappingHelper.Map(data);
 
-                //ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
+                ApplicationUI applicationUI = mapper.Map<ApplicationUI>(data);
                 var result = await dataPortal.UpdateAsync(applicationUI, null);
                 if (result == true)
                 {

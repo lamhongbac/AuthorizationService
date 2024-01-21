@@ -47,10 +47,10 @@ namespace AuthServices
                     errMessage = "Data not Found";
                     return null;
                 }
-                IMappingHelper<BaseAppObject, AppObjectUI> mappingHelper = new IMappingHelper<BaseAppObject, AppObjectUI>();
-                List<BaseAppObject> BaseAppObjects = mappingHelper.Map(AppObjectUIs);
+                //IMappingHelper<BaseAppObject, AppObjectUI> mappingHelper = new IMappingHelper<BaseAppObject, AppObjectUI>();
+                //List<BaseAppObject> BaseAppObjects = mappingHelper.Map(AppObjectUIs);
 
-                //List<BaseAppObject> BaseAppObjects = mapper.Map<List<BaseAppObject>>(AppObjectUIs);
+                List<BaseAppObject> BaseAppObjects = mapper.Map<List<BaseAppObject>>(AppObjectUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppObjects;
@@ -79,10 +79,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseAppObject, AppObjectUI> mappingHelper = new IMappingHelper<BaseAppObject, AppObjectUI>();
-                BaseAppObject BaseAppObject = mappingHelper.Map(AppObjectUIs);
+                //IMappingHelper<BaseAppObject, AppObjectUI> mappingHelper = new IMappingHelper<BaseAppObject, AppObjectUI>();
+                //BaseAppObject BaseAppObject = mappingHelper.Map(AppObjectUIs);
 
-                //BaseAppObject BaseAppObject = mapper.Map<BaseAppObject>(AppObjectUIs);
+                BaseAppObject BaseAppObject = mapper.Map<BaseAppObject>(AppObjectUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppObject;
@@ -111,10 +111,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseAppObject, AppObjectUI> mappingHelper = new IMappingHelper<BaseAppObject, AppObjectUI>();
-                BaseAppObject BaseAppObject = mappingHelper.Map(AppObjectUIs);
+                //IMappingHelper<BaseAppObject, AppObjectUI> mappingHelper = new IMappingHelper<BaseAppObject, AppObjectUI>();
+                //BaseAppObject BaseAppObject = mappingHelper.Map(AppObjectUIs);
 
-                //BaseAppObject BaseAppObject = mapper.Map<BaseAppObject>(AppObjectUIs);
+                BaseAppObject BaseAppObject = mapper.Map<BaseAppObject>(AppObjectUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppObject;
@@ -134,10 +134,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<AppObjectUI, BaseAppObject> mappingHelper = new IMappingHelper<AppObjectUI, BaseAppObject>();
-                AppObjectUI AppObjectUI = mappingHelper.Map(data);
+                //IMappingHelper<AppObjectUI, BaseAppObject> mappingHelper = new IMappingHelper<AppObjectUI, BaseAppObject>();
+                //AppObjectUI AppObjectUI = mappingHelper.Map(data);
 
-                //AppObjectUI AppObjectUI = mapper.Map<AppObjectUI>(data);
+                AppObjectUI AppObjectUI = mapper.Map<AppObjectUI>(data);
                 var result = await dataPortal.InsertAsync(AppObjectUI, null);
                 if (result == true)
                 {
@@ -169,10 +169,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<AppObjectUI, BaseAppObject> mappingHelper = new IMappingHelper<AppObjectUI, BaseAppObject>();
-                AppObjectUI AppObjectUI = mappingHelper.Map(data);
+                //IMappingHelper<AppObjectUI, BaseAppObject> mappingHelper = new IMappingHelper<AppObjectUI, BaseAppObject>();
+                //AppObjectUI AppObjectUI = mappingHelper.Map(data);
 
-                //AppObjectUI AppObjectUI = mapper.Map<AppObjectUI>(data);
+                AppObjectUI AppObjectUI = mapper.Map<AppObjectUI>(data);
                 var result = await dataPortal.UpdateAsync(AppObjectUI, null);
                 if (result == true)
                 {

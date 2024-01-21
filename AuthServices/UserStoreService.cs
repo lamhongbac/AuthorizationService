@@ -43,10 +43,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
-                List<BaseUserStore> BaseUserStores = mappingHelper.Map(UserStoreUIs);
+                //IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
+                //List<BaseUserStore> BaseUserStores = mappingHelper.Map(UserStoreUIs);
 
-                //List<BaseUserStore> BaseUserStores = mapper.Map<List<BaseUserStore>>(UserStoreUIs);
+                List<BaseUserStore> BaseUserStores = mapper.Map<List<BaseUserStore>>(UserStoreUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserStores;
@@ -75,10 +75,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
-                BaseUserStore BaseUserStore = mappingHelper.Map(UserStoreUIs);
+                //IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
+                //BaseUserStore BaseUserStore = mappingHelper.Map(UserStoreUIs);
 
-                //BaseUserStore BaseUserStore = mapper.Map<BaseUserStore>(UserStoreUIs);
+                BaseUserStore BaseUserStore = mapper.Map<BaseUserStore>(UserStoreUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserStore;
@@ -108,10 +108,10 @@ namespace AuthServices
                 }
 
                 
-                IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
-                BaseUserStore BaseUserStore = mappingHelper.Map(UserStoreUIs);
+                //IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
+                //BaseUserStore BaseUserStore = mappingHelper.Map(UserStoreUIs);
 
-                //BaseUserStore BaseUserStore = mapper.Map<BaseUserStore>(UserStoreUIs);
+                BaseUserStore BaseUserStore = mapper.Map<BaseUserStore>(UserStoreUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserStore;
@@ -131,10 +131,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<UserStoreUI, BaseUserStore> mappingHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
-                UserStoreUI UserStoreUI = mappingHelper.Map(data);
+                //IMappingHelper<UserStoreUI, BaseUserStore> mappingHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
+                //UserStoreUI UserStoreUI = mappingHelper.Map(data);
 
-                //UserStoreUI UserStoreUI = mapper.Map<UserStoreUI>(data);
+                UserStoreUI UserStoreUI = mapper.Map<UserStoreUI>(data);
                 var result = await dataPortal.InsertAsync(UserStoreUI, null);
                 if (result == true)
                 {
@@ -166,10 +166,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<UserStoreUI, BaseUserStore> mappingHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
-                UserStoreUI UserStoreUI = mappingHelper.Map(data);
+                //IMappingHelper<UserStoreUI, BaseUserStore> mappingHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
+                //UserStoreUI UserStoreUI = mappingHelper.Map(data);
 
-                //UserStoreUI UserStoreUI = mapper.Map<UserStoreUI>(data);
+                UserStoreUI UserStoreUI = mapper.Map<UserStoreUI>(data);
                 var result = await dataPortal.UpdateAsync(UserStoreUI, null);
                 if (result == true)
                 {

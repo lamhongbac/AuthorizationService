@@ -41,10 +41,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseRoleRight, RoleRightUI> mappingHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
-                List<BaseRoleRight> BaseRoleRights = mappingHelper.Map(RoleRightUIs);
+                //IMappingHelper<BaseRoleRight, RoleRightUI> mappingHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
+                //List<BaseRoleRight> BaseRoleRights = mappingHelper.Map(RoleRightUIs);
 
-                //List<BaseRoleRight> BaseRoleRights = mapper.Map<List<BaseRoleRight>>(RoleRightUIs);
+                List<BaseRoleRight> BaseRoleRights = mapper.Map<List<BaseRoleRight>>(RoleRightUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseRoleRights;
@@ -73,10 +73,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseRoleRight, RoleRightUI> mappingHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
-                BaseRoleRight BaseRoleRight = mappingHelper.Map(RoleRightUIs);
+                //IMappingHelper<BaseRoleRight, RoleRightUI> mappingHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
+                //BaseRoleRight BaseRoleRight = mappingHelper.Map(RoleRightUIs);
 
-                //BaseRoleRight BaseRoleRight = mapper.Map<BaseRoleRight>(RoleRightUIs);
+                BaseRoleRight BaseRoleRight = mapper.Map<BaseRoleRight>(RoleRightUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseRoleRight;
@@ -105,10 +105,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseRoleRight, RoleRightUI> mappingHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
-                BaseRoleRight BaseRoleRight = mappingHelper.Map(RoleRightUIs);
+                //IMappingHelper<BaseRoleRight, RoleRightUI> mappingHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
+                //BaseRoleRight BaseRoleRight = mappingHelper.Map(RoleRightUIs);
 
-                //BaseRoleRight BaseRoleRight = mapper.Map<BaseRoleRight>(RoleRightUIs);
+                BaseRoleRight BaseRoleRight = mapper.Map<BaseRoleRight>(RoleRightUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseRoleRight;
@@ -128,10 +128,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<RoleRightUI, BaseRoleRight> mappingHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
-                RoleRightUI RoleRightUI = mappingHelper.Map(data);
+                //IMappingHelper<RoleRightUI, BaseRoleRight> mappingHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
+                //RoleRightUI RoleRightUI = mappingHelper.Map(data);
 
-                //RoleRightUI RoleRightUI = mapper.Map<RoleRightUI>(data);
+                RoleRightUI RoleRightUI = mapper.Map<RoleRightUI>(data);
                 var result = await dataPortal.InsertAsync(RoleRightUI, null);
                 if (result == true)
                 {
@@ -163,10 +163,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<RoleRightUI, BaseRoleRight> mappingHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
-                RoleRightUI RoleRightUI = mappingHelper.Map(data);
+                //IMappingHelper<RoleRightUI, BaseRoleRight> mappingHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
+                //RoleRightUI RoleRightUI = mappingHelper.Map(data);
 
-                //RoleRightUI RoleRightUI = mapper.Map<RoleRightUI>(data);
+                RoleRightUI RoleRightUI = mapper.Map<RoleRightUI>(data);
                 var result = await dataPortal.UpdateAsync(RoleRightUI, null);
                 if (result == true)
                 {

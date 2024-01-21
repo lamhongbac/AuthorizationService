@@ -43,10 +43,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseUserRole, UserRoleUI> mappingHelper = new IMappingHelper<BaseUserRole, UserRoleUI>();
-                List<BaseUserRole> BaseUserRoles = mappingHelper.Map(UserRoleUIs);
+                //IMappingHelper<BaseUserRole, UserRoleUI> mappingHelper = new IMappingHelper<BaseUserRole, UserRoleUI>();
+                //List<BaseUserRole> BaseUserRoles = mappingHelper.Map(UserRoleUIs);
 
-                //List<BaseUserRole> BaseUserRoles = mapper.Map<List<BaseUserRole>>(UserRoleUIs);
+                List<BaseUserRole> BaseUserRoles = mapper.Map<List<BaseUserRole>>(UserRoleUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserRoles;
@@ -75,10 +75,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseUserRole, UserRoleUI> mappingHelper = new IMappingHelper<BaseUserRole, UserRoleUI>();
-                BaseUserRole BaseUserRole = mappingHelper.Map(UserRoleUIs);
+                //IMappingHelper<BaseUserRole, UserRoleUI> mappingHelper = new IMappingHelper<BaseUserRole, UserRoleUI>();
+                //BaseUserRole BaseUserRole = mappingHelper.Map(UserRoleUIs);
 
-                //BaseUserRole BaseUserRole = mapper.Map<BaseUserRole>(UserRoleUIs);
+                BaseUserRole BaseUserRole = mapper.Map<BaseUserRole>(UserRoleUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserRole;
@@ -107,10 +107,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseUserRole, UserRoleUI> mappingHelper = new IMappingHelper<BaseUserRole, UserRoleUI>();
-                BaseUserRole BaseUserRole = mappingHelper.Map(UserRoleUIs);
+                //IMappingHelper<BaseUserRole, UserRoleUI> mappingHelper = new IMappingHelper<BaseUserRole, UserRoleUI>();
+                //BaseUserRole BaseUserRole = mappingHelper.Map(UserRoleUIs);
 
-                //BaseUserRole BaseUserRole = mapper.Map<BaseUserRole>(UserRoleUIs);
+                BaseUserRole BaseUserRole = mapper.Map<BaseUserRole>(UserRoleUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseUserRole;
@@ -130,10 +130,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<UserRoleUI, BaseUserRole> mappingHelper = new IMappingHelper<UserRoleUI, BaseUserRole>();
-                UserRoleUI UserRoleUI = mappingHelper.Map(data);
+                //IMappingHelper<UserRoleUI, BaseUserRole> mappingHelper = new IMappingHelper<UserRoleUI, BaseUserRole>();
+                //UserRoleUI UserRoleUI = mappingHelper.Map(data);
 
-                //UserRoleUI UserRoleUI = mapper.Map<UserRoleUI>(data);
+                UserRoleUI UserRoleUI = mapper.Map<UserRoleUI>(data);
                 var result = await dataPortal.InsertAsync(UserRoleUI, null);
                 if (result == true)
                 {
@@ -165,10 +165,10 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                IMappingHelper<UserRoleUI, BaseUserRole> mappingHelper = new IMappingHelper<UserRoleUI, BaseUserRole>();
-                UserRoleUI UserRoleUI = mappingHelper.Map(data);
+                //IMappingHelper<UserRoleUI, BaseUserRole> mappingHelper = new IMappingHelper<UserRoleUI, BaseUserRole>();
+                //UserRoleUI UserRoleUI = mappingHelper.Map(data);
 
-                //UserRoleUI UserRoleUI = mapper.Map<UserRoleUI>(data);
+                UserRoleUI UserRoleUI = mapper.Map<UserRoleUI>(data);
                 var result = await dataPortal.UpdateAsync(UserRoleUI, null);
                 if (result == true)
                 {

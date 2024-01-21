@@ -46,10 +46,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
-                List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
+                //IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                //List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
 
-                //List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
+                List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppUsers;
@@ -77,10 +77,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
-                List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
+                //IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                //List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
 
-                //List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
+                List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppUsers;
@@ -108,10 +108,10 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
-                List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
+                //IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                //List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
 
-                //List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
+                List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppUsers;
@@ -140,13 +140,13 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
-                BaseAppUser BaseAppUser = mappingHelper.Map(AppUserData.AppUser);
+                //IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserData.AppUser);
 
-                IMappingHelper<BaseUserStore, UserStoreUI> mappingUserStoreHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
+                //IMappingHelper<BaseUserStore, UserStoreUI> mappingUserStoreHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
                 if (BaseAppUser != null)
                 {
-                    BaseAppUser.BaseUserStores = mappingUserStoreHelper.Map(AppUserData.UserStores);
+                    BaseAppUser.BaseUserStores = mapper.Map<List<BaseUserStore>>(AppUserData.UserStores);
                     result = true;
                     errMessage = "Success";
                     return BaseAppUser;
@@ -178,13 +178,13 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
-                BaseAppUser BaseAppUser = mappingHelper.Map(AppUserData.AppUser);
+                //IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserData.AppUser);
 
-                IMappingHelper<BaseUserStore, UserStoreUI> mappingUserStoreHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
+                //IMappingHelper<BaseUserStore, UserStoreUI> mappingUserStoreHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
                 if(BaseAppUser != null)
                 {
-                    BaseAppUser.BaseUserStores = mappingUserStoreHelper.Map(AppUserData.UserStores);
+                    BaseAppUser.BaseUserStores = mapper.Map<List<BaseUserStore>>(AppUserData.UserStores);
                     result = true;
                     errMessage = "Success";
                     return BaseAppUser;
@@ -219,8 +219,8 @@ namespace AuthServices
                     return processResult;
                 }
 
-                IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
-                AppUserData.AppUser = mappingHelper.Map(data);
+                //IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
+                AppUserData.AppUser = mapper.Map<AppUserUI>(data);
 
                 //Kiểm tra role selected là RM hay không
                 GenericDataPortal<AppRoleUI> genericDataPortal = new GenericDataPortal<AppRoleUI>(connectionString, "AppRoles");
@@ -239,8 +239,8 @@ namespace AuthServices
                     data.BaseUserStores = new List<BaseUserStore>();
                 }
 
-                IMappingHelper<UserStoreUI, BaseUserStore> mappingUserStoreHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
-                AppUserData.UserStores = mappingUserStoreHelper.Map(data.BaseUserStores);
+                //IMappingHelper<UserStoreUI, BaseUserStore> mappingUserStoreHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
+                AppUserData.UserStores = mapper.Map<List<UserStoreUI>>(data.BaseUserStores);
 
                 //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
                 var result = await dataPortal.Insert(AppUserData);
@@ -283,8 +283,8 @@ namespace AuthServices
                     return processResult;
                 }
 
-                IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
-                AppUserUI updateUserUI = mappingHelper.Map(data);
+                //IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
+                AppUserUI updateUserUI = mapper.Map<AppUserUI>(data);
 
                 //Kiểm tra role selected là RM hay không
                 GenericDataPortal<AppRoleUI> genericDataPortal = new GenericDataPortal<AppRoleUI>(connectionString, "AppRoles");
@@ -303,8 +303,8 @@ namespace AuthServices
                     data.BaseUserStores = new List<BaseUserStore>();
                 }
 
-                IMappingHelper<UserStoreUI, BaseUserStore> mappingUserStoreHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
-                List<UserStoreUI> updateUserStores = mappingUserStoreHelper.Map(data.BaseUserStores);
+                //IMappingHelper<UserStoreUI, BaseUserStore> mappingUserStoreHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
+                List<UserStoreUI> updateUserStores = mapper.Map<List<UserStoreUI>>(data.BaseUserStores);
 
                 List<UserStoreUI> existUserStores = AppUserData.UserStores;
                 List<UserStoreUI> insertDatas = new List<UserStoreUI>();

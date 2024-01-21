@@ -49,10 +49,10 @@ namespace AuthServices
                 //    BaseAppRole baseData = mappingHelper.Map(item);
                 //    BaseAppRoles.Add(baseData);
                 //}
-                IMappingHelper<BaseAppRole, AppRoleUI> mappingHelper = new IMappingHelper<BaseAppRole, AppRoleUI>();
-                List<BaseAppRole> BaseAppRoles = mappingHelper.Map(AppRoleUIs);
+                //IMappingHelper<BaseAppRole, AppRoleUI> mappingHelper = new IMappingHelper<BaseAppRole, AppRoleUI>();
+                //List<BaseAppRole> BaseAppRoles = mappingHelper.Map(AppRoleUIs);
 
-                //List<BaseAppRole> BaseAppRoles = mapper.Map<List<BaseAppRole>>(AppRoleUIs);
+                List<BaseAppRole> BaseAppRoles = mapper.Map<List<BaseAppRole>>(AppRoleUIs);
                 result = true;
                 errMessage = "Success";
                 return BaseAppRoles;
@@ -79,14 +79,14 @@ namespace AuthServices
                     return null;
                 }
 
-                IMappingHelper<BaseAppRole, AppRoleUI> mappingHelper = new IMappingHelper<BaseAppRole, AppRoleUI>();
-                BaseAppRole baseData = mappingHelper.Map(AppRoleData.AppRoleUI);
+                //IMappingHelper<BaseAppRole, AppRoleUI> mappingHelper = new IMappingHelper<BaseAppRole, AppRoleUI>();
+                //BaseAppRole baseData = mappingHelper.Map(AppRoleData.AppRoleUI);
 
-                IMappingHelper<BaseRoleRight, RoleRightUI> mappingRightHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
-                baseData.Rights = mappingRightHelper.Map(AppRoleData.RoleRightUIs);
+                //IMappingHelper<BaseRoleRight, RoleRightUI> mappingRightHelper = new IMappingHelper<BaseRoleRight, RoleRightUI>();
+                //baseData.Rights = mappingRightHelper.Map(AppRoleData.RoleRightUIs);
 
-                //BaseAppRole baseData = mapper.Map<BaseAppRole>(AppRoleData.AppRoleUI);
-                //baseData.Rights = mapper.Map<List<BaseRoleRight>>(AppRoleData.RoleRightUIs);
+                BaseAppRole baseData = mapper.Map<BaseAppRole>(AppRoleData.AppRoleUI);
+                baseData.Rights = mapper.Map<List<BaseRoleRight>>(AppRoleData.RoleRightUIs);
                 result = true;
                 errMessage = "Success";
                 return baseData;
@@ -115,14 +115,14 @@ namespace AuthServices
                 }
 
 
-                IMappingHelper<AppRoleUI, BaseAppRole> mappingHelper = new IMappingHelper<AppRoleUI, BaseAppRole>();
-                AppRoleUI AppRoleUI = mappingHelper.Map(data);
+                //IMappingHelper<AppRoleUI, BaseAppRole> mappingHelper = new IMappingHelper<AppRoleUI, BaseAppRole>();
+                //AppRoleUI AppRoleUI = mappingHelper.Map(data);
 
-                IMappingHelper<RoleRightUI, BaseRoleRight> mappingRightHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
-                List<RoleRightUI> roleRightUIs = mappingRightHelper.Map(data.Rights);
+                //IMappingHelper<RoleRightUI, BaseRoleRight> mappingRightHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
+                //List<RoleRightUI> roleRightUIs = mappingRightHelper.Map(data.Rights);
 
-                //AppRoleUI AppRoleUI = mapper.Map<AppRoleUI>(data);
-                //List<RoleRightUI> roleRightUIs = mapper.Map<List<RoleRightUI>>(data.Rights);
+                AppRoleUI AppRoleUI = mapper.Map<AppRoleUI>(data);
+                List<RoleRightUI> roleRightUIs = mapper.Map<List<RoleRightUI>>(data.Rights);
 
                 AppRoleData appRoleData = new AppRoleData();
                 appRoleData.AppRoleUI = AppRoleUI;
@@ -173,18 +173,18 @@ namespace AuthServices
                     return processResult;
                 }
                 //b1 xac dinh data update bang AppRole
-                IMappingHelper<AppRoleUI, BaseAppRole> mappingHelper = new IMappingHelper<AppRoleUI, BaseAppRole>();                
+                //IMappingHelper<AppRoleUI, BaseAppRole> mappingHelper = new IMappingHelper<AppRoleUI, BaseAppRole>();                
                 //Exist AppRoleUI
-                AppRoleUI updateAppRoleUI = mappingHelper.Map(data);
+                AppRoleUI updateAppRoleUI = mapper.Map<AppRoleUI>(data);
                 //b2 xac dinh data to insert or Update bang RoleRight
                
 
-                IMappingHelper<RoleRightUI, BaseRoleRight> mappingRightHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
+                //IMappingHelper<RoleRightUI, BaseRoleRight> mappingRightHelper = new IMappingHelper<RoleRightUI, BaseRoleRight>();
 
                 //Exist Rights= cac right dang co trong CSDL
                 List<RoleRightUI> existRights = existsAppRoleData.RoleRightUIs;
 
-                List<RoleRightUI> tobeUpdateRights = mappingRightHelper.Map(data.Rights);
+                List<RoleRightUI> tobeUpdateRights = mapper.Map<List<RoleRightUI>>(data.Rights);
                 List<RoleRightUI> insertRights = new List<RoleRightUI>();
                 List<RoleRightUI> updateRights = new List<RoleRightUI>();
                 List<RoleRightUI> deleteRights = new List<RoleRightUI>();
