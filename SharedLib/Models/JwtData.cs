@@ -4,10 +4,10 @@ using System.Text;
 
 namespace AuthServices.Models
 {
-    public class JwtData
-    {
-        public string AccessToken { get; set; } //Jwt
-        public string RefreshToken { get; set; }
+    //public class JwtData
+    //{
+    //    public string AccessToken { get; set; } //Jwt
+    //    public string RefreshToken { get; set; }
         
-    }
+    //}
 }

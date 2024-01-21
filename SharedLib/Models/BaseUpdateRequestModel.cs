@@ -1,4 +1,6 @@
-﻿namespace AuthServices.Models
+﻿using MSASharedLib.DataTypes;
+
+namespace AuthServices.Models
 {
     public class BaseUpdateRequestModel : RequestModel
     {

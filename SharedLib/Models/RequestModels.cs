@@ -1,31 +1,32 @@
 ﻿using AuthServices.Models;
+using MSASharedLib.DataTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AuthServices.Models
 {
-    public class RequestDatasModel
-    {
-        public string? SortProperty { get; set; }
-        public string? SearchText { get; set; }
-        public string? sortOrder { get; set; }
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-    }
-    public class RequestModel
-    {
-        public RequestModel()
-        {
-            ID = 0;
-            Number = " ";
-        }
-        public int ID { get; set; }
-        public string? GuidID { get; set; }
-        public string? Number { get; set; }
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-    }
+    //public class RequestDatasModel
+    //{
+    //    public string? SortProperty { get; set; }
+    //    public string? SearchText { get; set; }
+    //    public string? sortOrder { get; set; }
+    //    public int PageIndex { get; set; }
+    //    public int PageSize { get; set; }
+    //}
+    //public class RequestModel
+    //{
+    //    public RequestModel()
+    //    {
+    //        ID = 0;
+    //        Number = " ";
+    //    }
+    //    public int ID { get; set; }
+    //    public string? GuidID { get; set; }
+    //    public string? Number { get; set; }
+    //    public int PageIndex { get; set; }
+    //    public int PageSize { get; set; }
+    //}
 
     public class UpdateDataRequestModel : RequestModel
     {
@@ -33,14 +34,14 @@ namespace AuthServices.Models
         public string? UserID { get; set; }
         public object? DataUpdate { get; set; }
     }
-    public class AppUserRequestDatasModel : RequestDatasModel
+    public class AppUserRequestDatasModel : RequestModels
     {
         public int CompanyAppID { get; set; }
         public string? Department { get; set; }
         public int ManagerID { get; set; }
     }
 
-    public class AppRoleRequestDatasModel : RequestDatasModel
+    public class AppRoleRequestDatasModel : RequestModels
     {
         public int CompanyAppID { get; set; }
     }

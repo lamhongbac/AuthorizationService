@@ -1,4 +1,5 @@
 ﻿using AuthServices.Models;
+using MSASharedLib.DataTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;

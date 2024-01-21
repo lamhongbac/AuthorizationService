@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MSASharedLib.DataTypes;
 using StudyApiAuth.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;

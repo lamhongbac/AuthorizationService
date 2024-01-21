@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MSASharedLib.DataTypes;
 using SharedLib.Authentication;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
