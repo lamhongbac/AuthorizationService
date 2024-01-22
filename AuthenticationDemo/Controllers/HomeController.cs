@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using StudyApiAuth.Models;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -68,6 +69,7 @@ namespace AuthenticationDemo.Controllers
 
 
         [Authorize]
+        [HasPermission("about;read,list")]
         public async Task<IActionResult> Privacy()
         {
          

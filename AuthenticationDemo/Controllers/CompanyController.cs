@@ -3,6 +3,7 @@ using AuthenticationDemo.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using StudyApiAuth.Models;
 
 namespace AuthenticationDemo.Controllers
 {
@@ -51,12 +52,17 @@ namespace AuthenticationDemo.Controllers
             return View(viewModel);
         }
 
+        
+        [Authorize]
+        [HasPermission("about;read,list")]
         public ActionResult Update()
         {
             CompanyViewModel vm = new CompanyViewModel();
             return View(vm);
         }
 
+        [Authorize]
+        [HasPermission("about;read,list")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Update(CompanyViewModel vm)

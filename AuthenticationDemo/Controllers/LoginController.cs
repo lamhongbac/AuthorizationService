@@ -22,6 +22,7 @@ namespace AuthenticationDemo.Controllers
         /// neu da login thi quay ve home
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         public IActionResult Login(string? ReturnUrl = null )
         {
            
