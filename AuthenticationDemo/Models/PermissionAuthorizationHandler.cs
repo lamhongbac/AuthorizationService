@@ -9,9 +9,10 @@ namespace AuthenticationDemo.Models
         /// tu user claim doi tuong objectrights=> ep kieu ve dictionary (user right object)
         /// sau do kiem tra voi qui dinh tren action /auth attribute
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="requirement">la thuoc tinh right can thiet de access  actionmethod 
-        /// no dung de so sanh voi user right trong context.User </param>
+        /// <param name="context">User , bao gom user right</param>
+        /// <param name="requirement"> la thuoc tinh HasPermission="objectname:rights"=>ex:"company;read,list"
+        /// la thuoc tinh right can thiet de access  action method 
+        /// dung de so sanh voi user right trong context.User </param>
         /// <returns></returns>
         protected override Task HandleRequirementAsync
             (AuthorizationHandlerContext context,

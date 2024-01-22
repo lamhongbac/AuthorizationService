@@ -19,6 +19,7 @@ namespace AuthenticationDemo.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
+        [HasPermission("company;read,list")]
         public async Task<IActionResult> Index()
         {
             CompaniesViewModel viewModel = new CompaniesViewModel();
@@ -54,7 +55,7 @@ namespace AuthenticationDemo.Controllers
 
         
         [Authorize]
-        [HasPermission("about;read,list")]
+        [HasPermission("company;read,list")]
         public ActionResult Update()
         {
             CompanyViewModel vm = new CompanyViewModel();
@@ -62,7 +63,7 @@ namespace AuthenticationDemo.Controllers
         }
 
         [Authorize]
-        [HasPermission("about;read,list")]
+        [HasPermission("company;read,list")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Update(CompanyViewModel vm)

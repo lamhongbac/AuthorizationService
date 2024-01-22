@@ -67,7 +67,7 @@ namespace AuthenticationDemo.Services
                 HttpClient _httpClient = _factory.CreateClient(AppConstants.AuthenticationService);
                 string strAcessURL = AppConstants.AccountApiRoute + _serviceConfig.Login;
                 LoginInfo loginInfo = null;
-                BODataProcessResult processResult = new BODataProcessResult(); ;
+                BODataProcessResult processResult = new BODataProcessResult();
                 //===>call api===>
                 string json = JsonConvert.SerializeObject(model);
                 StringContent data = new StringContent(json, Encoding.UTF8, "application/json");
