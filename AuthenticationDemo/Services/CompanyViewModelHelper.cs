@@ -52,7 +52,7 @@ namespace AuthenticationDemo.Services
         {
             BODataProcessResult processResult = new BODataProcessResult();
             CompaniesViewModel viewModel = new CompaniesViewModel();
-            RequestHandler requestHandler = RequestHandler.GetInstance();
+            HttpRequestHandler requestHandler = HttpRequestHandler.GetInstance();
 
             try
             {                

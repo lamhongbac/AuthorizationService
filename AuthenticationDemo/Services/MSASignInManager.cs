@@ -15,9 +15,9 @@ namespace AuthenticationDemo.Services
 {
     public  class MSASignInManager : SignInManager<MSAUserInfo>
     {
-        WeUtils _webUtils;
+        
         IHttpContextAccessor _contextAccessor;
-        LoginInfo _loginInfo;
+        MSAUserInfo _userInfo;
         public MSASignInManager(UserManager<MSAUserInfo> userManager, IHttpContextAccessor contextAccessor, 
             IUserClaimsPrincipalFactory<MSAUserInfo> claimsFactory, IOptions<IdentityOptions> optionsAccessor, 
             ILogger<SignInManager<MSAUserInfo>> logger, IAuthenticationSchemeProvider schemes,
@@ -75,22 +75,22 @@ namespace AuthenticationDemo.Services
             }
             return isInRole;
         }
-        public override async Task SignInAsync(MSAUserInfo loginInfo, AuthenticationProperties authenticationProperties, string authenticationMethod = null)
+        public override async Task SignInAsync(MSAUserInfo userInfo, AuthenticationProperties authenticationProperties, string authenticationMethod = null)
         {
-
-            await base.SignInAsync(loginInfo, authenticationProperties);
+            _userInfo = userInfo;
+            await base.SignInAsync(_userInfo, authenticationProperties);
 
             //===>save cookier JwtData
-            SetLogin(loginInfo.LoginInfo);
+            SetLogin(_userInfo.LoginInfo);
             
             
             //===>demo call object from session
             //loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
 
             //===>Jwt client process
-            JwtClientUtil jwtUtil = new JwtClientUtil();
-            List<Claim> claims = jwtUtil.GetClaims(loginInfo.LoginInfo.JwtData.AccessToken);
-            ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //JwtClientUtil jwtUtil = new JwtClientUtil();
+            //List<Claim> claims = jwtUtil.GetClaims(loginInfo.LoginInfo.JwtData.AccessToken);
+            //ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
 
             //====login into HttpContext
@@ -99,7 +99,7 @@ namespace AuthenticationDemo.Services
             //debug
 
 
-            _contextAccessor.HttpContext.User = new ClaimsPrincipal(identity);
+            //_contextAccessor.HttpContext.User = new ClaimsPrincipal(identity);
 
         }
 

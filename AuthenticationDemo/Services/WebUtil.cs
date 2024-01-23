@@ -29,30 +29,21 @@ namespace AuthenticationDemo.Services
         }
         
     }
-    public class WeUtils
-    {
-        IHttpContextAccessor _httpContextAccessor;
-        public WeUtils(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-    }
-
+   
     /// <summary>
     /// goi request va tra ve BODataProcess, kg tra ve Business object
     /// </summary>
-    public class RequestHandler
+    public class HttpRequestHandler
     {
-        private static RequestHandler instance;
-        RequestHandler ()
+        private static HttpRequestHandler instance;
+        HttpRequestHandler ()
         {
 
         }
-        public static RequestHandler GetInstance()
+        public static HttpRequestHandler GetInstance()
         {
             if (instance == null)
-                instance = new RequestHandler();
+                instance = new HttpRequestHandler();
 
                 return instance;
 

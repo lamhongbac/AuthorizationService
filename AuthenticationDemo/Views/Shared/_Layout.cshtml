@@ -22,27 +22,32 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (signManager.IsSignedIn() && User.IsInRole("Admin"))
-                        {
-                            <!-- Admin specific navigation items -->
-                        }
-
-                        @if (signManager.IsSignedIn() && User.IsInRole("User"))
-                        {
-                            <!-- Standard user navigation items -->
-                        }
+                       
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="Index">Company List</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
-                        </li>
+                        @if (signManager.IsSignedIn() && User.IsInRole("admin"))
+                        {
+                            <!-- Admin specific navigation items -->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                        }
+
+                        @if (signManager.IsSignedIn() && User.IsInRole("user"))
+                        {
+                            <!-- Standard user navigation items -->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="Index">Company List</a>
+                            </li>
+                        }
+                        
+                        @if (signManager.IsSignedIn())
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

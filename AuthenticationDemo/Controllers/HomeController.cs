@@ -14,17 +14,17 @@ namespace AuthenticationDemo.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        WeUtils _webUtils;
+       
         IConfiguration _configuration;
         AppConfig _appConfig;
         AccountService _accountService;
         MSASignInManager _msaSignInManager;
         public HomeController(ILogger<HomeController> logger,
-            WeUtils webUtils, AccountService accountService, MSASignInManager msaSignInManager,
+           AccountService accountService, MSASignInManager msaSignInManager,
             IConfiguration configuration)
         {
             _logger = logger;
-            _webUtils= webUtils;
+         
             _configuration = configuration;
             _appConfig = configuration.GetSection("AppConfig").Get<AppConfig>();
             _accountService = accountService;
