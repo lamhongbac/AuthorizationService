@@ -12,11 +12,11 @@ namespace AuthenticationDemo.Controllers
     public class LoginController : Controller
     {
         AccountService accountService;
-        MSASignInManager _msaSignInManager;
-        public LoginController(AccountService accountService, MSASignInManager webUtils)
+        MSASignInManagerA _msaSignInManager;
+        public LoginController(AccountService accountService, MSASignInManagerA msaSignInManager)
         {
             this.accountService = accountService;
-            _msaSignInManager = webUtils;
+            _msaSignInManager = msaSignInManager;
         }
         /// <summary>
         /// neu da login thi quay ve home

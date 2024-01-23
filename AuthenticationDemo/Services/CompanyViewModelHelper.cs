@@ -30,12 +30,12 @@ namespace AuthenticationDemo.Services
         ServiceConfig _serviceConfig;
         AppConfig _appConfig;
         AccountService _accountService;
-        MSASignInManager _msaSignInManager;
+        MSASignInManagerA _msaSignInManager;
         string bearToken;
         public CompanyViewModelHelper(IHttpClientFactory factory,
              IHttpContextAccessor httpContextAccessor,
              IConfiguration configuration, AccountService accountService,
-              MSASignInManager msaSignInManager
+              MSASignInManagerA msaSignInManager
              )
         {
             _msaSignInManager = msaSignInManager;

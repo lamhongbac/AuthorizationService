@@ -7,9 +7,10 @@ namespace AuthenticationDemo.Models
     {
         public MSAUserInfo()
         {
-            loginInfo = new LoginInfo();
+            loginInfo = new LoginInfo(); KeepLogined = false;
         }
         LoginInfo loginInfo;
         public LoginInfo LoginInfo { get => loginInfo; set => loginInfo = value; }
+        public bool KeepLogined { get; set; }
     }
 }

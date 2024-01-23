@@ -18,9 +18,9 @@ namespace AuthenticationDemo.Controllers
         IConfiguration _configuration;
         AppConfig _appConfig;
         AccountService _accountService;
-        MSASignInManager _msaSignInManager;
+        MSASignInManagerA _msaSignInManager;
         public HomeController(ILogger<HomeController> logger,
-           AccountService accountService, MSASignInManager msaSignInManager,
+           AccountService accountService, MSASignInManagerA msaSignInManager,
             IConfiguration configuration)
         {
             _logger = logger;

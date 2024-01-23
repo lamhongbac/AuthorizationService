@@ -1,6 +1,6 @@
 ﻿@using AuthServices.Models
 @using AuthenticationDemo.Services
-@inject MSASignInManager signManager;
+@inject MSASignInManagerA signManager;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +26,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (signManager.IsSignedIn() && User.IsInRole("admin"))
+                        @if (signManager.IsSignedIn() && signManager.HasPermission("qamanager"))
                         {
                             <!-- Admin specific navigation items -->
                             <li class="nav-item">
@@ -34,7 +34,7 @@
                             </li>
                         }
 
-                        @if (signManager.IsSignedIn() && User.IsInRole("user"))
+                        @if (signManager.IsSignedIn() && signManager.HasPermission("company;read,list"))
                         {
                             <!-- Standard user navigation items -->
                             <li class="nav-item">

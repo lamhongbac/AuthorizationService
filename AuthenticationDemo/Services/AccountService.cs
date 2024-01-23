@@ -28,10 +28,10 @@ namespace AuthenticationDemo.Services
         IConfiguration _configuration;
         ServiceConfig _serviceConfig;
         AppConfig _appConfig;
-        MSASignInManager _msasignInManager;
+        MSASignInManagerA _msasignInManager;
         public AccountService(IHttpClientFactory factory,
             IHttpContextAccessor httpContextAccessor, 
-            IConfiguration configuration, MSASignInManager msasignInManager
+            IConfiguration configuration, MSASignInManagerA msasignInManager
             )
         {
             _factory = factory;
@@ -118,15 +118,15 @@ namespace AuthenticationDemo.Services
                 
                 
                 //===>Jwt client process
-                JwtClientUtil jwtUtil = new JwtClientUtil();
-                List<Claim> claims = jwtUtil.GetClaims(loginInfo.JwtData.AccessToken);
-                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                AuthenticationProperties properties = new AuthenticationProperties()
-                {
-                    AllowRefresh = true,
-                    IsPersistent = model.KeepLogined
-                };
-                _msasignInManager.SignInAsync(userInfo, properties);
+                //JwtClientUtil jwtUtil = new JwtClientUtil();
+                //List<Claim> claims = jwtUtil.GetClaims(loginInfo.JwtData.AccessToken);
+                //ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                //AuthenticationProperties properties = new AuthenticationProperties()
+                //{
+                //    AllowRefresh = true,
+                //    IsPersistent = model.KeepLogined
+                //};
+                _msasignInManager.SignInAsync(userInfo);
 
                 
                 return isLogin;
