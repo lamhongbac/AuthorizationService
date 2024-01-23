@@ -67,7 +67,7 @@ namespace MSASharedLib.Utils
     //    BadRequest
     //}
 
-    public enum EUserRole
+    public enum EBuiltInAppRole
     {
         Admin,
         QAOfficer,
