@@ -12,11 +12,11 @@ namespace AuthenticationDemo.Controllers
     public class LoginController : Controller
     {
         AccountService accountService;
-        WeUtils _webUtils;
-        public LoginController(AccountService accountService, WeUtils webUtils)
+        MSASignInManagerA _msaSignInManager;
+        public LoginController(AccountService accountService, MSASignInManagerA msaSignInManager)
         {
             this.accountService = accountService;
-            _webUtils = webUtils;
+            _msaSignInManager = msaSignInManager;
         }
         /// <summary>
         /// neu da login thi quay ve home
@@ -26,7 +26,7 @@ namespace AuthenticationDemo.Controllers
         public IActionResult Login(string? ReturnUrl = null )
         {
            
-            if (_webUtils.IsLogin())
+            if (_msaSignInManager.IsSignedIn())
             {
                 return RedirectToAction("Index", "Home");
             }

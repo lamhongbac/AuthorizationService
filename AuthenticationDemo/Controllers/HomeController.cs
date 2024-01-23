@@ -14,19 +14,21 @@ namespace AuthenticationDemo.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        WeUtils _webUtils;
+       
         IConfiguration _configuration;
         AppConfig _appConfig;
         AccountService _accountService;
+        MSASignInManagerA _msaSignInManager;
         public HomeController(ILogger<HomeController> logger,
-            WeUtils webUtils, AccountService accountService,
+           AccountService accountService, MSASignInManagerA msaSignInManager,
             IConfiguration configuration)
         {
             _logger = logger;
-            _webUtils= webUtils;
+         
             _configuration = configuration;
             _appConfig = configuration.GetSection("AppConfig").Get<AppConfig>();
             _accountService = accountService;
+            _msaSignInManager = msaSignInManager;
 
         }
         /// <summary>
@@ -51,7 +53,7 @@ namespace AuthenticationDemo.Controllers
 
             if (_appConfig.IsForceLogin)
             {
-                if (!_webUtils.IsLogin())
+                if (!_msaSignInManager.IsSignedIn())
                 {
                     string @returnUrl = Url.Action("Index", "Home");
                     return RedirectToAction("Login", "Login");
@@ -88,7 +90,7 @@ namespace AuthenticationDemo.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            bool result = await _accountService.Logout();
+            await _msaSignInManager.SignOutAsync();
 
             return RedirectToAction("Index");
            

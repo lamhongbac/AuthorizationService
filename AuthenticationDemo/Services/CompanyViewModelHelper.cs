@@ -29,22 +29,22 @@ namespace AuthenticationDemo.Services
         IConfiguration _configuration;
         ServiceConfig _serviceConfig;
         AppConfig _appConfig;
-        WeUtils _webUtils;
         AccountService _accountService;
+        MSASignInManagerA _msaSignInManager;
         string bearToken;
         public CompanyViewModelHelper(IHttpClientFactory factory,
              IHttpContextAccessor httpContextAccessor,
-             IConfiguration configuration, WeUtils webUtils,
-             AccountService accountService
+             IConfiguration configuration, AccountService accountService,
+              MSASignInManagerA msaSignInManager
              )
         {
-            _accountService= accountService;
+            _msaSignInManager = msaSignInManager;
             _factory = factory;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
             _serviceConfig = _configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
             _appConfig = _configuration.GetSection("AppConfig").Get<AppConfig>();
-            _webUtils = webUtils;
+             _accountService = accountService;
 
         }
         public string BearToken { get=>bearToken; set =>bearToken=value; }
@@ -52,16 +52,16 @@ namespace AuthenticationDemo.Services
         {
             BODataProcessResult processResult = new BODataProcessResult();
             CompaniesViewModel viewModel = new CompaniesViewModel();
-            RequestHandler requestHandler = RequestHandler.GetInstance();
+            HttpRequestHandler requestHandler = HttpRequestHandler.GetInstance();
 
             try
             {                
-                JwtData jwtData  =_webUtils.GetJwtData();
+                JwtData jwtData  = _msaSignInManager.GetJwtData();
                 
 
                 if (jwtData != null)
                 {
-                    JwtData newJwtData = await _accountService.GetAccessToken(jwtData);
+                    JwtData newJwtData = await _accountService.ReNewToken(jwtData);
                     if (newJwtData == null) {
                         viewModel.AddError("", "can not get access token");
                         return viewModel;

@@ -11,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
+builder.Services.AddSingleton<MSASignInManagerA>();
+
+
 builder.Services.AddControllersWithViews();
 ServiceConfig serviceConfig = builder.Configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
 //auth service
@@ -32,7 +35,7 @@ builder.Services.AddHttpClient(AppConstants.ProtectedResourceService, client =>
 
 builder.Services.AddHttpContextAccessor();
 //WeUtils
-builder.Services.AddSingleton<WeUtils>();
+
 builder.Services.AddSingleton<AccountService>();
 //client =>
 //client.BaseAddress = new Uri(appConfig.AuthBaseAddress));

@@ -28,10 +28,10 @@ namespace AuthenticationDemo.Services
         IConfiguration _configuration;
         ServiceConfig _serviceConfig;
         AppConfig _appConfig;
-        WeUtils _webUtils;
+        MSASignInManagerA _msasignInManager;
         public AccountService(IHttpClientFactory factory,
             IHttpContextAccessor httpContextAccessor, 
-            IConfiguration configuration, WeUtils webUtils
+            IConfiguration configuration, MSASignInManagerA msasignInManager
             )
         {
             _factory = factory;
@@ -39,7 +39,7 @@ namespace AuthenticationDemo.Services
             _configuration = configuration;
             _serviceConfig = _configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
             _appConfig = _configuration.GetSection("AppConfig").Get<AppConfig>();
-            _webUtils= webUtils;
+            _msasignInManager = msasignInManager;
 
         }
         /// <summary>
@@ -112,31 +112,23 @@ namespace AuthenticationDemo.Services
                 loginInfo = JsonConvert.DeserializeObject<LoginInfo>(processResult.Content.ToString()); //(LoginInfo)processResult.Content;
 
                 //===>save cookier JwtData
-                _webUtils.SetLogin(loginInfo);
-                //===>demo call object from session
-                //loginInfo = _httpContextAccessor.HttpContext.Session.GetObject<LoginInfo>(AppConstants.LoginInfo);
+                MSAUserInfo userInfo = new MSAUserInfo();
+                userInfo.LoginInfo = loginInfo;
 
+                
+                
                 //===>Jwt client process
-                JwtClientUtil jwtUtil = new JwtClientUtil();
-                List<Claim> claims = jwtUtil.GetClaims(loginInfo.JwtData.AccessToken);
-                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                AuthenticationProperties properties = new AuthenticationProperties()
-                {
-                    AllowRefresh = true,
-                    IsPersistent = model.KeepLogined
-                };
-                
-                //====login into HttpContext
-                await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(identity), properties);
-                //debug
-                isLogin = _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+                //JwtClientUtil jwtUtil = new JwtClientUtil();
+                //List<Claim> claims = jwtUtil.GetClaims(loginInfo.JwtData.AccessToken);
+                //ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                //AuthenticationProperties properties = new AuthenticationProperties()
+                //{
+                //    AllowRefresh = true,
+                //    IsPersistent = model.KeepLogined
+                //};
+                _msasignInManager.SignInAsync(userInfo);
 
-                _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(identity);
                 
-                //debug
-                 isLogin= _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
-
                 return isLogin;
                 //===>
 
@@ -156,7 +148,7 @@ namespace AuthenticationDemo.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<JwtData?> GetAccessToken(JwtData model)
+        public async Task<JwtData?> ReNewToken(JwtData model)
         {
             //Cap nhat cookie information
            
@@ -188,7 +180,7 @@ namespace AuthenticationDemo.Services
                     }
                     
                     if (reNewToken!=null)
-                        _webUtils.SaveJwtData(reNewToken);
+                        _msasignInManager.SaveJwtData(reNewToken);
                     return reNewToken;
                 }
                 else
@@ -227,9 +219,6 @@ namespace AuthenticationDemo.Services
             return reNewToken;
         }
 
-        public async Task<bool> Logout()
-        {
-           return await _webUtils.SetLogout();
-        }
+        
     }
 }
