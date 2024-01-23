@@ -67,6 +67,14 @@ namespace MSASharedLib.Utils
     //    BadRequest
     //}
 
+    public enum EUserRole
+    {
+        Admin,
+        QAOfficer,
+        QAManager,
+        RestaurantManager
+    }
+
     public enum EProcessStatus
     {
         QAOCheck,
