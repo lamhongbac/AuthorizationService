@@ -26,7 +26,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (signManager.IsSignedIn() && signManager.HasPermission("about;read,list"))
+                        @if (signManager.IsSignedIn() && signManager.HasPermission("approle;read,list"))
                         {
                             <!-- Admin specific navigation items -->
                             <li class="nav-item">
@@ -34,7 +34,7 @@
                             </li>
                         }
 
-                        @if (signManager.IsSignedIn() && signManager.HasPermission("company;read,list"))
+                        @if (signManager.IsSignedIn() && signManager.HasPermission("appuser;read,list"))
                         {
                             <!-- Standard user navigation items -->
                             <li class="nav-item">

@@ -71,7 +71,7 @@ namespace AuthenticationDemo.Controllers
 
 
         [Authorize]
-        [HasPermission("about;read,list")]
+        [HasPermission("approle;read,list")]
         public async Task<IActionResult> Privacy()
         {
          

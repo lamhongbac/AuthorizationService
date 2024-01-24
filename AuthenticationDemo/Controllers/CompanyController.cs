@@ -19,7 +19,7 @@ namespace AuthenticationDemo.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HasPermission("company;read,list")]
+        [HasPermission("appuser;read,list")]
         public async Task<IActionResult> Index()
         {
             CompaniesViewModel viewModel = new CompaniesViewModel();
