@@ -19,7 +19,7 @@ namespace AuthenticationDemo.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HasPermission("appuser;read,list")]
+        [HasPermission("appuser;read,list,create,update")]
         public async Task<IActionResult> Index()
         {
             CompaniesViewModel viewModel = new CompaniesViewModel();
@@ -63,7 +63,7 @@ namespace AuthenticationDemo.Controllers
         }
 
         [Authorize]
-        [HasPermission("company;read,list")]
+        [HasPermission("company;update,create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Update(CompanyViewModel vm)
@@ -74,6 +74,19 @@ namespace AuthenticationDemo.Controllers
             }
            //save data
          return  RedirectToAction ("Index");
+        }
+        [Authorize]
+        [HasPermission("company;create")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(CompanyViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+            //save data
+            return RedirectToAction("Index");
         }
     }
 }
