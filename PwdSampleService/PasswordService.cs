@@ -3,6 +3,11 @@ using System.Text;
 
 namespace PwdSampleService
 {
+    /// <summary>
+    /// Note:
+    /// Saltsize va HashAlgorithm must be parametterized from outside (ex: config)
+    /// 
+    /// </summary>
     public class PasswordService
     {
         public PasswordService()
