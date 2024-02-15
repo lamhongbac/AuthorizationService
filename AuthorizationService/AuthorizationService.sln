@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtectResourceService", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthSharedLib", "..\SharedLib\AuthSharedLib.csproj", "{00CE992A-EEAA-474D-B032-57C4438E0817}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PwdSampleService", "..\PwdSampleService\PwdSampleService.csproj", "{32E66774-6867-48C0-9922-921B6539D930}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{00CE992A-EEAA-474D-B032-57C4438E0817}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00CE992A-EEAA-474D-B032-57C4438E0817}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00CE992A-EEAA-474D-B032-57C4438E0817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32E66774-6867-48C0-9922-921B6539D930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32E66774-6867-48C0-9922-921B6539D930}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32E66774-6867-48C0-9922-921B6539D930}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32E66774-6867-48C0-9922-921B6539D930}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
