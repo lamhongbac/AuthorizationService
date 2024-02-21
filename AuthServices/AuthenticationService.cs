@@ -31,11 +31,12 @@ namespace AuthorizationService.Service
     {
         AccountService _accountService;
         AppObjectService _appObjectService;
-        
+        AppUserService appUserService;
         private IConfiguration _config;
        AuthJwtUtil _jwtUtil;
         IMapper _mapper;
         public AuthenticationService(IConfiguration config,
+            AppUserService appUserService,
             AppObjectService appObjectService,
              AuthJwtUtil jwtUtil,
         AccountService accountService,
@@ -47,6 +48,7 @@ namespace AuthorizationService.Service
             _accountService = accountService;
             _mapper = mapper;
             _appObjectService = appObjectService;
+            this.appUserService = appUserService;
         }
         public async Task<UserInfo> AuthenticateUser(LoginModel model)
         {
@@ -110,6 +112,20 @@ namespace AuthorizationService.Service
                     
                     userInfo.CompanyID = appUser.Company.ID;
                     userInfo.AppID = model.AppID;
+                    if(appUser.ManagerID.HasValue && appUser.ManagerID.Value > 0)
+                    {
+                        userInfo.ManagerID = appUser.ManagerID.Value;
+
+                        BaseAppUser managerAppUser = appUserService.GetData(userInfo.ManagerID, out errMessage, out result);
+                        if(managerAppUser != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(managerAppUser.Email))
+                            {
+                                userInfo.ManagerEmail = managerAppUser.Email;
+                            }
+                        }
+
+                    }
                     return userInfo;
                 }
             }

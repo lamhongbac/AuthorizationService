@@ -24,6 +24,8 @@ namespace AuthServices.Models
         
         public int AppID { get; set; }
         public int CompanyID { get; set; }
+        public int ManagerID { get; set; }
+        public string ManagerEmail { get; set; }
     }
     public class LoginInfo
     {

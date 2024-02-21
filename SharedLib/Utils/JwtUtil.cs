@@ -173,6 +173,16 @@ namespace AuthServices.Models
                 claims.Add(new Claim("ObjectRights", objectRights));
             }
 
+            if(userInfo.ManagerID > 0)
+            {
+                claims.Add(new Claim("ManagerID", userInfo.ManagerID.ToString()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(userInfo.ManagerEmail))
+            {
+                claims.Add(new Claim("ManagerEmail", userInfo.ManagerEmail));
+            }
+
 
 
             SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
