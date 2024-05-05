@@ -3,6 +3,13 @@ using Newtonsoft.Json;
 
 namespace StudyApiAuth.Models
 {
+    /// <summary>
+    /// lop nay chuyen handler cac policy co para la kieu
+    /// PermissionRequirement
+    /// Voi moi requirement type can 1 handler
+    /// requirement nay xuat phat tu policy requirement
+    /// 
+    /// </summary>
     public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
     {
         /// <summary>
