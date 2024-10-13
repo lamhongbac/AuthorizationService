@@ -131,7 +131,33 @@ namespace AuthorizationService.Service
             }
             return userInfo;
         }
+        /// <summary>
+        /// lop nay danh cho mobLogin
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<BODataProcessResult> MobLogin(LoginModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
 
+            processResult.OK = false;
+            processResult.Content = null;
+            UserInfo user = await AuthenticateUser(model);
+            if (user != null)
+            {
+                // ==>log vao mongo DB thong tin sau
+                // 
+                // ID: dai dien cho 1 lan login= userID+deviceID
+                // Status = Login/LogOut
+                // ngay thuc hien
+                
+                processResult.OK = true;
+                processResult.Content = user;
+
+
+            }
+            return processResult;
+        }
         public async Task<BODataProcessResult> Login(LoginModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();

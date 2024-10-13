@@ -17,6 +17,28 @@ namespace AuthorizationService.Controllers
             _authenticationService = authenticationService;
 
         }
+
+        //MobLogin
+        [Route("MobLogin")]
+        [HttpPost]
+        public async Task<IActionResult> MobLogin(LoginModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+            IActionResult response = Unauthorized();
+            processResult = await _authenticationService.MobLogin(model);
+
+            if (processResult.OK)
+            {
+
+                response = Ok(processResult);
+            }
+            else
+            {
+                //dich message?
+            }
+            return response;
+        }
+
         /// <summary>
         /// client khi login vao API se su dung ham nay
         /// tra ve KQ la JwtData
