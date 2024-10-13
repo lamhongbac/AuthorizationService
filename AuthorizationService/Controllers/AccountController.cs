@@ -1,10 +1,6 @@
-﻿using AuthorizationService.DataTypes;
-using AuthorizationService.Service;
-using AuthServices;
+﻿using AuthorizationService.Service;
 using AuthServices.Models;
 using Microsoft.AspNetCore.Mvc;
-using SharedLib;
-using MSASharedLib.Utils;
 using MSASharedLib.DataTypes;
 
 
@@ -34,13 +30,13 @@ namespace AuthorizationService.Controllers
             BODataProcessResult processResult = new BODataProcessResult();
             IActionResult response = Unauthorized();
             processResult = await _authenticationService.Login(model);
-          
+
             if (processResult.OK)
             {
-               
+
                 response = Ok(processResult);
             }
-           else
+            else
             {
                 //dich message?
             }
