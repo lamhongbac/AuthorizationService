@@ -104,7 +104,7 @@ namespace AuthenticationDAL
                     string sql = "SELECT * FROM " + tableName + whereString;
                     object param = new { ID = ID };
                     var dataUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, param);
-                    if(dataUI != null)
+                    if (dataUI != null)
                     {
                         data.AppUser = dataUI;
 
@@ -113,12 +113,12 @@ namespace AuthenticationDAL
                         string userStoreSQL = "SELECT * FROM " + userStoreTableName + userStoreWhereString;
                         object userStoreParam = new { UserID = ID };
                         var userStoreUI = await connection.QueryAsync<UserStoreUI>(userStoreSQL, userStoreParam);
-                        if(userStoreUI != null)
+                        if (userStoreUI != null)
                         {
                             data.UserStores = userStoreUI.ToList();
                         }
                     }
-                    
+
 
                     return data;
                 }
@@ -183,7 +183,7 @@ namespace AuthenticationDAL
                         }
                         else
                         {
-                            if(data.UserStores != null && data.UserStores.Count > 0)
+                            if (data.UserStores != null && data.UserStores.Count > 0)
                             {
                                 foreach (var item in data.UserStores)
                                 {
@@ -206,9 +206,9 @@ namespace AuthenticationDAL
                         return false;
                     }
                 }
-                
+
             }
-            
+
         }
 
         public async Task<bool> Update(AppUserUI data, List<UserStoreUI> insertDatas, List<UserStoreUI> updateDatas, List<UserStoreUI> deleteDatas)
@@ -257,7 +257,7 @@ namespace AuthenticationDAL
                                 trans.Rollback();
                                 return false;
                             }
-                            
+
                         }
                     }
                     catch
@@ -265,9 +265,9 @@ namespace AuthenticationDAL
                         return false;
                     }
                 }
-                
+
             }
-            
+
         }
 
         public async Task<bool> MarkDelete(AppUserUI data)
@@ -276,7 +276,7 @@ namespace AuthenticationDAL
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
-                    
+
                     var result = await connection.UpdateAsync(data);
                     if (result == false)
                     {
@@ -347,6 +347,16 @@ namespace AuthenticationDAL
                             parametter = new { RoleID = appUserUI.RoleID };
                             var roleRightUIs = await connection.QueryAsync<RoleRightUI>(Sql, parametter);
                             data.RoleRights = (List<RoleRightUI>)roleRightUIs;
+
+                            //Get List UserStoreUI
+                            Sql = "SELECT * FROM UserStores WHERE UserID=@UserID";
+                            parametter = new { UserID = appUserUI.ID };
+                            var userStoreUIs = await connection.QueryAsync<UserStoreUI>(Sql, parametter);
+                            if (userStoreUIs != null && userStoreUIs.Count() > 0)
+                            {
+                                data.UserStores = new List<UserStoreUI>(userStoreUIs);
+                            }
+
                         }
                         return data;
                     }

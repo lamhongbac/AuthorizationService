@@ -153,7 +153,10 @@ namespace AuthenticationDAL
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
-
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
                     int rec = -1;
                     rec = await connection.InsertAsync(entityToInsert, transaction);
                     return rec;

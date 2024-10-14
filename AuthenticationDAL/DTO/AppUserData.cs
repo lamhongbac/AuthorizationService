@@ -10,7 +10,6 @@ namespace AuthenticationDAL.DTO
             Company = new CompanyUI();
             AppRole = new AppRoleUI();
             RoleRights = new List<RoleRightUI>();
-            UserStores = null;
         }
         public AppUserUI AppUser { get; set; }
         public CompanyUI Company { get; set; }

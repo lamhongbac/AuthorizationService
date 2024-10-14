@@ -1,6 +1,7 @@
 using AuthorizationService.DataTypes;
 using AuthorizationService.Helper;
 using AuthorizationService.Service;
+using AuthServiceLibrary;
 using AuthServices;
 using AuthServices.Models;
 
@@ -50,6 +51,7 @@ builder.Services.AddSingleton<CompanyService>();
 builder.Services.AddSingleton<RoleRightService>();
 builder.Services.AddSingleton<UserRoleService>();
 builder.Services.AddSingleton<UserStoreService>();
+builder.Services.AddSingleton<LogLoginService>();
 //builder.Services.AddAuthorization(x =>
 //{
 //    x.AddPolicy(IdentityData.AdminUserPolicyName, p => p.RequireClaim(IdentityData.AdminUserClaimName));

@@ -22,6 +22,7 @@ namespace AuthorizationService.Helper
             CreateMap<BaseUserStore, UserStoreUI>().ReverseMap();
             CreateMap<AppUserData, BaseAppUser>().ReverseMap();
             CreateMap<BaseAppUser, UserInfo>().ReverseMap();
+            CreateMap<UserInfo, LogLoginUI>().ForMember(dest => dest.ID, opt => opt.Ignore()).ReverseMap();
         }
     }
 }

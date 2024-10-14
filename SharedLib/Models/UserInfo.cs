@@ -12,6 +12,7 @@ namespace AuthServices.Models
         {
             ObjectRights = new Dictionary<string, List<string>>();
             Roles = new List<string>();
+            StoreIDs = new List<int>();
         }
         public string ID { get; set; }
         public string UserName { get; set; }
@@ -20,12 +21,14 @@ namespace AuthServices.Models
         public List<string> Roles { get; set; }
 
         //objectName;right1,right2
-        public Dictionary<string,List<string>> ObjectRights { get; set; }
-        
+        public Dictionary<string, List<string>> ObjectRights { get; set; }
+
         public int AppID { get; set; }
         public int CompanyID { get; set; }
         public int ManagerID { get; set; }
         public string ManagerEmail { get; set; }
+        public List<int> StoreIDs { get; set; }
+        public Guid LoginID { get; set; }
     }
     public class LoginInfo
     {
