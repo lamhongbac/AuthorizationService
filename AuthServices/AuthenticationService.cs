@@ -146,14 +146,20 @@ namespace AuthorizationService.Service
                 // ID: dai dien cho 1 lan login= userID+deviceID
                 // Status = Login/LogOut
                 // ngay thuc hien
-                LogLoginUI logLoginUI = _mapper.Map<LogLoginUI>(user);
-                logLoginUI.ID = Guid.NewGuid();
-                logLoginUI.LoginDate = DateTime.Now;
-                BODataProcessResult logResult = await _logLoginService.Create(logLoginUI);
-                if (logResult.OK)
+                string mode = _config.GetValue<string>(
+                "AppConfig:ProductMode");
+                if (mode.ToLower() != "dev")
                 {
-                    user.LoginID = logLoginUI.ID;
+                    LogLoginUI logLoginUI = _mapper.Map<LogLoginUI>(user);
+                    logLoginUI.ID = Guid.NewGuid();
+                    logLoginUI.LoginDate = DateTime.Now;
+                    BODataProcessResult logResult = await _logLoginService.Create(logLoginUI);
+                    if (logResult.OK)
+                    {
+                        user.LoginID = logLoginUI.ID;
+                    }
                 }
+
 
                 processResult.OK = true;
                 processResult.Content = user;
