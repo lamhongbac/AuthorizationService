@@ -19,7 +19,7 @@ namespace AuthServices
         private string connectionString = string.Empty;
         private string tableName = "UserStores";
         IMapper mapper;
- 
+
         public UserStoreService(IConfiguration configuration, IMapper mapper)
         {
             var configSection = configuration.GetSection("AppConfig");
@@ -107,7 +107,7 @@ namespace AuthServices
                     return null;
                 }
 
-                
+
                 //IMappingHelper<BaseUserStore, UserStoreUI> mappingHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
                 //BaseUserStore BaseUserStore = mappingHelper.Map(UserStoreUIs);
 
@@ -196,6 +196,35 @@ namespace AuthServices
         public BODataProcessResult MarkDelete(BaseUserStore data)
         {
             return new BODataProcessResult();
+        }
+
+        public List<BaseUserStore> GetDatasByUserID(int userID, out string errMessage, out bool result)
+        {
+            try
+            {
+                GenericDataPortal<UserStoreUI> dataPortal = new GenericDataPortal<UserStoreUI>(connectionString, tableName);
+                string whereString = "UserID = @UserID";
+                object parametters = new { UserID = userID };
+
+                List<UserStoreUI> UserStoreUIs = dataPortal.ReadList(whereString, parametters).Result;
+                if (UserStoreUIs == null)
+                {
+                    result = false;
+                    errMessage = "Data not Found";
+                    return null;
+                }
+                List<BaseUserStore> baseUserStores = mapper.Map<List<BaseUserStore>>(UserStoreUIs);
+                result = true;
+                errMessage = "Success";
+                return baseUserStores;
+
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                errMessage = ex.Message;
+                return null;
+            }
         }
     }
 }

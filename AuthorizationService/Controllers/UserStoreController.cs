@@ -3,6 +3,7 @@ using AuthServices;
 using Microsoft.AspNetCore.Mvc;
 using MSASharedLib.DataTypes;
 using MSASharedLib.Utils;
+using System.Collections.Generic;
 
 namespace AuthorizationService.Controllers
 {
@@ -10,8 +11,8 @@ namespace AuthorizationService.Controllers
     [ApiController]
     public class UserStoreController : Controller
     {
-        UserRoleService service;
-        public UserStoreController(UserRoleService service)
+        UserStoreService service;
+        public UserStoreController(UserStoreService service)
         {
             this.service = service;
         }
@@ -24,7 +25,7 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                List<BaseUserRole> baseDatas = service.GetDatas(out errMessage, out result);
+                List<BaseUserStore> baseDatas = service.GetDatas(out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseDatas;
@@ -50,7 +51,7 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                BaseUserRole baseData = service.GetData(ID, out errMessage, out result);
+                BaseUserStore baseData = service.GetData(ID, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
@@ -76,7 +77,7 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                BaseUserRole baseData = service.GetData(Number, out errMessage, out result);
+                BaseUserStore baseData = service.GetData(Number, out errMessage, out result);
                 if (result == true)
                 {
                     processResult.Content = baseData;
@@ -95,7 +96,7 @@ namespace AuthorizationService.Controllers
 
         [Route("CreateUserRole")]
         [HttpPost]
-        public async Task<IActionResult> Create(BaseUserRole data)
+        public async Task<IActionResult> Create(BaseUserStore data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             try
@@ -117,7 +118,7 @@ namespace AuthorizationService.Controllers
 
         [Route("UpdateUserRole")]
         [HttpPost]
-        public async Task<IActionResult> Update(BaseUserRole data)
+        public async Task<IActionResult> Update(BaseUserStore data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             try
@@ -139,7 +140,7 @@ namespace AuthorizationService.Controllers
 
         [Route("DeleteUserRole")]
         [HttpPost]
-        public IActionResult Delete(BaseUserRole data)
+        public IActionResult Delete(BaseUserStore data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             try
@@ -161,12 +162,42 @@ namespace AuthorizationService.Controllers
 
         [Route("MarkDeletaUserRole")]
         [HttpPost]
-        public IActionResult MarkDelete(BaseUserRole data)
+        public IActionResult MarkDelete(BaseUserStore data)
         {
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
                 processResult = service.MarkDelete(data);
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            finally
+            {
+
+            }
+            return Ok(processResult);
+        }
+
+        [Route("GetListUserStoreByUserID")]
+        [HttpPost]
+        public IActionResult GetStoreIDByUser(RequestModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+            string errMessage = string.Empty;
+            bool result = false;
+            try
+            {
+                List<BaseUserStore> baseUserRoles = service.GetDatasByUserID(model.ID, out errMessage, out result);
+                if (result)
+                {
+                    processResult.Content = baseUserRoles;
+                }
+                processResult.OK = result;
+                processResult.Message = errMessage;
             }
             catch (Exception ex)
             {

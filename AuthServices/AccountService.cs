@@ -38,6 +38,7 @@ namespace AuthServices
                 baseAppUser.Company = mapper.Map<BaseCompany>(appUserData.Company);
                 baseAppUser.Role = mapper.Map<BaseAppRole>(appUserData.AppRole);
                 baseAppUser.Role.Rights = mapper.Map<List<BaseRoleRight>>(appUserData.RoleRights);
+                baseAppUser.BaseUserStores = mapper.Map<List<BaseUserStore>>(appUserData.UserStores);
                 return baseAppUser;
             }
         }

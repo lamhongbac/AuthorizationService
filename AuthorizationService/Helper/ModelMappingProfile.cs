@@ -2,6 +2,7 @@
 using AuthorizationService.BaseObjects;
 using AuthorizationService.DataTypes;
 using AuthServices.Models;
+using AuthSharedLib.Models;
 using AutoMapper;
 using SharedLib;
 
@@ -22,7 +23,10 @@ namespace AuthorizationService.Helper
             CreateMap<BaseUserStore, UserStoreUI>().ReverseMap();
             CreateMap<AppUserData, BaseAppUser>().ReverseMap();
             CreateMap<BaseAppUser, UserInfo>().ReverseMap();
-            CreateMap<UserInfo, LogLoginUI>().ForMember(dest => dest.ID, opt => opt.Ignore()).ReverseMap();
+            CreateMap<UserInfo, LogLoginUI>().ForMember(dest => dest.ID, opt => opt.Ignore())
+                 .ForMember(dest => dest.UserID, opt => opt.MapFrom(s => s.ID))
+                 .ReverseMap();
+            CreateMap<UserInfo, MobUserInfo>().ForMember(dest => dest.ObjectRights, opt => opt.Ignore()).ReverseMap();
         }
     }
 }

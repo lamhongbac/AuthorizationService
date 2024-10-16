@@ -3,12 +3,14 @@ using AuthorizationService.BaseObjects;
 using AuthServiceLibrary;
 using AuthServices;
 using AuthServices.Models;
+using AuthSharedLib.Models;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using MSASharedLib.DataTypes;
 using MSASharedLib.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -141,6 +143,20 @@ namespace AuthorizationService.Service
             UserInfo user = await AuthenticateUser(model);
             if (user != null)
             {
+                MobUserInfo mobUserInfo = _mapper.Map<MobUserInfo>(user);
+
+                List<ObjectRight> objectRights = new List<ObjectRight>();
+                foreach (var item in user.ObjectRights)
+                {
+                    ObjectRight objectRight = new ObjectRight
+                    {
+                        ObjectName = item.Key,
+                        Rights = item.Value
+                    };
+                    objectRights.Add(objectRight);
+                }
+                mobUserInfo.ObjectRights = objectRights;
+                mobUserInfo.LoginDate = DateTime.Now;
                 // ==>log vao mongo DB thong tin sau
                 // 
                 // ID: dai dien cho 1 lan login= userID+deviceID
@@ -156,13 +172,13 @@ namespace AuthorizationService.Service
                     BODataProcessResult logResult = await _logLoginService.Create(logLoginUI);
                     if (logResult.OK)
                     {
-                        user.LoginID = logLoginUI.ID;
+                        mobUserInfo.LoginID = logLoginUI.ID;
                     }
                 }
 
 
                 processResult.OK = true;
-                processResult.Content = user;
+                processResult.Content = mobUserInfo;
 
 
             }

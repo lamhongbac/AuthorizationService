@@ -32,7 +32,7 @@ namespace AuthorizationService.Controllers
             bool result = false;
             try
             {
-                
+
                 List<BaseAppUser> baseDatas = service.GetDatas(model.CompanyAppID, out errMessage, out result);
                 if (result == true)
                 {
@@ -62,11 +62,11 @@ namespace AuthorizationService.Controllers
                         baseDatas = DoSort(baseDatas, model.SortProperty, eSortOrder);
                         int totalCount = baseDatas.Count;
                         processResult.ErrorNumber = totalCount;
-                        PageDataService <BaseAppUser> pageData = new PageDataService<BaseAppUser>();
+                        PageDataService<BaseAppUser> pageData = new PageDataService<BaseAppUser>();
                         baseDatas = pageData.GetData(baseDatas, model.PageIndex, model.PageSize);
                     }
                     processResult.Content = baseDatas;
-                    
+
                 }
                 processResult.OK = result;
                 processResult.Message = errMessage;
@@ -90,7 +90,7 @@ namespace AuthorizationService.Controllers
             try
             {
                 List<BaseAppUser> baseDatas = service.GetDatas(model.CompanyAppID, model.Department, out errMessage, out result);
-                if(baseDatas != null)
+                if (baseDatas != null)
                 {
                     processResult.Content = baseDatas;
                 }
@@ -148,7 +148,7 @@ namespace AuthorizationService.Controllers
                 }
                 processResult.OK = result;
                 processResult.Message = errMessage;
-                
+
             }
             catch (Exception ex)
             {

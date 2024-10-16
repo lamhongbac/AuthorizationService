@@ -93,6 +93,51 @@ namespace AuthenticationDAL
             }
         }
 
+        public async Task<List<AppUserData>> ReadListData(int companyAppID)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_connectionString))
+                {
+                    string whereString = " WHERE CompanyAppID = @CompanyAppID";
+                    string sql = "SELECT * FROM " + tableName + whereString;
+                    object param = new { CompanyAppID = companyAppID };
+                    var dataUIs = await connection.QueryAsync<AppUserUI>(sql, param);
+                    if (dataUIs != null && dataUIs.Count() > 0)
+                    {
+                        List<AppUserData> appUserDatas = new List<AppUserData>();
+
+                        foreach (var item in dataUIs)
+                        {
+                            AppUserData appUserData = new AppUserData()
+                            {
+                                AppUser = item
+                            };
+                            string userStoreTableName = "UserStores";
+                            string userStoreWhereString = " WHERE UserID = @UserID";
+                            string userStoreSQL = "SELECT * FROM " + userStoreTableName + userStoreWhereString;
+                            object userStoreParam = new { UserID = item.ID };
+                            var userStoreUI = await connection.QueryAsync<UserStoreUI>(userStoreSQL, userStoreParam);
+                            if (userStoreUI != null)
+                            {
+                                appUserData.UserStores = userStoreUI.ToList();
+                            }
+                            appUserDatas.Add(appUserData);
+                        }
+                        return appUserDatas;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public async Task<AppUserData> Read(int ID)
         {
             AppUserData data = new AppUserData();

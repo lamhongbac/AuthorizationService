@@ -24,7 +24,7 @@ namespace AuthServices
         private string connectionString = string.Empty;
         private string tableName = "AppUsers";
         IMapper mapper;
-   
+
         public AppUserService(IConfiguration configuration, IMapper mapper)
         {
             var configSection = configuration.GetSection("AppConfig");
@@ -46,13 +46,34 @@ namespace AuthServices
                     return null;
                 }
 
-                //IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
-                //List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
+                List<AppUserData> appUserDatas = dataPortal.ReadListData(companyAppID).Result;
+                if (appUserDatas == null)
+                {
+                    result = false;
+                    errMessage = "Data not Found";
+                    return null;
+                }
+                else
+                {
+                    List<BaseAppUser> baseAppUsers = new List<BaseAppUser>();
+                    foreach (var item in appUserDatas)
+                    {
+                        BaseAppUser baseAppUser = mapper.Map<BaseAppUser>(item.AppUser);
+                        baseAppUser.BaseUserStores = mapper.Map<List<BaseUserStore>>(item.UserStores);
+                        baseAppUsers.Add(baseAppUser);
+                    }
+                    result = true;
+                    errMessage = "Success";
+                    return baseAppUsers;
+                }
 
-                List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
-                result = true;
-                errMessage = "Success";
-                return BaseAppUsers;
+                ////IMappingHelper<BaseAppUser, AppUserUI> mappingHelper = new IMappingHelper<BaseAppUser, AppUserUI>();
+                ////List<BaseAppUser> BaseAppUsers = mappingHelper.Map(AppUserUIs);
+
+                //List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(AppUserUIs);
+                //result = true;
+                //errMessage = "Success";
+                //return BaseAppUsers;
 
             }
             catch (Exception ex)
@@ -94,7 +115,7 @@ namespace AuthServices
             }
         }
 
-        public List<BaseAppUser> GetDatas(int companyAppID, string department, int managerID,  out string errMessage, out bool result)
+        public List<BaseAppUser> GetDatas(int companyAppID, string department, int managerID, out string errMessage, out bool result)
         {
             try
             {
@@ -182,7 +203,7 @@ namespace AuthServices
                 BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserData.AppUser);
 
                 //IMappingHelper<BaseUserStore, UserStoreUI> mappingUserStoreHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
-                if(BaseAppUser != null)
+                if (BaseAppUser != null)
                 {
                     BaseAppUser.BaseUserStores = mapper.Map<List<BaseUserStore>>(AppUserData.UserStores);
                     result = true;
@@ -193,7 +214,7 @@ namespace AuthServices
                 errMessage = "false";
                 return null;
                 //BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserUIs);
-                
+
 
             }
             catch (Exception ex)
@@ -234,7 +255,7 @@ namespace AuthServices
                     return processResult;
                 }
 
-                if(existRole.IsStoreAdmin == false)
+                if (existRole.IsStoreAdmin == false)
                 {
                     data.BaseUserStores = new List<BaseUserStore>();
                 }
@@ -311,14 +332,14 @@ namespace AuthServices
                 List<UserStoreUI> updateDatas = new List<UserStoreUI>();
                 List<UserStoreUI> deleteDatas = new List<UserStoreUI>();
 
-                if(updateUserStores != null)
+                if (updateUserStores != null)
                 {
-                    foreach(var item in updateUserStores)
+                    foreach (var item in updateUserStores)
                     {
-                        if(existUserStores != null && existUserStores.Count > 0)
+                        if (existUserStores != null && existUserStores.Count > 0)
                         {
                             UserStoreUI userStoreUI = existUserStores.FirstOrDefault(x => x.UserID == item.UserID && x.StoreID == item.StoreID);
-                            if(userStoreUI != null && userStoreUI.ID != 0)
+                            if (userStoreUI != null && userStoreUI.ID != 0)
                             {
                                 updateDatas.Add(item);
                             }
@@ -333,10 +354,10 @@ namespace AuthServices
                         }
                     }
 
-                    foreach(var item in existUserStores)
+                    foreach (var item in existUserStores)
                     {
                         UserStoreUI userStoreUI = updateUserStores.FirstOrDefault(x => x.UserID == item.UserID && x.StoreID == item.StoreID);
-                        if(userStoreUI == null)
+                        if (userStoreUI == null)
                         {
                             deleteDatas.Add(item);
                         }
