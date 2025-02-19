@@ -467,5 +467,47 @@ namespace AuthServices
             }
             return processResult;
         }
+
+        public List<BaseAppUser> GetRMsByStore(int companyAppID, int storeID, out string errMessage, out bool result)
+        {
+            try
+            {
+                GenericDataPortal<UserStoreUI> userStoreDataPortal = new GenericDataPortal<UserStoreUI>(connectionString, "UserStores");
+                string whereString = "StoreID = @StoreID";
+                object parameter = new { StoreID = storeID };
+                List<UserStoreUI> userStoreUIs = userStoreDataPortal.ReadList(whereString, parameter).Result;
+                if (userStoreUIs == null)
+                {
+                    result = false;
+                    errMessage = "Data not Found";
+                    return null;
+                }
+                GenericDataPortal<AppUserUI> appUserDataPortal = new GenericDataPortal<AppUserUI>(connectionString, tableName);
+                whereString = "CompanyAppID = @CompanyAppID AND ID IN @IDs";
+                List<int> userIDs = userStoreUIs.Select(x => x.UserID).ToList();
+                parameter = new { CompanyAppID = companyAppID, IDs = userIDs };
+                List<AppUserUI> appUserUIs = appUserDataPortal.ReadList(whereString, parameter).Result;
+                if (appUserUIs != null && appUserUIs.Count > 0)
+                {
+                    List<BaseAppUser> BaseAppUsers = mapper.Map<List<BaseAppUser>>(appUserUIs);
+                    result = true;
+                    errMessage = "Success";
+                    return BaseAppUsers;
+                }
+                else
+                {
+                    result = false;
+                    errMessage = "Data not Found";
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                errMessage = ex.Message;
+                return null;
+            }
+        }
     }
 }

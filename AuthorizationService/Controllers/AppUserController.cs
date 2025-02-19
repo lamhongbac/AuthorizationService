@@ -337,5 +337,36 @@ namespace AuthorizationService.Controllers
                 throw;
             }
         }
+
+        /// <summary>
+        /// Hàm lấy danh sách RM của nhà hàng
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("GetRMsByStore")]
+        [HttpPost]
+        public IActionResult GetRMsByStore(AppUserRequestDatasModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+            string errMessage = string.Empty;
+            bool result = false;
+            try
+            {
+                List<BaseAppUser> baseData = service.GetRMsByStore(model.CompanyAppID, model.StoreID.Value, out errMessage, out result);
+                if (result == true)
+                {
+                    processResult.Content = baseData;
+                }
+                processResult.OK = result;
+                processResult.Message = errMessage;
+            }
+            catch (Exception ex)
+            {
+                processResult.OK = false;
+                processResult.Message = ex.Message;
+                return BadRequest(processResult);
+            }
+            return Ok(processResult);
+        }
     }
 }

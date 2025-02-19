@@ -39,6 +39,7 @@ namespace AuthServices.Models
         public int CompanyAppID { get; set; }
         public string? Department { get; set; }
         public int ManagerID { get; set; }
+        public int? StoreID { get; set; }
     }
 
     public class AppRoleRequestDatasModel : RequestModels
