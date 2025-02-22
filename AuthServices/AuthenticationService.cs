@@ -3,7 +3,7 @@ using AuthorizationService.BaseObjects;
 using AuthServiceLibrary;
 using AuthServices;
 using AuthServices.Models;
-using AuthSharedLib.Models;
+using AuthServices.Models;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using MSASharedLib.DataTypes;
