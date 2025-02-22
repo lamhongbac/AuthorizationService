@@ -16,10 +16,20 @@ namespace AuthServices.Models
         public int ObjectID { get; set; }
         public string ObjectName { get; set; }
         public List<string> Rights { get; set; }
+
+        public bool CanList { get; set; }
+
+        //neu kg the can read ==> kg the co cac quyen phia sau nhu can Create/Update,..vv
+
+        public bool CanRead { get; set; }
+        public bool CanCreate { get; set; }
+        public bool CanUpdate { get; set; }
+        public bool CanDelete { get; set; }
+
     }
 
     /// <summary>
-    /// Binary object right
+    /// BObjectRight= Binary object right
     /// lop nay su dung thuat toan binary de quan ly quyen
     /// </summary>
     public class BObjectRight

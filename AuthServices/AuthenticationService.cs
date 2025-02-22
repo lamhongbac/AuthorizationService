@@ -42,6 +42,15 @@ namespace AuthorizationService.Service
             this.appUserService = appUserService;
             _logLoginService = logLoginService;
         }
+        /// <summary>
+        /// Ham nay chi kiem tra xem User login co hop le kg
+        /// 1 check ton tai userID
+        /// 2 check pass
+        /// sau khi pass het thi gan thong tin can thiet
+        /// Chu y Hidden info: companyID, AppID
+        /// </summary>
+        /// <param name="model">Cung cap cac para cho login</param>
+        /// <returns>UserInfo tra ve null la login sai, va nguoc lai</returns>
         public async Task<UserInfo> AuthenticateUser(LoginModel model)
         {
             UserInfo userInfo = null;
