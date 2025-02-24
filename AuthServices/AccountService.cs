@@ -24,6 +24,18 @@ namespace AuthServices
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// lay thong tin user theo userName
+        /// muon lay thong tin theo email, mobile thi can trien khai them ham
+        /// GetUserInfoByEmail, Mobile,...vv
+        /// Table:AppUsers
+        /// 1.Map tư bang AppUserData sang BaseAppUser
+        /// 2
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="companyID"></param>
+        /// <param name="appID"></param>
+        /// <returns></returns>
         public async Task<BaseAppUser> GetUserInfo(string userName, int companyID, int appID)
         {
             _appUserDataPortal = new AppUserDataPortal(connectionString);
