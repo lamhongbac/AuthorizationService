@@ -15,7 +15,11 @@ namespace AuthenticationDAL.DTO
         public string Name { get; set; }
         public string Description { get; set; }
         /// <summary>
-        /// 
+        /// thuoc tinh nay de xac dinh role nay co can danh sach nha hang hay khong
+        /// neu is store admin = false thi co nghia kg can
+        /// cac role nhu QA manager, Hoac tuong tu thi kg can ds nha hang
+        /// cac role QA Officer thi cung co the (neu DN nho)
+        /// cac role RM thi can co DS nha hang (bat buoc)
         /// </summary>
         public bool IsStoreAdmin { get; set; }
     }
