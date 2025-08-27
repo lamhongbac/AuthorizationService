@@ -104,7 +104,7 @@ namespace AuthenticationDAL
                     string sql = "SELECT * FROM " + tableName + whereString;
                     object param = new { ID = ID };
                     var dataUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, param);
-                    if(dataUI != null)
+                    if (dataUI != null)
                     {
                         data.AppUser = dataUI;
 
@@ -113,12 +113,12 @@ namespace AuthenticationDAL
                         string userStoreSQL = "SELECT * FROM " + userStoreTableName + userStoreWhereString;
                         object userStoreParam = new { UserID = ID };
                         var userStoreUI = await connection.QueryAsync<UserStoreUI>(userStoreSQL, userStoreParam);
-                        if(userStoreUI != null)
+                        if (userStoreUI != null)
                         {
                             data.UserStores = userStoreUI.ToList();
                         }
                     }
-                    
+
 
                     return data;
                 }
@@ -129,16 +129,16 @@ namespace AuthenticationDAL
             }
         }
 
-        public async Task<AppUserData> Read(string UserName, int CompanyAppID)
+        public async Task<AppUserData> Read(string UserName, int appID)
         {
             AppUserData data = new AppUserData();
             try
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
-                    string whereString = " WHERE UserName = @UserName AND CompanyAppID = @CompanyAppID";
+                    string whereString = " WHERE UserName = @UserName AND ApplicationID = @ApplicationID";
                     string sql = "SELECT * FROM " + tableName + whereString;
-                    object param = new { UserName = UserName, CompanyAppID = CompanyAppID };
+                    object param = new { UserName = UserName, ApplicationID = appID };
                     var dataUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, param);
                     if (dataUI != null)
                     {
@@ -183,7 +183,7 @@ namespace AuthenticationDAL
                         }
                         else
                         {
-                            if(data.UserStores != null && data.UserStores.Count > 0)
+                            if (data.UserStores != null && data.UserStores.Count > 0)
                             {
                                 foreach (var item in data.UserStores)
                                 {
@@ -206,9 +206,9 @@ namespace AuthenticationDAL
                         return false;
                     }
                 }
-                
+
             }
-            
+
         }
 
         public async Task<bool> Update(AppUserUI data, List<UserStoreUI> insertDatas, List<UserStoreUI> updateDatas, List<UserStoreUI> deleteDatas)
@@ -257,7 +257,7 @@ namespace AuthenticationDAL
                                 trans.Rollback();
                                 return false;
                             }
-                            
+
                         }
                     }
                     catch
@@ -265,9 +265,9 @@ namespace AuthenticationDAL
                         return false;
                     }
                 }
-                
+
             }
-            
+
         }
 
         public async Task<bool> MarkDelete(AppUserUI data)
@@ -276,7 +276,7 @@ namespace AuthenticationDAL
             {
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
-                    
+
                     var result = await connection.UpdateAsync(data);
                     if (result == false)
                     {
@@ -303,7 +303,7 @@ namespace AuthenticationDAL
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public async Task<AppUserData> GetAppUserData(string userName, int companyID, int appID)
+        public async Task<AppUserData> GetAppUserData(string userName, int appID)
         {
             try
             {
@@ -311,17 +311,17 @@ namespace AuthenticationDAL
                 using (IDbConnection connection = new SqlConnection(_connectionString))
                 {
                     //Get CompanyAppID
-                    string Sql = "SELECT * FROM CompanyApplication WHERE CompanyID=@CompanyID AND AppID = @AppID";
-                    object parametter = new { CompanyID = companyID, appID = appID };
-                    CompanyApplicationUI companyApplicationUI = await connection.QueryFirstOrDefaultAsync<CompanyApplicationUI>(Sql, parametter);
-                    if (companyApplicationUI == null)
+                    string Sql = "SELECT * FROM Applications WHERE ID = @AppID";
+                    object parametter = new { AppID = appID };
+                    ApplicationUI applicationUI = await connection.QueryFirstOrDefaultAsync<ApplicationUI>(Sql, parametter);
+                    if (applicationUI == null)
                     {
                         return null;
                     }
                     else
                     {
-                        Sql = "SELECT * FROM " + tableName + " WHERE UserName=@UserName AND CompanyAppID=@CompanyAppID";
-                        parametter = new { UserName = userName, CompanyAppID = companyApplicationUI.ID };
+                        Sql = "SELECT * FROM " + tableName + " WHERE UserName=@UserName AND ApplicationID=@ApplicationID";
+                        parametter = new { UserName = userName, ApplicationID = applicationUI.ID };
                         AppUserUI appUserUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(Sql, parametter);
                         if (appUserUI == null)
                         {
@@ -330,23 +330,24 @@ namespace AuthenticationDAL
                         else
                         {
                             data.AppUser = appUserUI;
-                            //Get AppRoleUI
-                            Sql = "SELECT * FROM AppRoles WHERE ID=@ID";
-                            parametter = new { ID = appUserUI.RoleID };
-                            AppRoleUI appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(Sql, parametter);
-                            data.AppRole = appRoleUI;
 
-                            //Get CompanyUI
-                            Sql = "SELECT * FROM Companies WHERE ID=@ID";
-                            parametter = new { ID = companyID };
-                            CompanyUI companyUI = await connection.QueryFirstOrDefaultAsync<CompanyUI>(Sql, parametter);
-                            data.Company = companyUI;
+                            ////Get AppRoleUI
+                            //Sql = "SELECT * FROM AppRoles WHERE ID=@ID";
+                            //parametter = new { ID = appUserUI.RoleID };
+                            //AppRoleUI appRoleUI = await connection.QueryFirstOrDefaultAsync<AppRoleUI>(Sql, parametter);
+                            //data.AppRole = appRoleUI;
 
-                            //Get List RoleRightUI
-                            Sql = "SELECT * FROM RoleRights WHERE RoleID=@RoleID";
-                            parametter = new { RoleID = appUserUI.RoleID };
-                            var roleRightUIs = await connection.QueryAsync<RoleRightUI>(Sql, parametter);
-                            data.RoleRights = (List<RoleRightUI>)roleRightUIs;
+                            ////Get CompanyUI
+                            //Sql = "SELECT * FROM Companies WHERE ID=@ID";
+                            //parametter = new { ID = companyID };
+                            //CompanyUI companyUI = await connection.QueryFirstOrDefaultAsync<CompanyUI>(Sql, parametter);
+                            //data.Company = companyUI;
+
+                            ////Get List RoleRightUI
+                            //Sql = "SELECT * FROM RoleRights WHERE RoleID=@RoleID";
+                            //parametter = new { RoleID = appUserUI.RoleID };
+                            //var roleRightUIs = await connection.QueryAsync<RoleRightUI>(Sql, parametter);
+                            //data.RoleRights = (List<RoleRightUI>)roleRightUIs;
                         }
                         return data;
                     }

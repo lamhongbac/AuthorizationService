@@ -24,7 +24,7 @@ namespace AuthServices
         private string connectionString = string.Empty;
         private string tableName = "AppUsers";
         IMapper mapper;
-   
+
         public AppUserService(IConfiguration configuration, IMapper mapper)
         {
             var configSection = configuration.GetSection("AppConfig");
@@ -94,7 +94,7 @@ namespace AuthServices
             }
         }
 
-        public List<BaseAppUser> GetDatas(int companyAppID, string department, int managerID,  out string errMessage, out bool result)
+        public List<BaseAppUser> GetDatas(int companyAppID, string department, int managerID, out string errMessage, out bool result)
         {
             try
             {
@@ -182,7 +182,7 @@ namespace AuthServices
                 BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserData.AppUser);
 
                 //IMappingHelper<BaseUserStore, UserStoreUI> mappingUserStoreHelper = new IMappingHelper<BaseUserStore, UserStoreUI>();
-                if(BaseAppUser != null)
+                if (BaseAppUser != null)
                 {
                     BaseAppUser.BaseUserStores = mapper.Map<List<BaseUserStore>>(AppUserData.UserStores);
                     result = true;
@@ -193,7 +193,7 @@ namespace AuthServices
                 errMessage = "false";
                 return null;
                 //BaseAppUser BaseAppUser = mapper.Map<BaseAppUser>(AppUserUIs);
-                
+
 
             }
             catch (Exception ex)
@@ -211,7 +211,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppUserData = await dataPortal.Read(data.UserName, data.CompanyAppID);
+                AppUserData = await dataPortal.Read(data.UserName, data.AppID);
                 if (AppUserData.AppUser != null)
                 {
                     processResult.OK = false;
@@ -219,28 +219,32 @@ namespace AuthServices
                     return processResult;
                 }
 
+                data.PwdKey = MSASecurity.GetSalt();
+                string saltPass = data.Pwd + data.PwdKey;
+                data.Pwd = MSASecurity.GetHash(saltPass);
+
                 //IMappingHelper<AppUserUI, BaseAppUser> mappingHelper = new IMappingHelper<AppUserUI, BaseAppUser>();
                 AppUserData.AppUser = mapper.Map<AppUserUI>(data);
 
-                //Kiểm tra role selected là RM hay không
-                GenericDataPortal<AppRoleUI> genericDataPortal = new GenericDataPortal<AppRoleUI>(connectionString, "AppRoles");
-                string whereString = "ID = @ID";
-                object param = new { ID = data.RoleID };
-                AppRoleUI existRole = await genericDataPortal.Read(whereString, param);
-                if (existRole == null)
-                {
-                    processResult.OK = false;
-                    processResult.Message = "Role note found";
-                    return processResult;
-                }
+                ////Kiểm tra role selected là RM hay không
+                //GenericDataPortal<AppRoleUI> genericDataPortal = new GenericDataPortal<AppRoleUI>(connectionString, "AppRoles");
+                //string whereString = "ID = @ID";
+                //object param = new { ID = data.RoleID };
+                //AppRoleUI existRole = await genericDataPortal.Read(whereString, param);
+                //if (existRole == null)
+                //{
+                //    processResult.OK = false;
+                //    processResult.Message = "Role note found";
+                //    return processResult;
+                //}
 
-                if(existRole.IsStoreAdmin == false)
-                {
-                    data.BaseUserStores = new List<BaseUserStore>();
-                }
+                //if (existRole.IsStoreAdmin == false)
+                //{
+                //    data.BaseUserStores = new List<BaseUserStore>();
+                //}
 
-                //IMappingHelper<UserStoreUI, BaseUserStore> mappingUserStoreHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
-                AppUserData.UserStores = mapper.Map<List<UserStoreUI>>(data.BaseUserStores);
+                ////IMappingHelper<UserStoreUI, BaseUserStore> mappingUserStoreHelper = new IMappingHelper<UserStoreUI, BaseUserStore>();
+                //AppUserData.UserStores = mapper.Map<List<UserStoreUI>>(data.BaseUserStores);
 
                 //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
                 var result = await dataPortal.Insert(AppUserData);
@@ -275,7 +279,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppUserData = await dataPortal.Read(data.UserName, data.CompanyAppID);
+                AppUserData = await dataPortal.Read(data.UserName, data.AppID);
                 if (AppUserData.AppUser == null)
                 {
                     processResult.OK = false;
@@ -311,14 +315,14 @@ namespace AuthServices
                 List<UserStoreUI> updateDatas = new List<UserStoreUI>();
                 List<UserStoreUI> deleteDatas = new List<UserStoreUI>();
 
-                if(updateUserStores != null)
+                if (updateUserStores != null)
                 {
-                    foreach(var item in updateUserStores)
+                    foreach (var item in updateUserStores)
                     {
-                        if(existUserStores != null && existUserStores.Count > 0)
+                        if (existUserStores != null && existUserStores.Count > 0)
                         {
                             UserStoreUI userStoreUI = existUserStores.FirstOrDefault(x => x.UserID == item.UserID && x.StoreID == item.StoreID);
-                            if(userStoreUI != null && userStoreUI.ID != 0)
+                            if (userStoreUI != null && userStoreUI.ID != 0)
                             {
                                 updateDatas.Add(item);
                             }
@@ -333,10 +337,10 @@ namespace AuthServices
                         }
                     }
 
-                    foreach(var item in existUserStores)
+                    foreach (var item in existUserStores)
                     {
                         UserStoreUI userStoreUI = updateUserStores.FirstOrDefault(x => x.UserID == item.UserID && x.StoreID == item.StoreID);
-                        if(userStoreUI == null)
+                        if (userStoreUI == null)
                         {
                             deleteDatas.Add(item);
                         }
@@ -374,7 +378,7 @@ namespace AuthServices
             BODataProcessResult processResult = new BODataProcessResult();
             try
             {
-                AppUserData = await dataPortal.Read(data.UserName, data.CompanyAppID);
+                AppUserData = await dataPortal.Read(data.UserName, data.AppID);
                 if (AppUserData.AppUser == null)
                 {
                     processResult.OK = false;

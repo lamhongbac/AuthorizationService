@@ -10,8 +10,8 @@ namespace AuthServices.Models
     {
         public UserInfo()
         {
-            ObjectRights = new Dictionary<string, List<string>>();
-            Roles = new List<string>();
+            //ObjectRights = new Dictionary<string, List<string>>();
+            //Roles = new List<string>();
         }
         public string ID { get; set; }
         public string UserName { get; set; }
@@ -20,8 +20,8 @@ namespace AuthServices.Models
         public List<string> Roles { get; set; }
 
         //objectName;right1,right2
-        public Dictionary<string,List<string>> ObjectRights { get; set; }
-        
+        public Dictionary<string, List<string>> ObjectRights { get; set; }
+
         public int AppID { get; set; }
         public int CompanyID { get; set; }
         public int ManagerID { get; set; }

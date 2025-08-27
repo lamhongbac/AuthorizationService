@@ -12,7 +12,7 @@ namespace AuthenticationDAL.DTO
         public string FullName { get; set; }
         public string Pwd { get; set; }
         public string PwdKey { get; set; }
-        public int CompanyAppID { get; set; }
+        //public int CompanyAppID { get; set; }
         public string Email { get; set; }
         public string Mobile { get; set; }
         public bool? IsDeleted { get; set; }
@@ -20,5 +20,6 @@ namespace AuthenticationDAL.DTO
         public int? ManagerID { get; set; }
         public bool IsManager { get; set; }
         public string? Department { get; set; }
+        public int? ApplicationID { get; set; }
     }
 }

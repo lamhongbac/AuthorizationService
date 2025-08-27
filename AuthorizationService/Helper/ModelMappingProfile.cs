@@ -15,7 +15,8 @@ namespace AuthorizationService.Helper
             CreateMap<BaseAppObject, AppObjectUI>().ReverseMap();
             CreateMap<BaseRoleRight, RoleRightUI>().ReverseMap();
             CreateMap<BaseAppRole, AppRoleUI>().ReverseMap();
-            CreateMap<BaseAppUser, AppUserUI>().ReverseMap();
+            CreateMap<BaseAppUser, AppUserUI>()
+               .ForMember(dest => dest.ApplicationID, act => act.MapFrom(src => src.AppID)).ReverseMap();
             CreateMap<BaseApplication, ApplicationUI>().ReverseMap();
             CreateMap<BaseCompanyApplication, CompanyApplicationUI>().ReverseMap();
             CreateMap<BaseUserRole, UserRoleUI>().ReverseMap();
