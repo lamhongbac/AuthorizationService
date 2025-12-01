@@ -2,6 +2,9 @@
 
 namespace AuthenticationDAL.DTO
 {
+    /// <summary>
+    /// AppUsers(Companies
+    /// </summary>
     public class AppUserData
     {
         public AppUserData()
