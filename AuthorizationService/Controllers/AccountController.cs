@@ -39,47 +39,47 @@ namespace AuthorizationService.Controllers
             return response;
         }
 
-        //Mob QA Login
-        [Route("MobQALogin")]
-        [HttpPost]
-        public async Task<IActionResult> MobQALogin(LoginModel model)
-        {
-            BODataProcessResult processResult = new BODataProcessResult();
-            IActionResult response = Unauthorized();
-            processResult = await _authenticationService.MobLogin(model);
+        ////Mob QA Login
+        //[Route("MobQALogin")]
+        //[HttpPost]
+        //public async Task<IActionResult> MobQALogin(LoginModel model)
+        //{
+        //    BODataProcessResult processResult = new BODataProcessResult();
+        //    IActionResult response = Unauthorized();
+        //    processResult = await _authenticationService.MobLogin(model);
 
-            if (processResult.OK)
-            {
+        //    if (processResult.OK)
+        //    {
 
-                response = Ok(processResult);
-            }
-            else
-            {
-                //dich message?
-            }
-            return response;
-        }
+        //        response = Ok(processResult);
+        //    }
+        //    else
+        //    {
+        //        //dich message?
+        //    }
+        //    return response;
+        //}
 
-        //Mob RM Login
-        [Route("MobRMLogin")]
-        [HttpPost]
-        public async Task<IActionResult> MobRMLogin(LoginModel model)
-        {
-            BODataProcessResult processResult = new BODataProcessResult();
-            IActionResult response = Unauthorized();
-            processResult = await _authenticationService.MobRMLogin(model);
+        ////Mob RM Login
+        //[Route("MobRMLogin")]
+        //[HttpPost]
+        //public async Task<IActionResult> MobRMLogin(LoginModel model)
+        //{
+        //    BODataProcessResult processResult = new BODataProcessResult();
+        //    IActionResult response = Unauthorized();
+        //    processResult = await _authenticationService.MobRMLogin(model);
 
-            if (processResult.OK)
-            {
+        //    if (processResult.OK)
+        //    {
 
-                response = Ok(processResult);
-            }
-            else
-            {
-                //dich message?
-            }
-            return response;
-        }
+        //        response = Ok(processResult);
+        //    }
+        //    else
+        //    {
+        //        //dich message?
+        //    }
+        //    return response;
+        //}
 
         /// <summary>
         /// client khi login vao API se su dung ham nay

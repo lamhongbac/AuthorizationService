@@ -140,134 +140,134 @@ namespace AuthorizationService.Service
             return userInfo;
         }
 
-        /// <summary>
-        /// lop nay danh cho mobLogin
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<BODataProcessResult> MobLogin(LoginModel model)
-        {
-            BODataProcessResult processResult = new BODataProcessResult();
+        ///// <summary>
+        ///// lop nay danh cho mobLogin
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //public async Task<BODataProcessResult> MobLogin(LoginModel model)
+        //{
+        //    BODataProcessResult processResult = new BODataProcessResult();
 
-            processResult.OK = false;
-            processResult.Content = null;
-            UserInfo user = await AuthenticateUser(model);
-            if (user != null)
-            {
-                MobUserInfo mobUserInfo = _mapper.Map<MobUserInfo>(user);
+        //    processResult.OK = false;
+        //    processResult.Content = null;
+        //    UserInfo user = await AuthenticateUser(model);
+        //    if (user != null)
+        //    {
+        //        MobUserInfo mobUserInfo = _mapper.Map<MobUserInfo>(user);
 
-                List<ObjectRight> objectRights = new List<ObjectRight>();
-                foreach (var item in user.ObjectRights)
-                {
-                    ObjectRight objectRight = new ObjectRight
-                    {
-                        ObjectName = item.Key,
-                        Rights = item.Value
-                    };
-                    objectRights.Add(objectRight);
-                }
-                mobUserInfo.ObjectRights = objectRights;
-                mobUserInfo.LoginDate = DateTime.Now;
-                // ==>log vao mongo DB thong tin sau
-                // 
-                // ID: dai dien cho 1 lan login= userID+deviceID
-                // Status = Login/LogOut
-                // ngay thuc hien
-                string mode = _config.GetValue<string>(
-                "AppConfig:ProductMode");
-                if (mode.ToLower() != "dev")
-                {
-                    LogLoginUI logLoginUI = _mapper.Map<LogLoginUI>(user);
-                    logLoginUI.ID = Guid.NewGuid();
-                    logLoginUI.LoginDate = DateTime.Now;
-                    BODataProcessResult logResult = await _logLoginService.Create(logLoginUI);
-                    if (logResult.OK)
-                    {
-                        mobUserInfo.LoginID = logLoginUI.ID;
-                    }
-                }
-
-
-                processResult.OK = true;
-                processResult.Content = mobUserInfo;
+        //        List<ObjectRight> objectRights = new List<ObjectRight>();
+        //        foreach (var item in user.ObjectRights)
+        //        {
+        //            ObjectRight objectRight = new ObjectRight
+        //            {
+        //                ObjectName = item.Key,
+        //                Rights = item.Value
+        //            };
+        //            objectRights.Add(objectRight);
+        //        }
+        //        mobUserInfo.ObjectRights = objectRights;
+        //        mobUserInfo.LoginDate = DateTime.Now;
+        //        // ==>log vao mongo DB thong tin sau
+        //        // 
+        //        // ID: dai dien cho 1 lan login= userID+deviceID
+        //        // Status = Login/LogOut
+        //        // ngay thuc hien
+        //        string mode = _config.GetValue<string>(
+        //        "AppConfig:ProductMode");
+        //        if (mode.ToLower() != "dev")
+        //        {
+        //            LogLoginUI logLoginUI = _mapper.Map<LogLoginUI>(user);
+        //            logLoginUI.ID = Guid.NewGuid();
+        //            logLoginUI.LoginDate = DateTime.Now;
+        //            BODataProcessResult logResult = await _logLoginService.Create(logLoginUI);
+        //            if (logResult.OK)
+        //            {
+        //                mobUserInfo.LoginID = logLoginUI.ID;
+        //            }
+        //        }
 
 
-            }
-            return processResult;
-        }
-
-        /// <summary>
-        /// Login cho RM mobile app
-        /// Kiểm tra email + pass + mã nhà hàng
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<BODataProcessResult> MobRMLogin(LoginModel model)
-        {
-            BODataProcessResult processResult = new BODataProcessResult();
-
-            processResult.OK = false;
-            processResult.Content = null;
-            UserInfo user = await AuthenticateUser(model);
-            if (user != null)
-            {
-                //kiểm tra user có thuộc quản lý nhà hàng không?
-                if (user.StoreIDs == null || user.StoreIDs.Count == 0)
-                {
-                    processResult.OK = false;
-                    processResult.Message = "Không có dữ liệu nhà hàng quản lý";
-                    return processResult;
-                }
-
-                //if (!user.StoreIDs.Any(x => x == model.StoreID))
-                //{
-                //    processResult.OK = false;
-                //    processResult.Message = "Nhà hàng không hợp lệ";
-                //    return processResult;
-                //}
+        //        processResult.OK = true;
+        //        processResult.Content = mobUserInfo;
 
 
-                MobUserInfo mobUserInfo = _mapper.Map<MobUserInfo>(user);
+        //    }
+        //    return processResult;
+        //}
 
-                List<ObjectRight> objectRights = new List<ObjectRight>();
-                foreach (var item in user.ObjectRights)
-                {
-                    ObjectRight objectRight = new ObjectRight
-                    {
-                        ObjectName = item.Key,
-                        Rights = item.Value
-                    };
-                    objectRights.Add(objectRight);
-                }
-                mobUserInfo.ObjectRights = objectRights;
-                mobUserInfo.LoginDate = DateTime.Now;
-                // ==>log vao mongo DB thong tin sau
-                // 
-                // ID: dai dien cho 1 lan login= userID+deviceID
-                // Status = Login/LogOut
-                // ngay thuc hien
-                string mode = _config.GetValue<string>(
-                "AppConfig:ProductMode");
-                if (mode.ToLower() != "dev")
-                {
-                    LogLoginUI logLoginUI = _mapper.Map<LogLoginUI>(user);
-                    logLoginUI.ID = Guid.NewGuid();
-                    logLoginUI.LoginDate = DateTime.Now;
-                    BODataProcessResult logResult = await _logLoginService.Create(logLoginUI);
-                    if (logResult.OK)
-                    {
-                        mobUserInfo.LoginID = logLoginUI.ID;
-                    }
-                }
+        ///// <summary>
+        ///// Login cho RM mobile app
+        ///// Kiểm tra email + pass + mã nhà hàng
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //public async Task<BODataProcessResult> MobRMLogin(LoginModel model)
+        //{
+        //    BODataProcessResult processResult = new BODataProcessResult();
 
+        //    processResult.OK = false;
+        //    processResult.Content = null;
+        //    UserInfo user = await AuthenticateUser(model);
+        //    if (user != null)
+        //    {
+        //        //kiểm tra user có thuộc quản lý nhà hàng không?
+        //        if (user.StoreIDs == null || user.StoreIDs.Count == 0)
+        //        {
+        //            processResult.OK = false;
+        //            processResult.Message = "Không có dữ liệu nhà hàng quản lý";
+        //            return processResult;
+        //        }
 
-                processResult.OK = true;
-                processResult.Content = mobUserInfo;
+        //        //if (!user.StoreIDs.Any(x => x == model.StoreID))
+        //        //{
+        //        //    processResult.OK = false;
+        //        //    processResult.Message = "Nhà hàng không hợp lệ";
+        //        //    return processResult;
+        //        //}
 
 
-            }
-            return processResult;
-        }
+        //        MobUserInfo mobUserInfo = _mapper.Map<MobUserInfo>(user);
+
+        //        List<ObjectRight> objectRights = new List<ObjectRight>();
+        //        foreach (var item in user.ObjectRights)
+        //        {
+        //            ObjectRight objectRight = new ObjectRight
+        //            {
+        //                ObjectName = item.Key,
+        //                Rights = item.Value
+        //            };
+        //            objectRights.Add(objectRight);
+        //        }
+        //        mobUserInfo.ObjectRights = objectRights;
+        //        mobUserInfo.LoginDate = DateTime.Now;
+        //        // ==>log vao mongo DB thong tin sau
+        //        // 
+        //        // ID: dai dien cho 1 lan login= userID+deviceID
+        //        // Status = Login/LogOut
+        //        // ngay thuc hien
+        //        string mode = _config.GetValue<string>(
+        //        "AppConfig:ProductMode");
+        //        if (mode.ToLower() != "dev")
+        //        {
+        //            LogLoginUI logLoginUI = _mapper.Map<LogLoginUI>(user);
+        //            logLoginUI.ID = Guid.NewGuid();
+        //            logLoginUI.LoginDate = DateTime.Now;
+        //            BODataProcessResult logResult = await _logLoginService.Create(logLoginUI);
+        //            if (logResult.OK)
+        //            {
+        //                mobUserInfo.LoginID = logLoginUI.ID;
+        //            }
+        //        }
+
+
+        //        processResult.OK = true;
+        //        processResult.Content = mobUserInfo;
+
+
+        //    }
+        //    return processResult;
+        //}
 
         /// <summary>
         /// Login cho RM mobile app
