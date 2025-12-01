@@ -25,7 +25,49 @@ namespace AuthorizationService.Controllers
         {
             BODataProcessResult processResult = new BODataProcessResult();
             IActionResult response = Unauthorized();
+            processResult = await _authenticationService.MobLogin1(model);
+
+            if (processResult.OK)
+            {
+
+                response = Ok(processResult);
+            }
+            else
+            {
+                //dich message?
+            }
+            return response;
+        }
+
+        //Mob QA Login
+        [Route("MobQALogin")]
+        [HttpPost]
+        public async Task<IActionResult> MobQALogin(LoginModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+            IActionResult response = Unauthorized();
             processResult = await _authenticationService.MobLogin(model);
+
+            if (processResult.OK)
+            {
+
+                response = Ok(processResult);
+            }
+            else
+            {
+                //dich message?
+            }
+            return response;
+        }
+
+        //Mob RM Login
+        [Route("MobRMLogin")]
+        [HttpPost]
+        public async Task<IActionResult> MobRMLogin(LoginModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+            IActionResult response = Unauthorized();
+            processResult = await _authenticationService.MobRMLogin(model);
 
             if (processResult.OK)
             {

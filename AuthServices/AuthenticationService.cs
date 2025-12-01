@@ -45,7 +45,7 @@ namespace AuthorizationService.Service
         public async Task<UserInfo> AuthenticateUser(LoginModel model)
         {
             UserInfo userInfo = null;
-            BaseAppUser appUser = await _accountService.GetUserInfo(model.UserName, model.CompanyID, model.AppID);
+            BaseAppUser appUser = await _accountService.GetUserInfo(model.UserName, model.CompanyID, model.AppID, model.UserType);
             if (appUser != null)
             {
                 string saltPass = model.Password + appUser.PwdKey;
@@ -122,6 +122,7 @@ namespace AuthorizationService.Service
                     if (appUser.BaseUserStores != null && appUser.BaseUserStores.Count > 0)
                     {
                         userInfo.StoreIDs = appUser.BaseUserStores.Select(x => x.StoreID).ToList();
+                        userInfo.StoreNumbers = appUser.BaseUserStores.Select(x => x.Number).ToList();
                     }
 
                     return userInfo;
@@ -129,6 +130,7 @@ namespace AuthorizationService.Service
             }
             return userInfo;
         }
+
         /// <summary>
         /// lop nay danh cho mobLogin
         /// </summary>
@@ -184,6 +186,132 @@ namespace AuthorizationService.Service
             }
             return processResult;
         }
+
+        /// <summary>
+        /// Login cho RM mobile app
+        /// Kiểm tra email + pass + mã nhà hàng
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<BODataProcessResult> MobRMLogin(LoginModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+
+            processResult.OK = false;
+            processResult.Content = null;
+            UserInfo user = await AuthenticateUser(model);
+            if (user != null)
+            {
+                //kiểm tra user có thuộc quản lý nhà hàng không?
+                if (user.StoreIDs == null || user.StoreIDs.Count == 0)
+                {
+                    processResult.OK = false;
+                    processResult.Message = "Không có dữ liệu nhà hàng quản lý";
+                    return processResult;
+                }
+
+                //if (!user.StoreIDs.Any(x => x == model.StoreID))
+                //{
+                //    processResult.OK = false;
+                //    processResult.Message = "Nhà hàng không hợp lệ";
+                //    return processResult;
+                //}
+
+
+                MobUserInfo mobUserInfo = _mapper.Map<MobUserInfo>(user);
+
+                List<ObjectRight> objectRights = new List<ObjectRight>();
+                foreach (var item in user.ObjectRights)
+                {
+                    ObjectRight objectRight = new ObjectRight
+                    {
+                        ObjectName = item.Key,
+                        Rights = item.Value
+                    };
+                    objectRights.Add(objectRight);
+                }
+                mobUserInfo.ObjectRights = objectRights;
+                mobUserInfo.LoginDate = DateTime.Now;
+                // ==>log vao mongo DB thong tin sau
+                // 
+                // ID: dai dien cho 1 lan login= userID+deviceID
+                // Status = Login/LogOut
+                // ngay thuc hien
+                string mode = _config.GetValue<string>(
+                "AppConfig:ProductMode");
+                if (mode.ToLower() != "dev")
+                {
+                    LogLoginUI logLoginUI = _mapper.Map<LogLoginUI>(user);
+                    logLoginUI.ID = Guid.NewGuid();
+                    logLoginUI.LoginDate = DateTime.Now;
+                    BODataProcessResult logResult = await _logLoginService.Create(logLoginUI);
+                    if (logResult.OK)
+                    {
+                        mobUserInfo.LoginID = logLoginUI.ID;
+                    }
+                }
+
+
+                processResult.OK = true;
+                processResult.Content = mobUserInfo;
+
+
+            }
+            return processResult;
+        }
+
+        /// <summary>
+        /// Login cho RM mobile app
+        /// Kiểm tra email + pass + mã nhà hàng
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<BODataProcessResult> MobLogin1(LoginModel model)
+        {
+            BODataProcessResult processResult = new BODataProcessResult();
+
+            processResult.OK = false;
+            processResult.Content = null;
+            UserInfo user = await AuthenticateUser(model);
+            if (user != null)
+            {
+                if (!model.IsOfficeLogin)
+                {
+                    //kiểm tra user có thuộc quản lý nhà hàng không?
+                    if (user.StoreNumbers == null || user.StoreNumbers.Count == 0)
+                    {
+                        processResult.OK = false;
+                        processResult.Message = "Không có dữ liệu nhà hàng quản lý";
+                        return processResult;
+                    }
+
+                    if (!user.StoreNumbers.Any(x => x == model.StoreNumber))
+                    {
+                        processResult.OK = false;
+                        processResult.Message = "Nhà hàng không hợp lệ";
+                        return processResult;
+                    }
+                }
+                JwtData jwtData = _jwtUtil.GenerateJSONWebToken(user);
+                LoginInfoMob loginInfo = new LoginInfoMob()
+                {
+                    LoginDate = DateTime.Now,
+                    JwtData = jwtData,
+                    AssignedOutlets = user.StoreNumbers,
+                    FullName = user.FullName,
+                    ID = user.ID,
+                    Roles = user.Roles,
+                    UserName = user.UserName
+                };
+
+                processResult.OK = true;
+                processResult.Content = loginInfo;
+
+
+            }
+            return processResult;
+        }
+
         public async Task<BODataProcessResult> Login(LoginModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();

@@ -13,6 +13,7 @@ namespace AuthServices.Models
             ObjectRights = new Dictionary<string, List<string>>();
             Roles = new List<string>();
             StoreIDs = new List<int>();
+            StoreNumbers = new List<string>();
         }
         public string ID { get; set; }
         public string UserName { get; set; }
@@ -31,6 +32,7 @@ namespace AuthServices.Models
         public List<int> StoreIDs { get; set; }
         public Guid LoginID { get; set; }
         public DateTime LoginDate { get; set; }
+        public List<string> StoreNumbers { get; set; }
     }
     public class LoginInfo
     {
@@ -44,6 +46,27 @@ namespace AuthServices.Models
         public DateTime LoginDate { get; set; }
         //example cho truong hop user data tong quat duoi dang string object
 
+        public JwtData JwtData { get; set; }
+    }
+
+    /// <summary>
+    /// User info cho mobile app
+    /// </summary>
+    public class LoginInfoMob
+    {
+        public LoginInfoMob()
+        {
+            Roles = new List<string>();
+            AssignedOutlets = new List<string>();
+            LoginDate = DateTime.Now;
+            JwtData = new JwtData();
+        }
+        public string ID { get; set; }
+        public string UserName { get; set; }
+        public string FullName { get; set; }
+        public List<string> Roles { get; set; }
+        public List<string> AssignedOutlets { get; set; }
+        public DateTime LoginDate { get; set; }
         public JwtData JwtData { get; set; }
     }
 }

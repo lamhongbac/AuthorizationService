@@ -116,7 +116,7 @@ namespace AuthServices.Models
         {
 
         }
-        public void SetConfig(JwtConfig jwtConfig )
+        public void SetConfig(JwtConfig jwtConfig)
         {
             this.jwtConfig = jwtConfig;
         }
@@ -173,7 +173,7 @@ namespace AuthServices.Models
                 claims.Add(new Claim("ObjectRights", objectRights));
             }
 
-            if(userInfo.ManagerID > 0)
+            if (userInfo.ManagerID > 0)
             {
                 claims.Add(new Claim("ManagerID", userInfo.ManagerID.ToString()));
             }
@@ -184,6 +184,80 @@ namespace AuthServices.Models
             }
 
 
+
+            SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddSeconds(jwtConfig.ExpiredSeconds),
+                SigningCredentials = credentials,
+                Issuer = jwtConfig.Issuer,
+                Audience = jwtConfig.Audience,
+
+            };
+            JwtData data = new JwtData();
+
+
+            var jwtoken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
+            string jwt = jwtSecurityTokenHandler.WriteToken(jwtoken);
+            string refreshToken = GenerateRefreshToken();
+            int ref_exp_mins = jwtConfig.RefExpireMinutes;
+
+            //save data to DB
+            RefreshTokenData refreshTokenModel = new RefreshTokenData()
+            {
+                Id = Guid.NewGuid(),
+                Token = refreshToken,
+                IssuedAt = DateTime.UtcNow,
+                ExpiredAt = DateTime.UtcNow.AddMinutes(ref_exp_mins),
+
+
+                IsRevoked = false,
+                IsUsed = false,
+
+                JwtId = jwtoken.Id,
+                UserId = userInfo.ID
+            };
+            //save token
+            _tokenDatas.AddToken(refreshTokenModel);
+
+            data.AccessToken = jwt;
+            data.RefreshToken = refreshTokenModel.Token;
+
+            return data;
+        }
+
+        public JwtData GenerateJSONWebTokenForMob(LoginInfoMob userInfo)
+        {
+            JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
+
+
+            if (userInfo.UserName != null)
+            {
+                claims.Add(new Claim("UserName", userInfo.UserName));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, userInfo.UserName));
+            }
+            else
+            {
+                throw new Exception("UserName is not allow empty");
+            }
+            if (userInfo.ID != null)
+                claims.Add(new Claim("UserID", userInfo.ID.ToString()));
+            if (userInfo.FullName != null)
+                claims.Add(new Claim("FullName", userInfo.FullName.ToString()));
+
+            if (userInfo.Roles != null && userInfo.Roles.Count > 0)
+            {
+                foreach (var item in userInfo.Roles)
+                {
+                    claims.Add(new Claim("Roles", item));
+                }
+            }
 
             SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
             {
@@ -313,10 +387,10 @@ namespace AuthServices.Models
         /// <returns></returns>
         public BODataProcessResult RenewToken(JwtData model)
         {
-            JwtClientUtil jwtClientUtil=new JwtClientUtil();
+            JwtClientUtil jwtClientUtil = new JwtClientUtil();
             BODataProcessResult processResult = new BODataProcessResult();
             JwtSecurityTokenHandler tokenSecurityTokenHandler = new JwtSecurityTokenHandler();
-            
+
             Byte[] seckeyBytes = Encoding.UTF8.GetBytes(jwtConfig.SecretKey);
 
             //b1. build token validate para
@@ -437,11 +511,11 @@ namespace AuthServices.Models
             }
 
         }
-        
 
 
-        
+
+
     }
 
-    
+
 }

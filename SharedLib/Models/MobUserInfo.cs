@@ -26,6 +26,7 @@ namespace AuthSharedLib.Models
         public List<int> StoreIDs { get; set; }
         public Guid LoginID { get; set; }
         public DateTime LoginDate { get; set; }
+
     }
 
     public struct ObjectRight

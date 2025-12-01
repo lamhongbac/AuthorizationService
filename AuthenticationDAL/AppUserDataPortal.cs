@@ -1,6 +1,7 @@
 ﻿using AuthenticationDAL.DTO;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -348,7 +349,7 @@ namespace AuthenticationDAL
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public async Task<AppUserData> GetAppUserData(string userName, int companyID, int appID)
+        public async Task<AppUserData> GetAppUserData(string userName, int companyID, int appID, string userType = "username")
         {
             try
             {
@@ -365,9 +366,17 @@ namespace AuthenticationDAL
                     }
                     else
                     {
-                        Sql = "SELECT * FROM " + tableName + " WHERE UserName=@UserName AND CompanyAppID=@CompanyAppID";
+                        string column = "UserName";
+                        if (!string.IsNullOrEmpty(userType) && userType.Equals("email", StringComparison.OrdinalIgnoreCase))
+                        {
+                            column = "Email";
+                        }
+                        string sql = $@"SELECT * 
+                FROM {tableName}
+                WHERE {column} = @UserName
+                AND CompanyAppID = @CompanyAppID";
                         parametter = new { UserName = userName, CompanyAppID = companyApplicationUI.ID };
-                        AppUserUI appUserUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(Sql, parametter);
+                        AppUserUI appUserUI = await connection.QueryFirstOrDefaultAsync<AppUserUI>(sql, parametter);
                         if (appUserUI == null)
                         {
                             return null;

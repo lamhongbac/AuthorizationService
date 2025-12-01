@@ -24,10 +24,10 @@ namespace AuthServices
             this.mapper = mapper;
         }
 
-        public async Task<BaseAppUser> GetUserInfo(string userName, int companyID, int appID)
+        public async Task<BaseAppUser> GetUserInfo(string userName, int companyID, int appID, string userType)
         {
             _appUserDataPortal = new AppUserDataPortal(connectionString);
-            AppUserData appUserData = await _appUserDataPortal.GetAppUserData(userName, companyID, appID);
+            AppUserData appUserData = await _appUserDataPortal.GetAppUserData(userName, companyID, appID, userType);
             if (appUserData == null)
             {
                 return null;
