@@ -319,7 +319,7 @@ namespace AuthServices
                     return processResult;
                 }
 
-                if (existRole.IsStoreAdmin == false)
+                if (!existRole.IsStoreAdmin && existRole.Number.ToLower() != "qaofficer")
                 {
                     data.BaseUserStores = new List<BaseUserStore>();
                 }
@@ -363,7 +363,6 @@ namespace AuthServices
                         }
                     }
                 }
-
                 //AppUserUI AppUserUI = mapper.Map<AppUserUI>(data);
                 var result = await dataPortal.Update(updateUserUI, insertDatas, updateDatas, deleteDatas);
                 if (result == true)
