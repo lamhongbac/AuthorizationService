@@ -270,12 +270,11 @@ namespace AuthorizationService.Service
         //}
 
         /// <summary>
-        /// Login cho RM mobile app
         /// Kiểm tra email + pass + mã nhà hàng
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<BODataProcessResult> MobLogin1(LoginModel model)
+        public async Task<BODataProcessResult> MobLogin(LoginModel model)
         {
             BODataProcessResult processResult = new BODataProcessResult();
 
@@ -284,23 +283,24 @@ namespace AuthorizationService.Service
             UserInfo user = await AuthenticateUser(model);
             if (user != null)
             {
-                if (!model.IsOfficeLogin)
-                {
-                    //kiểm tra user có thuộc quản lý nhà hàng không?
-                    if (user.StoreNumbers == null || user.StoreNumbers.Count == 0)
-                    {
-                        processResult.OK = false;
-                        processResult.Message = "Không có dữ liệu nhà hàng quản lý";
-                        return processResult;
-                    }
+                //if (!model.IsOfficeLogin)
+                //{
+                //    //kiểm tra user có thuộc quản lý nhà hàng không?
+                //    if (user.StoreNumbers == null || user.StoreNumbers.Count == 0)
+                //    {
+                //        processResult.OK = false;
+                //        processResult.Message = "Không có dữ liệu nhà hàng quản lý";
+                //        return processResult;
+                //    }
 
-                    if (!user.StoreNumbers.Any(x => x == model.StoreNumber))
-                    {
-                        processResult.OK = false;
-                        processResult.Message = "Nhà hàng không hợp lệ";
-                        return processResult;
-                    }
-                }
+                //    if (!user.StoreNumbers.Any(x => x == model.StoreNumber))
+                //    {
+                //        processResult.OK = false;
+                //        processResult.Message = "Nhà hàng không hợp lệ";
+                //        return processResult;
+                //    }
+                //}
+
                 JwtData jwtData = _jwtUtil.GenerateJSONWebToken(user);
                 LoginInfoMob loginInfo = new LoginInfoMob()
                 {

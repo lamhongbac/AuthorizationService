@@ -25,7 +25,7 @@ namespace AuthorizationService.Controllers
         {
             BODataProcessResult processResult = new BODataProcessResult();
             IActionResult response = Unauthorized();
-            processResult = await _authenticationService.MobLogin1(model);
+            processResult = await _authenticationService.MobLogin(model);
 
             if (processResult.OK)
             {
