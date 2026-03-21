@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using AuthServices.Models;
+using System.Linq;
 
 namespace AuthServiceLibrary
 {
@@ -18,6 +19,7 @@ namespace AuthServiceLibrary
         private string connectionString = string.Empty;
         private string tableName = "LogLogin";
         IMapper mapper;
+        MobileTrackingDataPortal mobileTrackingDataPortal;
         public LogLoginService(IMapper mapper)
         {
             this.mapper = mapper;
@@ -133,6 +135,156 @@ namespace AuthServiceLibrary
                 processResult.Message = ex.Message;
             }
             return processResult;
+        }
+
+        public async Task<List<MobileTrackingUI>> GetListHeader()
+        {
+            mobileTrackingDataPortal = new MobileTrackingDataPortal(connectionString);
+            List<MobileTrackingUI> trackingUIs = await mobileTrackingDataPortal.ReadListHeader();
+            return trackingUIs;
+        }
+
+        public async Task<MobileTrackingData> GetDataByMemID(string memID)
+        {
+            mobileTrackingDataPortal = new MobileTrackingDataPortal(connectionString);
+            MobileTrackingData trackingData = await mobileTrackingDataPortal.ReadData(memID);
+            return trackingData;
+        }
+
+        /// <summary>
+        /// Ghi log khi login
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<BODataProcessResult> LogLogin(LoginModel model, string userName)
+        {
+            BODataProcessResult result = new BODataProcessResult();
+            mobileTrackingDataPortal = new MobileTrackingDataPortal(connectionString);
+
+            MobileTrackingData mobileTrackingData = await mobileTrackingDataPortal.ReadData(userName);
+            if (mobileTrackingData == null)
+            {
+                MobileTrackingUI trackingUI = new MobileTrackingUI();
+                trackingUI.ID = Guid.NewGuid();
+                trackingUI.UserName = userName;
+                trackingUI.Token = model.Token;
+                //trackingUI.AppID = model.AppID;
+                trackingUI.IsIn = true;
+                trackingUI.CreatedOn = DateTime.Now;
+                trackingUI.CreatedBy = userName;
+                trackingUI.ModifiedOn = DateTime.Now;
+                trackingUI.ModifiedBy = userName;
+
+                MobileTrackingDetailUI detailUI = new MobileTrackingDetailUI
+                {
+                    ID = Guid.NewGuid(),
+                    //AppID = model.AppID,
+                    DateIn = DateTime.Now,
+                    IP = model.IP,
+                    DeviceHid = model.Hid,
+                    DeviceName = model.DeviceName,
+                    Location = model.Location,
+                    Platform = model.Platform,
+                    Token = model.Token,
+                    TrackingType = "Login",
+                    UserName = userName,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = userName,
+                    ModifiedOn = DateTime.Now,
+                    ModifiedBy = userName
+                };
+                bool insertResut = await mobileTrackingDataPortal.Insert(trackingUI, detailUI);
+                if (insertResut)
+                {
+                    result.OK = true;
+                }
+            }
+            else
+            {
+                MobileTrackingUI trackingUI = mobileTrackingData.MobileTracking;
+                trackingUI.Token = model.Token;
+                //trackingUI.AppID = model.AppID;
+                trackingUI.IsIn = true;
+                trackingUI.CreatedOn = DateTime.Now;
+                trackingUI.CreatedBy = userName;
+                trackingUI.ModifiedOn = DateTime.Now;
+                trackingUI.ModifiedBy = userName;
+
+                MobileTrackingDetailUI detailUI = new MobileTrackingDetailUI
+                {
+                    ID = Guid.NewGuid(),
+                    //AppID = model.AppID,
+                    DateIn = DateTime.Now,
+                    IP = model.IP,
+                    DeviceHid = model.Hid,
+                    DeviceName = model.DeviceName,
+                    Location = model.Location,
+                    Platform = model.Platform,
+                    Token = model.Token,
+                    TrackingType = "Login",
+                    UserName = userName,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = userName,
+                    ModifiedOn = DateTime.Now,
+                    ModifiedBy = userName
+                };
+                bool insertResut = await mobileTrackingDataPortal.Update(trackingUI, detailUI, true);
+                if (insertResut)
+                {
+                    result.OK = true;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Ghi log khi login
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<BODataProcessResult> LogLogout(string userName)
+        {
+            BODataProcessResult result = new BODataProcessResult();
+            mobileTrackingDataPortal = new MobileTrackingDataPortal(connectionString);
+
+            MobileTrackingData mobileTrackingData = await mobileTrackingDataPortal.ReadData(userName);
+            if (mobileTrackingData == null)
+            {
+                result.OK = false;
+                result.Message = "InValidData";
+                return result;
+            }
+            else
+            {
+                MobileTrackingUI trackingUI = mobileTrackingData.MobileTracking;
+                trackingUI.IsIn = false;
+                trackingUI.CreatedOn = DateTime.Now;
+                trackingUI.CreatedBy = userName;
+                trackingUI.ModifiedOn = DateTime.Now;
+                trackingUI.ModifiedBy = userName;
+
+                MobileTrackingDetailUI detailUI = mobileTrackingData.MobileTrackingDetails.Where(x => x.DateOut == null).LastOrDefault();
+                if (detailUI == null)
+                {
+                    result.OK = false;
+                    result.Message = "InValidData";
+                    return result;
+                }
+                else
+                {
+                    detailUI.DateOut = DateTime.Now;
+                    detailUI.CreatedOn = DateTime.Now;
+                    detailUI.CreatedBy = userName;
+                    detailUI.ModifiedOn = DateTime.Now;
+                    detailUI.ModifiedBy = userName;
+                }
+                bool insertResut = await mobileTrackingDataPortal.Update(trackingUI, detailUI);
+                if (insertResut)
+                {
+                    result.OK = true;
+                }
+            }
+            return result;
         }
     }
 }

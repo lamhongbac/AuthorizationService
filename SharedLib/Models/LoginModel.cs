@@ -16,5 +16,11 @@ namespace AuthServices.Models
         public string? StoreNumber { get; set; }
 
         public bool IsOfficeLogin { get; set; }
+        public string? IP { get; set; }
+        public string? DeviceName { get; set; }
+        public string? Platform { get; set; }
+        public string? Hid { get; set; }
+        public string? Location { get; set; }
+        public string? Token { get; set; }
     }
 }

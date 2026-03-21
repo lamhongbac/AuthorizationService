@@ -33,6 +33,7 @@ namespace AuthServices.Models
         public Guid LoginID { get; set; }
         public DateTime LoginDate { get; set; }
         public List<string> StoreNumbers { get; set; }
+        public string Department { get; set; }
     }
     public class LoginInfo
     {
@@ -68,5 +69,6 @@ namespace AuthServices.Models
         public List<string> AssignedOutlets { get; set; }
         public DateTime LoginDate { get; set; }
         public JwtData JwtData { get; set; }
+        public string Department { get; set; }
     }
 }

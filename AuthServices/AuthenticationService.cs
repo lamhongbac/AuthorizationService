@@ -75,6 +75,7 @@ namespace AuthorizationService.Service
                     userInfo.UserName = appUser.UserName;
                     userInfo.FullName = appUser.FullName;
                     userInfo.EmailAddress = appUser.Email;
+                    userInfo.Department = appUser.Department;
                     if (appUser.Role != null)
                     {
                         userInfo.Roles.Add(appUser.Role.Number.ToLower());
@@ -310,8 +311,11 @@ namespace AuthorizationService.Service
                     FullName = user.FullName,
                     ID = user.ID,
                     Roles = user.Roles,
-                    UserName = user.UserName
+                    UserName = user.UserName,
+                    Department = user.Department
                 };
+
+                BODataProcessResult logResult = await _logLoginService.LogLogin(model, user.UserName);
 
                 processResult.OK = true;
                 processResult.Content = loginInfo;
@@ -349,8 +353,13 @@ namespace AuthorizationService.Service
         }
 
 
-        public BODataProcessResult Logout(LogOutModel model)
+        public async Task<BODataProcessResult> Logout(LogOutModel model)
         {
+            BODataProcessResult logResult = await _logLoginService.LogLogout(model.UserID);
+            if (!logResult.OK)
+            {
+
+            }
             return new BODataProcessResult() { OK = true };
         }
         public BODataProcessResult RenewToken(JwtData model)
