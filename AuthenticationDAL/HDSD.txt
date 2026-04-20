@@ -1,0 +1,17 @@
+﻿Setup API AppAuthAPI
+
+tu phia ung dung thuc hien cac giao dien, sao cho dap ung cau truc Application-> appobject
+dap ung viec gan quyen cho user
+sau do khi ung dung start 
+ truyen data qua ham Init
+ khi co thay doi data goi  ham refresh Data
+
+ khi can kiem tra goi ham CheckObjectRight
+ Co the kiem tra khac tren ung dung roi goi qua object right hoac nguoc lai de co cac kiem tra khac
+
+ chu y Platform se kg co quan ly DAL
+ Plat form chi quan ly logic
+
+ Dieu nay giup cho viec xay dung Auth o cac ung dung 1 cach ro rang
+
+ phia ung dung co the to chuc 1 DAL rieng, va UI rieng
